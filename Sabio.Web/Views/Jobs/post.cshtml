@@ -1,0 +1,405 @@
+﻿@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+
+
+<!-- HTML CODE START HERE -->
+
+<h2>Post a New Job at Santa Cruz</h2>
+
+
+<form id="postJobsForm" class="form-horizontal" role="form">
+    <!-- JOB TITLE -->
+    <div class="form-group">
+        <label for="jobTitle" class="col-sm-2 control-label">Job Title</label>
+        <div class="col-sm-10">
+            <input name="jobTitle" type="text" class="form-control" id="jobTitle" placeholder="Job Title">
+        </div>
+    </div>
+
+    <!-- JOB DESCRIPTION -->
+    <div class="form-group">
+        <label for="jobDescription" class="col-sm-2 control-label">Job Description</label>
+        <div class="col-sm-10">
+            <input name="jobDescription" type="text" class="form-control" id="jobDescription" placeholder="Job Description">
+        </div>
+    </div>
+
+
+    <!-- JOB SALARY FILL-IN FIELD -->
+    <div class="form-group">
+        <label for="salaryFillIn" class="col-sm-2 control-label">Job Salary</label>
+        <div class="col-sm-10">
+            <input name="salaryFillIn" type="number" class="form-control" id="salaryFillIn" placeholder="Whole numbers only please">
+        </div>
+    </div>
+
+
+    <!-- JOB SALARY DROP-DOWN -->
+    <div class="form-group">
+        <div class="col-sm-10">
+            <label for="salaryDropDown" class="col-sm-3 control-label">Job Salary Range</label>
+
+            <select id="salaryDropDown" name="salaryDropDown">
+                <option value="">Please select a salary range</option>
+                <option value="1">$20,000+</option>
+                <option value="2">$40,000+</option>
+                <option value="3">$60,000+</option>
+                <option value="4">$80,000+</option>
+                <option value="5">$100,000+</option>
+            </select>
+
+
+
+        </div>
+    </div>
+
+
+    <!-- JOBLEVEL -- I'M LOOKING FOR A... RADIO BUTTONS -->
+    <div class="form-group">
+        <label for="jobLevelRadio" class="col-sm-3 control-label">Software Developer Skill Level:</label>
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="radio">
+                <label for="optionJunior"><input id="optionJunior" type="radio" name="jobLevelRadio" value="1">Junior Developer</label><br>
+                <label for="optionMidLevel"><input id="optionMidLevel" type="radio" name="jobLevelRadio" value="2">Mid-level Developer</label><br>
+                <label for="optionArchitect"><input id="optionArchitect" type="radio" name="jobLevelRadio" value="3">Senior Developer / Architect</label>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- REQUIRED JOB SKILLS CHECKBOXES -->
+    <div class="col-sm-8" id="JobSkillsCheckBox">
+        <div>
+            <label for="JobSkillsCheckBox" class="col-sm-3 control-label">Required Job Skills:</label><br />
+            <input type="checkbox" name="JobSkillsCheckBox" value="1">HTML
+            <input type="checkbox" name="JobSkillsCheckBox" value="2">CSS
+            <input type="checkbox" name="JobSkillsCheckBox" value="3">JavaScript
+            <input type="checkbox" name="JobSkillsCheckBox" value="4">jQuery
+            <input type="checkbox" name="JobSkillsCheckBox" value="5">C# / .NET
+        </div>
+    </div>
+
+
+    <!-- LOCATION STATE DROP-DOWN -->
+    <div class="form-group">
+        <div class="col-sm-10">
+            <label for="locationStateDropDown" class="col-sm-3 control-label">Job Location (State):</label>
+            <select id="locationStateDropDown" name="locationStateDropDown">
+                <option name="locationStateDropDown" value="">Please select a state</option>
+                <option name="locationStateDropDown" value="AL">Alabama</option>
+                <option name="locationStateDropDown" value="AK">Alaska</option>
+                <option name="locationStateDropDown" value="AZ">Arizona</option>
+                <option name="locationStateDropDown" value="AR">Arkansas</option>
+                <option name="locationStateDropDown" value="CA">California</option>
+                <option name="locationStateDropDown" value="CO">Colorado</option>
+                <option name="locationStateDropDown" value="CT">Connecticut</option>
+                <option name="locationStateDropDown" value="DE">Delaware</option>
+                <option name="locationStateDropDown" value="DC">District Of Columbia</option>
+                <option name="locationStateDropDown" value="FL">Florida</option>
+                <option name="locationStateDropDown" value="GA">Georgia</option>
+                <option name="locationStateDropDown" value="HI">Hawaii</option>
+                <option name="locationStateDropDown" value="ID">Idaho</option>
+                <option name="locationStateDropDown" value="IL">Illinois</option>
+                <option name="locationStateDropDown" value="IN">Indiana</option>
+                <option name="locationStateDropDown" value="IA">Iowa</option>
+                <option name="locationStateDropDown" value="KS">Kansas</option>
+                <option name="locationStateDropDown" value="KY">Kentucky</option>
+                <option name="locationStateDropDown" value="LA">Louisiana</option>
+                <option name="locationStateDropDown" value="ME">Maine</option>
+                <option name="locationStateDropDown" value="MD">Maryland</option>
+                <option name="locationStateDropDown" value="MA">Massachusetts</option>
+                <option name="locationStateDropDown" value="MI">Michigan</option>
+                <option name="locationStateDropDown" value="MN">Minnesota</option>
+                <option name="locationStateDropDown" value="MS">Mississippi</option>
+                <option name="locationStateDropDown" value="MO">Missouri</option>
+                <option name="locationStateDropDown" value="MT">Montana</option>
+                <option name="locationStateDropDown" value="NE">Nebraska</option>
+                <option name="locationStateDropDown" value="NV">Nevada</option>
+                <option name="locationStateDropDown" value="NH">New Hampshire</option>
+                <option name="locationStateDropDown" value="NJ">New Jersey</option>
+                <option name="locationStateDropDown" value="NM">New Mexico</option>
+                <option name="locationStateDropDown" value="NY">New York</option>
+                <option name="locationStateDropDown" value="NC">North Carolina</option>
+                <option name="locationStateDropDown" value="ND">North Dakota</option>
+                <option name="locationStateDropDown" value="OH">Ohio</option>
+                <option name="locationStateDropDown" value="OK">Oklahoma</option>
+                <option name="locationStateDropDown" value="OR">Oregon</option>
+                <option name="locationStateDropDown" value="PA">Pennsylvania</option>
+                <option name="locationStateDropDown" value="RI">Rhode Island</option>
+                <option name="locationStateDropDown" value="SC">South Carolina</option>
+                <option name="locationStateDropDown" value="SD">South Dakota</option>
+                <option name="locationStateDropDown" value="TN">Tennessee</option>
+                <option name="locationStateDropDown" value="TX">Texas</option>
+                <option name="locationStateDropDown" value="UT">Utah</option>
+                <option name="locationStateDropDown" value="VT">Vermont</option>
+                <option name="locationStateDropDown" value="VA">Virginia</option>
+                <option name="locationStateDropDown" value="WA">Washington</option>
+                <option name="locationStateDropDown" value="WV">West Virginia</option>
+                <option name="locationStateDropDown" value="WI">Wisconsin</option>
+                <option name="locationStateDropDown" value="WY">Wyoming</option>
+
+            </select>
+
+        </div>
+    </div>
+
+
+
+
+
+    <!-- LOCATION CITY FILL-IN -->
+    <div class="form-group">
+        <label for="locationCityFillIn" class="col-sm-2 control-label">Job Location (City):</label>
+        <div class="col-sm-10">
+            <input name="locationCityFillIn" type="text" class="form-control" id="locationCityFillIn" placeholder="Job Location City">
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- SUBMIT JOB POSTING BUTTON -->
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="postJobsButton" type="button" class="btn btn-default">Submit Job Posting</button>
+        </div>
+    </div>
+</form>
+
+
+
+
+<!-- ERROR MODAL HERE -->
+<a id="errorModal" href="#errorModalContainer" role="button" class="btn hidden" data-toggle="modal">placeholder</a>
+<div class="modal fade" id="errorModalContainer" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title" id="myModalTitleLabel">
+                    ERROR
+                </h4>
+            </div>
+            <div class="modal-body">
+                Please complete all the fields of the form.  Thank you!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- SUCCESS MODAL HERE -->
+<a id="successModal" href="#successModalContainer" role="button" class="btn hidden" data-toggle="modal">placeholder</a>
+<div class="modal fade" id="successModalContainer" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="location.href='/jobs/'">x</button>
+                <h4 class="modal-title" id="myModalTitleLabel">
+                    SUCCESS
+                </h4>
+            </div>
+            <div class="modal-body">
+                You have just created a job posting!  Click "Close" to be taken to the main jobs area.  Thank you!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="location.href='/jobs/'">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- HTML CODE END HERE -->
+<!-- JavaScript CODE BEGIN HERE -->
+@section scripts{
+
+    <script type="text/javascript" src="/scripts/sabio.services.jobs.js"></script>
+
+    <script type="text/javascript">
+
+
+        // this is the "startup" function that runs at page load
+        sabio.page.startUp = function () {
+
+            sabio.page.setRules();
+            //$("#postJobs").on("click", sabio.page.handlers.revealPostJobsForm);
+            //$("#searchJobs").on("click", location.href='/jobs/search2');
+            $("#postJobsButton").on("click", sabio.page.handlers.validateRulesPostJobsForm);
+
+        }
+
+
+
+        sabio.page.handlers.revealPostJobsForm = function () {
+
+            $("#postJobsForm").slideDown("slow", function () {
+
+                $("html, body").animate({
+                    scrollTop: $("#postJobsForm").offset().top - 160
+                }, 500);
+
+            });
+
+        }
+
+
+
+        sabio.page.handlers.revealSearchJobsForm = function () {
+
+            $("#searchJobsForm").slideDown("slow", function () {
+
+                $("html, body").animate({
+                    scrollTop: $("#searchJobsForm").offset().top - 160
+                }, 500);
+
+            });
+
+        }
+
+
+
+        // this sets the rules first, run in startup function, validation comes later
+        sabio.page.setRules = function () {
+
+            var validateOptions = {};
+
+            validateOptions.rules = {
+
+                jobTitle: {
+                    required: true,
+                    minlength: 2,
+                },
+
+                jobDescription: {
+                    required: true,
+                    minlength: 2,
+                    //minlength: 180,
+                },
+
+                salaryFillIn: {
+                    required: true,
+                },
+
+                salaryDropDown: {
+                    required: true,
+                },
+
+                jobLevelRadio: {
+                    required: true
+                },
+
+                JobSkillsCheckBox: {
+                    required: true
+                },
+
+                locationStateDropDown: {
+                    required: true
+
+                },
+
+                locationCityFillIn: {
+                    required: true
+                }
+
+
+            };
+
+            validateOptions.errorPlacement = sabio.page.errorPlacement;
+
+
+
+
+            $("#postJobsForm").validate(validateOptions);
+
+        };
+
+
+        sabio.page.errorPlacement = function (error, element) {
+
+            if (element.is(":radio")) {
+                error.appendTo(element.parent().parent().parent());
+
+            }
+            else if (element.is(":checkbox")) {
+                error.appendTo(element.parent());
+            }
+            else if (element.is(":text")) {
+                error.appendTo(element.parent());
+            }
+            else {
+                error.appendTo(element.parent());
+            }
+        };
+
+
+
+
+
+
+        // this validates the fields and prints out the values
+        sabio.page.handlers.validateRulesPostJobsForm = function () {
+            var formIsValid = $("#postJobsForm").valid();
+
+
+            if (formIsValid) {
+
+                sabio.page.handlers.onJobsPosting();
+
+            } else {
+                console.log("Please complete the form.");
+                //alert("Please complete all fields of the form.  Thank you!");
+                $("#errorModalContainer").modal("show");
+            }
+
+        };
+
+
+
+        sabio.page.handlers.onJobsPosting = function (event) {
+
+            var isFormValid = $("#postJobsForm").valid();
+            var serializedForm = null;
+
+            if (isFormValid) {
+
+                serializedForm = $("#postJobsForm").serialize();
+                //sabio.services.jobs.create(serializedForm, sabio.page.handlers.onJobsPostingSuccess, sabio.page.handlers.onJobsPostingError);
+
+            }
+
+        }
+
+
+        sabio.page.handlers.onJobsPostingSuccess = function () {
+
+            $("#successModalContainer").modal("show");
+            //document.location.href = '/jobs
+
+        }
+
+
+        sabio.page.handlers.onJobsPostingError = function () {
+
+            //gets called when AJAX call fails
+
+        }
+
+
+
+    </script>
+    <!-- JavaScript CODE END HERE -->
+}

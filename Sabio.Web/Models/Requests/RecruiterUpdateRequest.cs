@@ -1,0 +1,17 @@
+﻿using Sabio.Web.Models.request;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace Sabio.Web.Models.Requests.Requiter
+{
+    public class RecruiterUpdateRequest : recruiterRequestModel
+    {
+        [Required]
+        public Guid recuiterUid { get; set; }
+
+
+    }
+}

@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    <div class="btn-group">
+        <span type="button" class="btn global-login-nav" data-toggle="dropdown">
+            <i class="fa fa-user"></i>
+            <a href="http://santacruz.dev/accounts/profile">&nbsp; Hello, @User.Identity.GetUserName()!</a>
+        </span>
+        </div>
+    <div class="btn global-login-nav">
+        <a id="cmdGlobalLogOut">Log Out</a>
+    </div>
+    //Above link do NOT exist: accounts/profile
+    //jason added api/accounts/logout
+}
+else
+{
+    <div class="btn-group dropdown">
+        <button type="button" class="btn dropdown-toggle global-login-nav" data-toggle="dropdown"><i class="fa fa-user"></i> Login</button>
+        <ul class="dropdown-menu dropdown-menu-right dropdown-animation">
+            <li>
+                <form class="login-form" id="globalFormLogin">
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Email</label>
+                        <input type="text" class="form-control" placeholder="" name="email" id="globalEmail">
+                        <i class="fa fa-user form-control-feedback"></i>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="control-label">Password</label>
+                        <input type="password" class="form-control" placeholder="" name="loginPassword" id="globalPassword">
+                        <i class="fa fa-lock form-control-feedback"></i>
+                    </div>
+                    <button type="submit" class="btn btn-group btn-primary btn-sm" id="cmdGlobalLogin">Log In</button>
+                    <span>or</span>
+                    <a class="btn btn-group btn-success btn-sm" href="http://santacruz.dev/accounts/signup/" role="button" id="cmdGlobalSignUp">Sign Up</a>
+                    <ul>
+                        <li><a href="http://santacruz.dev/accounts/forgotpassword">Forgot your password?</a></li>
+                    </ul>
+                    <div class="divider"></div>
+                    <span class="text-center">Login with</span>
+                    <ul class="social-links clearfix">
+                        <li class="facebook"><a target="_blank" href="http://www.facebook.com"><i class="fa fa-facebook"></i></a></li>
+                        <li class="twitter"><a target="_blank" href="http://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
+                        <li class="googleplus"><a target="_blank" href="http://plus.google.com"><i class="fa fa-google-plus"></i></a></li>
+                    </ul>
+                </form>
+            </li>
+        </ul>
+    </div>
+}
+@*<ul class="nav navbar-nav navbar-right">
+    <li> <span><i class="fa fa-user"></i></span>@Html.ActionLink("Register", "/", "signup", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+
+    @* SC* ORIG ACCOUNT LOGIN CODE HERE
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+*@
+
+@*<li>@Html.ActionLink("Log in", "/", "loginuser", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>*@
+

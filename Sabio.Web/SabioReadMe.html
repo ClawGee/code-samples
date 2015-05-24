@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Sabio Starter Template</title>
+    <link href="/Content/bootstrap.css" rel="stylesheet" />
+    <link href="/Content/site.css" rel="stylesheet" />
+
+    <script src="/Scripts/modernizr-2.8.3.js"></script>
+
+    <style type="text/css">
+        dt, dd {
+            padding-top: 10px;
+        }
+
+
+
+        .bs-callout {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            border-color: #eee;
+            border-image: none;
+            border-radius: 3px;
+            border-style: solid;
+            border-width: 1px 1px 1px 5px;
+            margin: 20px 0;
+            padding: 20px;
+        }
+
+        .bs-callout-info {
+            border-left-color: #5bc0de;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+
+        <div class="jumbotron">
+            <h1>Sabio Starter Application</h1>
+            <p>High Level Outline</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <h2>MVC Application design outline</h2>
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <h2 class=" "><span class="label label-primary">Models</span>
+
+                        </h2>
+                        <div class="bs-callout-info bs-callout  ">Models serve to carry data from one place to an other.</div>
+                        <p>In many applications, <mark>Models</mark> are used in a variety of ways including partial updates, inserts and deletes.</p>
+                        <p>In our application we will create a more refined architecture and create 4 different types of Models.</p>
+                        <p>These four types will be named according to their utility or purpose</p>
+                        <dl class="dl-horizontal">
+
+                            <dt><mark>*Request Models</mark></dt>
+                            <dd>These models will be used to pass data into a <mark>Controller</mark>. These models will participate 
+                                in <mark>Model Binding</mark> where data from an in-comming request will be mapped to the properties of the given Model. They will be used
+                                to perform updates, inserts or deletes. More often than not, they will contain partial list of all the properties of the
+                                entities that they represent.
+                            </dd>
+
+                            <dt><mark>*Response Models</mark></dt>
+                            <dd>
+                                <p>
+                                    These Models will be the objects passed out of <mark>Api Controllers</mark>. Often times these
+                                Models will be used to wrap <mark>Domain</mark> models as they are passed out of the web application.
+                                </p>
+                                <p>All Response Models must inherit from BaseResponse.</p>
+                            </dd>
+
+                            <dt><mark>*ViewModels Models</mark></dt>
+                            <dd>
+                                <p>
+                                    These Models will be the objects passed out of <mark>View Controllers</mark>. Often times these
+                                Models will be used to wrap <mark>Domain</mark> models as they are passed into a View
+                                </p>
+                                <p>All View Models must inherit from BaseViewModel.</p>
+
+                            </dd>
+
+
+                            <dt><mark>*Domain Models</mark></dt>
+                            <dd>These models will be used to most accurately represent the entities we store in our database. When returned, they should be fully hydrated with 
+                                the data in the database.
+                            </dd>
+
+
+
+                        </dl>
+
+                        <p>These files are located here at the following path. You should inspect the files there for more information.</p>
+                        <code>/models/</code>
+
+                    </div>
+
+                    <div class="col-md-12">
+                        <h2 class=" "><span class="label label-primary">Controllers</span></h2>
+                        <div class="bs-callout-info bs-callout  ">
+                            Controllers act to execute the first layer of business logic in our application's 
+                            request/response life cycle. They may receive a model as input parameters and will often engage 1 or more Service layer
+                            classes to achieve their tasks.
+                        </div>
+                        <p>There are two type of Controllers in an MVC application</p>
+                        <dl class="dl-horizontal">
+
+                            <dt><mark>Controllers</mark></dt>
+                            <dd>
+                                <p>
+                                    which we will refer to as "View Controllers" because they are invoked 
+                               with the intent to have an entire <mark>View</mark> or HTML page returned in the response to the browser.
+                                </p>
+
+                                <p>
+                                    All Api Controllers should inherit from BaseController
+                                </p>
+                            </dd>
+                            <dt><mark>API Controllers</mark>
+                            </dt>
+                            <dd>
+
+                                <p>
+                                    which are invoked usually via an Ajax request. These types of request may return HTML but that is not best practice.
+                                We will be using them exclusively to pass data to and from the web server from our HTML page.
+                                </p>
+
+                                <p>
+                                    All Api Controllers should inherit from BaseApiController
+                                </p>
+                            </dd>
+                        </dl>
+
+                        <p>These files are located here at the following path. You should inspect the files there for more information.</p>
+                        <code>/Controllers/</code>
+
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <h2 class=" "><span class="label label-primary">Views</span></h2>
+                        <div class="bs-callout-info bs-callout  ">
+                            Views are responsible for the UI of the application, the presentation. Any "business" logic that they may perform 
+                            will be solely for the purpose of rendering an appropriate interface.
+                            
+                            They may receive a model, passed to it, from a View Controller.
+                        </div>
+                        <p>There are serveral types of View files. The all have an extension of .cshtml</p>
+                        <dl class="dl-horizontal">
+
+                            <dt><mark>Layouts</mark></dt>
+                            <dd>
+                                <p>
+                                    These files are shared between the different Views of the application. You can think of them as the
+                                    Template files for any given page. 
+                                    
+                                </p>
+                                <p>These files are in most ways identical to View Files with regards to functionality and capability.</p>
+
+                                <p>
+                                    The HTML markup within these files is merged with the HTML markup generated by view files and rendered to the web browser as one file.
+
+                                </p>
+
+
+                                <p>
+                                    The layout files will be located here:
+                                    <code>/Views/Shared/</code>
+                                </p>
+                            </dd>
+                            
+                            <dt><mark>View Files</mark></dt>
+                            <dd>
+
+                                <p>
+                                    These files contain the page level specific HTML, CSS and Javascript mark up for a give page/route.
+                                </p>
+
+                                <p>
+                                    These files are located here at the following path.
+                                    <code>/Views/</code>
+                                </p>
+
+                            </dd>
+
+
+                             <dt><mark>_ViewStart File</mark></dt>
+                            <dd>
+
+                                <p>
+                                   This file has a number of utility/config purposes. We primarily would use it to set up the default
+                                    Layout View file for the application.
+                                </p>
+                                <p>THe default Layout for a view can be changed at the top the view file.</p>
+                                <p>
+                                    This file located at the root of
+                                    <code>/Views/</code>
+                                </p>
+
+                            </dd>
+
+
+                            <dt><mark>Partial View Files</mark></dt>
+                            <dd>
+
+                                <p>
+                                    These files containHTML, CSS and Javascript mark that could be used to partially render a snippet of content from 
+                                    within several different top level View files. 
+                                </p>
+                                <p>
+                                    Some shops would render a Partial View as an entire response via an Ajax request. The intent would be to place this 
+                                    content within the existing DOM. We will <strong>NOT</strong> be using this technique because it is not very
+                                    efficient.
+                                </p>
+                                <p>
+                                    These files can be located anywhere, but typically somewhere within <code>/Views/</code>
+                                    
+                                </p>
+
+                            </dd>
+                        </dl>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <script src="/Scripts/jquery-2.1.1.js"></script>
+
+    <script src="/Scripts/bootstrap.js"></script>
+    <script src="/Scripts/respond.js"></script>
+
+</body>
+</html>

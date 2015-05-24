@@ -1,0 +1,292 @@
+﻿@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+
+
+
+<h2>Signup with Santa Cruz</h2>
+
+<form id="signUpForm" class="form-horizontal" role="form">
+    <div class="form-group">
+        <label for="firstName" class="col-sm-2 control-label">First Name</label>
+        <div class="col-sm-10">
+            <input name="firstName" type="text" class="form-control" id="firstName" placeholder="First Name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="lastName" class="col-sm-2 control-label">Last Name</label>
+        <div class="col-sm-10">
+            <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Last Name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="emailAddress" class="col-sm-2 control-label">Email Address</label>
+        <div class="col-sm-10">
+            <input name="emailAddress" type="email" class="form-control" id="emailAddress" placeholder="Email Address">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-10">
+            <input name="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" type="password" class="form-control" id="password" placeholder="Min 8 char (1 upper / 1 lower), 1 number, 1 speechul char">
+            <!-- <input title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password" onchange=" this.setCustomValidity(this.validity.patternMismatch ? this.title : ''); if(this.checkValidity()) form.passwordConfirm.pattern = this.value; "> -->
+            <div id="messages"></div>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="passwordConfirm" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" class="col-sm-2 control-label">Confirm Password</label>
+        <div class="col-sm-10">
+            <input name="passwordConfirm" type="password" class="form-control" id="passwordConfirm" placeholder="Confirm Password">
+            <!-- <input title="Please enter the same Password as above" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="passwordConfirm" onchange=" this.setCustomValidity(this.validity.patternMismatch ? this.title : ''); "> -->
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="radio">
+                <label for="optionDeveloper"><input id="optionDeveloper" type="radio" name="userType" value="1">I am a Developer</label><br>
+                <label for="optionEmployer"><input id="optionEmployer" type="radio" name="userType" value="2">I am an Employer</label><br>
+                <label for="optionRecruiter"><input id="optionRecruiter" type="radio" name="userType" value="3">I am a Recruiter</label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox">Remember me
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="signUpButton" type="button" class="btn btn-default">Sign Up</button>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+
+
+<!-- SC* start inline JavaScript -->
+@section scripts{
+
+
+    <script type="text/javascript">
+
+
+        // this is the "startup" function that runs at page load
+        sabio.page.startUp = function () {
+            sabio.page.setRules();
+            $("#signUpButton").on("click", sabio.page.handlers.validateRules);
+
+        };
+
+        sabio.page.setRules = function () {
+            // this sets the rules first, run in startup function, validation comes later
+
+            $("#signUpForm").validate({
+                rules: {
+                    // no quoting, firstName: "required",
+                    firstName: {
+                        required: true,
+                        minlength: 2,
+                    },
+
+                    lastName: {
+                        required: true,
+                        minlength: 2,
+                    },
+
+
+                    emailAddress: {
+                        required: true,
+                        email: true
+                    },
+
+
+                    password: {
+                        required: true,
+                        minlength: 8,
+                        //upperCase: true,
+                        //digit: true,
+                        //lowserCase: true
+                    },
+
+                    passwordConfirm: {
+                        required: true,
+                        equalTo: "#password"
+                    },
+
+                    userType: {
+                        required: true
+                    }
+
+                },
+
+
+                // the errorPlacement has to take the table layout into account
+                errorPlacement: function (error, element) {
+                    if (element.is(":radio"))
+                        error.appendTo(element.parent().next().next());
+                        //else if (element.is(":checkbox"))
+                        //    error.appendTo(element.next());
+                    else if (element.is(":text"))
+                        error.appendTo(element.parent());
+                    else
+                        error.appendTo(element.parent());
+                }
+
+            }
+            )
+        };
+
+
+
+
+
+
+
+        sabio.page.handlers.validateRules = function () {
+
+            // this only validates the fields, we want to use "validate"
+            // $("#signUpForm").valid();
+            // this calls the function below to print out the values
+            sabio.page.printFormValues();
+
+        };
+
+
+
+        // !!! this is what I was looking for -- defining global vars to use everywhere !!!
+        sabio.page.printFormValues = function () {
+
+
+            var firstName = $('#signUpForm').find('#inputFirstName').val();
+            var formIsValid = $("#signUpForm").valid();
+
+
+            if (formIsValid) {
+
+                sabio.page.handlers.onSignUp();
+
+            } else {
+                // console.log(formIsValid);
+                // console.log("firstName logged from FALSE: " + firstName);
+                console.log("Please complete the form.");
+            }
+
+
+        }
+
+
+
+
+        sabio.page.handlers.onSignUp = function (event) {
+
+            // event.preventDefault();
+            //console.log("FORM IS VALID if TRUE: " + isFormValid);
+            //console.log(serializedForm);
+            // inside the above function
+
+            var isFormValid = $("#signUpForm").valid();
+            var serializedForm = $("#signUpForm").serialize();
+
+            if (isFormValid) {
+
+                var url = "/api/accounts/create";
+                var settings = {
+                    cache: false,
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    data: serializedForm,
+                    dataType: "json",
+                    success: sabio.page.handlers.onSignupSuccess,
+                    error: sabio.page.handlers.onSignupError,
+                    type: "POST"
+                };
+
+                $.ajax(url, settings);
+
+            }
+
+        }
+
+
+
+
+
+
+        // SC* start passwd validation / progress bar
+        // paste this here from here:
+        // http://jsfiddle.net/jquery4u/mmXV5/
+
+        // NOTE: AT symbols now REMOVED  in the backup .txt file !!!
+
+
+
+        //success: sabio.page.handlers.onSignupSuccess,
+        sabio.page.handlers.onSignupSuccess = function (data, status, xhr) {
+
+            // Jason Tsai - on success, alert email has been sent using layout modal
+            var modalTitle = "Check your email for verification";
+            var modalBody = "Success! Your user has been created. Find the email from Sabio Administrator and click the link to verify your identity.";
+            var modalButton = "I get it";
+            sabio.page.showLayoutModal(modalTitle, modalBody, modalButton);
+
+            window.location.href = "http://santacruz.dev/login";
+
+            /* Spicer's code
+            console.log("FORM IS VALID");
+            console.log(JSON.stringify(data));
+            //sabio.page.logToBottom(data);
+            $("#msgWindow").removeClass("alert-danger");
+            $("#msgWindow").addClass("alert-info");
+            //alert("Signup Success!  Click here to be taken to the home page...");
+            //document.location.href = '/';
+            alert("Signup Success!  Click here to be taken to the home page...");
+            document.location.href = '/';
+            */
+
+        }
+
+        //success: sabio.page.handlers.onSignupFail,
+        sabio.page.handlers.onSignupError = function (jqXHR, textStatus, errorThrown) {
+
+            console.log("FORM IS NOT VALID");
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+            console.log(jqXHR.status);
+            //sabio.page.logToBottom(jqXHR.responseJSON);
+            $("#msgWindow").addClass("alert-danger");
+            $("#msgWindow").removeClass("alert-info");
+            alert("Signup Failed!  The user aldready exists, please choose another.");
+            //document.location.href = '/signup/';
+
+            //var jsonText = '{"Email":"taken",}';
+            //var jsonError = JSON.parse(jsonText);
+            //document.write(jsonError.email);
+            //console.log(jsonError.email);
+        }
+
+
+
+
+    </script>
+}
+
+
+

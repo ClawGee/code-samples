@@ -1,0 +1,702 @@
+﻿@model Sabio.Web.Models.ViewModels.ExperienceViewModel
+
+@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+
+
+
+<div class="box-style-2">
+    <div class="icon-container default-bg">
+        <i class="fa fa-briefcase"></i>
+    </div>
+</div>
+<div class="col-md-8">
+    <h1 style="margin-top: 0;">Work Experience</h1>
+    <div class="separator-2"></div>
+    <p>Enter your previous work experience for the past 10 years or more.</p>
+</div>
+<br />
+<br />
+
+
+@**ARTICULATION**data-ng-controller="ExperienceManagerController as manager(friendly name for the controller)"*@
+<div data-ng-controller="ExperienceManagerController as manager" id="expManagerController" class="workExperience">
+
+    <!--------------------------------- BEGIN FORM - workExperienceInfo ----------->
+
+    <form class="exp-form" name="experienceNg" ng-submit="manager.submitTheForm()" id="workExperienceInfo" novalidate>
+        <!-- novalidate prevents HTML5 validation since we will be validating ourselves (experienceNg.$valid)-->
+
+
+        <div class="container">
+
+            <!--SECTION -->
+            <section id="companyInfoSection">
+
+                <!--****SECTION TITLE -->
+                <div class="row">
+                    <div class="col-xs-offset-1 col-xs-4">
+                        <h3>EMPLOYMENT INFO</h3>
+                    </div>
+                </div>
+
+                <!--- START ROW -->
+                <!--***COMPANY NAME & TITLE-->
+                <div class="row form-group">
+                    <div class="col-sm-offset-1 col-xs-4" ng-class="{ 'has-error' : experienceNg.companyName.$invalid &&
+                         !experienceNg.$pristine }">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" name="companyName" ng-model="manager.item.companyName"
+                               id="companyName" placeholder="Enter Company Name" ng-minlength="1" ng-maxlength="50" required="" />
+
+                        <p ng-show="experienceNg.companyName.$invalid && !experienceNg.$pristine"
+                           class="help-block">Please enter you name.</p>
+                    </div>
+
+
+                    <!--***TITLE -->
+                    <div class="col-xs-4 form-group" ng-class="{ 'has-error' : experienceNg.title.$invalid &&
+                         !experienceNg.$pristine }">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" ng-model="manager.item.title" id="title"
+                               placeholder="Enter Position Title" ng-minlength="1" ng-maxlength="50" required="" />
+                    </div>
+                    <p ng-show="experienceNg.title.$invalid && !experienceNg.$pristine"
+                       class="help-block">Title please.</p>
+                </div>
+
+                <!--- START ROW  -->
+                <!-- ***COMPANY CITY & STATE -->
+                <div class="row">
+                    <div class="col-sm-offset-1 col-xs-4 form-group"
+                         ng-class="{ 'has-error' : experienceNg.companyCity.$invalid && !experienceNg.$pristine }">
+                        <label for="companyLocation">Company Location</label>
+                        <label class="sr-only" for="companyCity">City</label>
+                        <input type="text" name="companyCity" ng-model="manager.item.companyCity" id="companyCity"
+                               placeholder="Enter City" ng-minlength="1" ng-maxlength="50" required="" />
+                    </div>
+                    <p ng-show="experienceNg.companyCity.$invalid && !experienceNg.$pristine"
+                       class="help-block">Please enter your City.</p>
+
+
+                    <div class="col-xs-2 form-group"
+                         ng-class="{ 'has-error' : experienceNg.companyState.$invalid && !experienceNg.$pristine }">
+                        <label class="companyState" for="companyState">State</label>
+
+                        @**ARTICULATION**data-ng-options=label(state.stateProvinceCode) for value (state)  in array(manager.items)*@
+                        <select type="singleselect" name="companyState" ng-model="manager.item.companyState" id="companyState"
+                                data-ng-options="state.stateProvinceCode for state in  manager.items track by state.stateProvinceId"
+                                aria-describedby="state-Label" required>
+                            <option value="" disabled>Enter State</option>
+                        </select>
+
+                    </div>
+                    <p ng-show="experienceNg.companyState.$invalid && !experienceNg.$pristine"
+                       class="help-block">Please select a state.</p>
+
+
+                    <div class="col-xs-2 form-group" ng-class="{ 'has-error' : experienceNg.countryName.$invalid && !experienceNg.$pristine }">
+                        <label class="countryName" for="countryName">Country</label>
+                        <select type="singleselect" name="countryName" ng-model="manager.item.countryName" id="countryName"
+                                aria-describedby="country-Label" required>
+                            <option value="" selected="selected">Enter Country</option>
+                            <option value="1">USA</option>
+                            <option value="2">Canada</option>
+                            <option value="3">Mexico</option>
+                            <option value="4">India</option>
+                        </select>
+                    </div>
+                    <p ng-show="experienceNg.companyState.$invalid && !experienceNg.$pristine"
+                       class="help-block">Please select a country.</p>
+
+                </div>
+                <br />
+            </section>
+
+            <!--- START ROW 3------------ -->
+            <!-- ***CURRENTLY EMPLOYED HERE?-->
+            <div class="row">
+                <div class="col-sm-offset-1 col-sm-4 form-group">
+                    <label>
+                        Do You Currently Work Here?
+                    </label>
+
+                    <input type="radio" ng-model="manager.item.currentJob" name="currentJob" value="Yes" />Yes
+                    <input type="radio" ng-model="manager.item.currentJob" name="currentJob" value="No" />No
+
+                    <br />
+                </div>
+            </div>
+            <br />
+
+            <!--- START ROW 4------------ -->
+            <!-- ***DATES OF EMPLOYMENT -->
+            <div class="row">
+                <div class="col-sm-offset-1 col-xs-4" ng-class="{ 'has-error' : experienceNg.companyName.$invalid && !experienceNg.companyName.$pristine }">
+                    <!--
+                    This is all Angular specific syntax for populating the
+                    options of the drop down.
+
+                    the options for the drop down are dropped on the page
+                    from the server side. it is a list of UserStatus enum values
+
+                    the ng-model attribute signals that the model should bound, two way to the selected value
+                    of the select
+                    -->
+
+                    <label class="startDateMonth" for="startDateMonth">Start Date</label>
+
+                    @**ARTICULATION**data-ng-options="item.Key as item.Value for item in manager.$sabio.page.months | filter: {Value:'!NotSet'}"*@
+
+                    <select ng-model=" manager.item.startdatemonth"
+                            data-ng-options="item.Key as item.Value for item in manager.$sabio.page.months | filter: {Value:'!NotSet'}"
+                            name="startDateMonth" id="startDateMonth" type="singleselect"
+                            aria-describedby="month-startDate">
+                        <option value="" disabled selected="selected">--Select Month--</option>
+
+                    </select>
+
+                    <label class="startDateYear" for="startDateYear"></label>
+                    <select ng-model="manager.item.startDateYear"
+                            name="startDateYear" id="startDateYear" type="singleselect"
+                            aria-describedby="month-startYear">
+                        <option value="" disabled selected="selected">--Select Year--</option>
+                        <option value="2015">2015</option>
+                        <option value="2014">2014</option>
+                        <option value="2013">2013</option>
+                        <option value="2012">2012</option>
+                        <option value="2011">2011</option>
+                        <option value="2010">2010</option>
+                        <option value="2009">2009</option>
+                        <option value="2008">2008</option>
+                        <option value="2007">2007</option>
+                        <option value="2006">2006</option>
+                        <option value="2005">2005</option>
+                        <option value="2004">2004</option>
+                        <option value="2003">2003</option>
+                        <option value="2002">2002</option>
+                        <option value="2001">2001</option>
+                        <option value="2000">2000</option>
+                        <option value="1999">1999</option>
+                        <option value="1998">1998</option>
+                    </select>
+                </div>
+
+
+                <div class="col-xs-4">
+                    <label class="endDateMonth" for="endDateMonth">End Date</label>
+                    <select ng-model="manager.item.endDateMonth"
+                            data-ng-options="item.Key as item.Value for item in manager.$sabio.page.months | filter: {Value:'!NotSet'}"
+                            name="endDateMonth" id="endDateMonth" type="singleselect"
+                            aria-describedby="month-endDate">
+                        <option value="" disabled selected="selected">--Select Month--</option>
+
+                    </select>
+
+                    <label class="endDateYear" for="endDateYear"></label>
+                    <select ng-model="manager.item.endDateYear" name="endDateYear" id="endDateYear" type="singleselect"
+                            aria-describedby="year-endDate">
+                        <option value="" disabled selected="selected">--Select Year--</option>
+                        <option value="2015">2015</option>
+                        <option value="2014">2014</option>
+                        <option value="2013">2013</option>
+                        <option value="2012">2012</option>
+                        <option value="2011">2011</option>
+                        <option value="2010">2010</option>
+                        <option value="2009">2009</option>
+                        <option value="2008">2008</option>
+                        <option value="2007">2007</option>
+                        <option value="2006">2006</option>
+                        <option value="2005">2005</option>
+                        <option value="2004">2004</option>
+                        <option value="2003">2003</option>
+                        <option value="2002">2002</option>
+                        <option value="2001">2001</option>
+                        <option value="2000">2000</option>
+                        <option value="1999">1999</option>
+                        <option value="1998">1998</option>
+                    </select>
+                </div>
+
+            </div>
+            <br />
+            @*</section>*@
+
+            <!--SECTION -->
+            <section id="descriptionOfDutiesSection">
+
+                <!--****SECTION TITLE -->
+                @*<div class="row">
+                        <div class="col-xs-offset-1 col-xs-4">
+                            <h3>JOB DUTIES</h3>
+                        </div>
+                    </div>*@
+
+                <!--- START ROW 5------------ -->
+                <!--***DESCRIPTION -->
+                <div class="row">
+                    <div class="col-sm-offset-1 col-xs-8">
+                        <label for="description">Description of Duties</label>
+                        <textarea ng-model="manager.item.description" name="description" rows="3" id="description" placeholder="Enter Description of Duties"></textarea>
+                    </div>
+                </div>
+                <br />
+
+                <!--- START ROW 6------------ -->
+                <!-- ***UPLOAD FILE OR RESUME -->
+                <div class="row">
+                    <div class="col-sm-offset-1 col-xs-4">
+                        <label for="uploadFile">Upload File</label>
+                        <input type="file" id="uploadFile" name="uploadFile">
+                        <p class="help-block">Send Us Your Resume or Other File in PDF Format.</p>
+                    </div>
+                </div>
+            </section>
+            <br />
+
+            <!-- ***BUTTON TO ADD EXPERIENCE -->
+            <!-- SUBMIT BUTTON -->
+            <div class="col-sm-offset-1">
+                <button type="submit" class="btn btn-default" id="cmdAddExperience">Submit</button>
+                @*ng-disabled="experienceNg.$invalid"*@
+            </div>
+
+
+        </div>
+
+
+        <!--***hidden input for uid-->
+        <input type="hidden" id="uid" name="uid" value="@Model.Uid">
+    </form>
+
+    <!----------------------------------- END FORM - workExperienceInfo ----->
+
+
+
+</div>
+
+
+
+
+@section scripts{
+
+
+    <script type="text/javascript">
+
+        sabio.page.months=@Html.Raw(Json.Encode(Model.Months));
+
+    </script>
+
+
+    <script type="text/javascript" src="~/Scripts/sabio.services.experiences.js"></script>
+    <script type="text/javascript">
+
+        //********F U N C T I O N S***
+
+        // ********START UP
+
+        sabio.page.startUp = function () {
+
+            //this is to post an instance of ng controller that is created for the div
+            sabio.page.experienceManagerController = sabio.ng.getControllerInstance($("#expManagerController"));
+
+        }
+
+
+        sabio.services.experiences.experienceManagerFactory = function ($baseService) {
+
+            var aSabioServiceObject = sabio.services.experiences;
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+        }
+
+
+
+        sabio.page.experienceManagerControllerFactory = function (
+              $scope
+            , $baseController
+            , $experienceManagerService) {
+
+            var vm = this;
+            //object.property
+            vm.item = {};
+            //the entire page is built around vm.item  can rename to vm.formData or something  form fields boudn directly to this item
+            vm.states = null;
+            vm.$experienceManagerService = $experienceManagerService;
+
+            vm.submitTheForm = _submitTheForm;
+            vm.getUsStates = _getUsStates;
+            vm.receiveItems = _receiveItems;
+            vm.onExpError = _onExpError;
+
+            //-- this line to simulate inheritance, like the AdminApiController : ApiController
+            $.extend( vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$experienceManagerService.getNotifier($scope);
+
+            render();
+
+            function render() {
+
+                vm.$experienceManagerService.getUsStates(vm.receiveItems, vm.onExpError);
+            }
+
+
+            function _submitTheForm (data) {
+                console.log(vm.item);
+            }
+
+            function _getUsStates (data) {
+                console.log (vm.item);
+            }
+
+            function _receiveItems(data) {
+                //this receives the data and calls the special
+                //notify method that will trigger ng to refresh UI
+                vm.notify(function () {
+                    vm.items = data.items;
+                });
+            }
+
+
+            function _onExpError(jqXhr, error) {
+                console.error(error);
+
+            }
+        }
+
+        /*
+     Below here is where we register our service and controller with ng
+     */
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$ExperienceManagerService"
+            , ["$baseService"]
+            , sabio.services.experiences.experienceManagerFactory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "ExperienceManagerController"
+            , ['$scope', '$baseController', "$ExperienceManagerService"]
+            , sabio.page.experienceManagerControllerFactory)
+
+
+
+
+
+
+        //********F U N C T I O N S***
+
+        // ********START UP
+        //sabio.page.startUp = function () {
+        //    sabio.page.workExperienceInfo = $("#workExperienceInfo");
+        //    sabio.page.setUpValidation();
+        //    sabio.services.experiences.getUsStatesDropdown(sabio.page.getUsStatesDropdownSuccess, sabio.page.getUsStatesDropdownError);
+        //    sabio.page.populateMonthsDropdown();
+
+        //    //DEFINES MYUID by selecting the html element with an ID of UID & executes the value function VAL()
+        //    //and changes the element's VALUE to FUNCTION - note ID must be a form field
+
+        //    //THEN PASSING IN THE ARGUMENTS OF MYUID IN THE NEW FUNCTION
+        //    var myUid = $("#uid").val();
+
+        //    //IF ELSE STATEMENT - checks if there is GUID present for CREATE OR EDIT Mode
+        //    if (myUid.length > 0) {
+        //        //  if we have a guid - EDIT Mode
+        //        //BINDERS - PUT/UPDATE/EDIT - BY UID - ON CLICK BUTTON
+
+        //        $("#cmdAddExperience").on("click", sabio.page.handlers.onEditExperienceByUid);
+        //        sabio.services.experiences.getExperienceDataByUid(myUid, sabio.page.onGetExperienceByUidDataSuccess, sabio.page.onGetExperienceByUidDataError);
+        //    }
+        //    else {
+        //        //  if no guid was located - CREATE mode
+        //        //BINDERS - POST/CREATE/ADD - NEW EXPERIENCE - ON CLICK BUTTON
+        //        $("#cmdAddExperience").on("click", sabio.page.handlers.onCmdAddExperience);
+
+        //    }
+        //}
+
+
+        //// ******POST FUNCTIONS******
+
+        ////FUNCTION - POST/CREATE/ADD - NEW EXPERIENCE - VALIDATION Sets up rules-
+        //sabio.page.setUpValidation = function () {
+        //    sabio.page.workExperienceInfo.validate({
+        //        rules: {
+        //            companyName: {
+        //                required: true,
+        //                minlength: 2,
+        //                maxlength: 25,
+        //            },
+        //            title: {
+        //                required: true,
+        //                minlength: 2,
+        //                maxlength: 25,
+        //            },
+        //            companyCity: {
+        //                required: true,
+        //                minlength: 2,
+        //                maxlength: 25,
+        //            },
+        //            companyState: {
+        //                required: true
+        //            },
+        //            startDateMonth: "required",
+        //            startDateYear: "required",
+        //            //currentEmployer: ,
+        //            endDateMonth: "required",
+        //            endDateYear: "required",
+        //            description: {
+        //                required: true,
+        //                minlength: 2,
+        //                maxlength: 100,
+        //            }
+        //            //uploadFile: ,
+        //        }
+
+        //    });
+        //}
+
+        ////FUNCTION - POST/CREATE/ADD - NEW EXPERIENCE - defines var and calls JS ajax function
+        //sabio.page.createExperience = function () {
+
+        //    var serializedForm = sabio.page.workExperienceInfo.serialize();
+        //    console.log(serializedForm);
+
+        //    sabio.services.experiences.submitAddExperience(serializedForm, sabio.page.handlers.onAddExperienceSuccess, sabio.page.handlers.onAddExperienceError);
+
+        //}
+
+        ////FUNCTION - POST/CREATE/ADD - NEW EXPERIENCE - SUCCESS
+        //sabio.page.AddExperienceSuccess = function () {
+
+        //    window.location.href = '/experience';
+        //};
+
+        ////FUNCTION - POST/CREATE/ADD - NEW EXPERIENCE - ERROR
+        //sabio.page.AddExperienceError = function () {
+
+        //    alert("Please add correct info");
+        //};
+
+
+
+        //// ******GET FUNCTIONS******
+
+        ////FUNCTION - GET/READ/VIEW - US STATES DROPDOWN MENU- SUCCESS
+        //sabio.page.getUsStatesDropdownSuccess = function (results) {
+        //    console.log(results);
+        //    //       var myData = null;
+
+        //    $.each(results.items, sabio.page.handlers.populateUsStatesDropdown);
+        //};
+
+        ////FUNCTION - GET/READ/VIEW - US STATES DROPDOWN MENU- ERROR
+        //sabio.page.getUsStatesDropdownError = function () {
+        //    console.log("State Dropdown Error");
+        //};
+
+
+        ////FUNCTION - GET/READ/VIEW - MONTHS DROPDOWN MENU- SUCCESS
+        //sabio.page.populateMonthsDropdown = function () {
+
+        //    $.each(sabio.page.months, sabio.page.handlers.populateMonthsDropdown);
+
+
+        //};
+
+        ////FUNCTION - GET/READ/VIEW - MONTHS DROPDOWN MENU- ERROR
+        //sabio.page.getMonthsDropdownError = function () {
+        //    console.log("Months Dropdown Error");
+        //};
+
+
+        ////FUNCTION - GET/READ/VIEW - BY UID- SUCCESS function for only 1 uid (no FOR LOOP is needed)
+        //sabio.page.onGetExperienceByUidDataSuccess = function (data, status, xhr) {
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+
+        //    if (!data.item) {
+
+        //        return;
+        //    }
+
+        //    //$('#uid').val();  //JQUERY TO CHANGE TEXTBOX VALUE
+        //    $("#companyName").val(data.item.companyName);
+        //    $("#title").val(data.item.title);
+        //    $("#companyCity").val(data.item.companyCity);
+        //    $("#companyState").val(data.item.state.stateProvinceId);
+        //    $("#startDateMonth").val(data.item.startDateMonth);
+        //    $("#startDateYear").val(data.item.startDateYear);
+        //    $("#endDateMonth").val(data.item.endDateMonth);
+        //    $("#endDateYear").val(data.item.endDateYear);
+        //    $("#description").val(data.item.description);
+
+        //}
+
+
+        ////FUNCTION - GET/READ/VIEW - BY UID- ERROR function for only 1 uid (no FOR LOOP is needed)
+        //sabio.page.onGetExperienceByUidDataError = function (jqXHR, textStatus, errorThrown) {
+        //    console.log("Oops! There's an error!");
+        //    alert("Mistake");
+        //}
+
+
+
+        //// ******PUT FUNCTIONS******
+
+        ////FUNCTION - PUT/UPDATE/EDIT - BY UID - SUBMITS With AJAX CALL that SERIALIZES the form
+        //sabio.page.updateExperience = function () {
+
+        //    var myUid = $("#uid").val();
+        //    var serializedForm = sabio.page.workExperienceInfo.serialize();
+        //    console.log(serializedForm);
+
+        //    sabio.services.experiences.update(myUid,
+        //        serializedForm,
+        //        sabio.page.handlers.onEditExperienceByUidSuccess,
+        //        sabio.page.handlers.onEditExperienceByUidError);
+
+        //}
+
+        ////FUNCTION - PUT/UPDATE/EDIT - BY UID - SUCCESS
+        //sabio.page.EditExperienceByUidSuccess = function () {
+
+        //    window.location.href = '/experience';
+        //};
+
+        ////FUNCTION - PUT/UPDATE/EDIT - BY UID - ERROR
+        //sabio.page.EditExperienceByUidError = function () {
+
+        //    alert("Please Review Your Info and Try Again!");
+        //};
+
+
+
+        ////********H A N D L E R S***
+
+        ////******POST HANDLERS******
+
+        ////HANDLER - POST/CREATE/ADD - NEW EXPERIENCE - VALIDATES AND SUBMITS the fields and prints out the values
+        //sabio.page.handlers.onCmdAddExperience = function (event) {
+        //    event.preventDefault();
+        //    var isFormValid = sabio.page.workExperienceInfo.valid();
+        //    if (isFormValid == true) {
+        //        sabio.page.createExperience();
+        //    };
+        //}
+
+        ////HANDLER - POST/CREATE/ADD - NEW EXPERIENCE - SUCCESS
+        //sabio.page.handlers.onAddExperienceSuccess = function (data, status, xhr) {
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+        //    console.log("Success, It's Working");
+
+        //    alert("Thank you!");
+
+        //    window.location.href = '/experience/';
+
+
+        //}
+
+        ////HANDLER - POST/CREATE/ADD - NEW EXPERIENCE - ERROR
+        //sabio.page.handlers.onAddExperienceError = function (jqXHR, textStatus, errorThrown) {
+
+        //    console.log(jqXHR);
+        //    console.log(textStatus);
+        //    console.log(errorThrown);
+        //    console.log("Nope, It Failed");
+
+        //}
+
+
+
+        ////******GET HANDLERS***
+
+        ////HANDLER - GET - POPULATE US STATES IN DROPDOWN
+        //sabio.page.handlers.populateUsStatesDropdown = function (index, singleState) {
+
+        //    $('#companyState')
+        //.append($("<option></option>")
+        //.attr("value", singleState.stateProvinceId)
+        //.text(singleState.stateProvinceCode));
+
+        //    //Naming convention is super important  Remember I had value but changed it to singleState and cleared up my understanding
+        //}
+
+
+        ////HANDLER - GET - POPULATE MONTHS IN DROPDOWN
+        //sabio.page.handlers.populateMonthsDropdown = function (index, singleMonth) {
+        //    console.log(index+" "+singleMonth);
+        //    if (singleMonth=="NotSet") {
+        //        $('#startDateMonth, #endDateMonth')
+        //        .append($("<option></option>")
+        //        .attr("value", "0")
+        //        .text("Enter Month"));
+
+        //    } else {
+        //        $('#startDateMonth, #endDateMonth')
+        //        .append($("<option></option>")
+        //        .attr("value", index)
+        //        .text(singleMonth));
+        //        //Naming convention is super important  Remember I had value but changed it to singleMonth and cleared up my understanding
+        // //this code basically says create this:   <option value="January">January</option>
+        //    }
+        //}
+
+
+
+
+        ////******PUT HANDLERS******
+
+        ////HANDLER - PUT/UPDATE/EDIT - BY UID - VALIDATES AND SUBMITS the fields and prints out the values
+        //sabio.page.handlers.onEditExperienceByUid = function (event) {
+        //    event.preventDefault();
+
+        //    var isFormValid = sabio.page.workExperienceInfo.valid();
+
+        //    if (isFormValid) {
+
+        //        sabio.page.updateExperience();
+
+        //    };
+        //}
+
+
+        ////HANDLER - PUT/UPDATE/EDIT - BY UID - SUCCESS
+        //sabio.page.handlers.onEditExperienceByUidSuccess = function (data, status, xhr) {
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+        //    console.log("Your Update Is Complete!  Thank You!");
+
+        //    alert("Thank you!");
+
+        //    window.location.href = '/experience/';
+
+        //}
+
+        ////HANDLER - PUT/UPDATE/EDIT - BY UID - ERROR
+        //sabio.page.handlers.onEditExperienceByUidError = function (jqXHR, textStatus, errorThrown) {
+
+        //    console.log(jqXHR);
+        //    console.log(textStatus);
+        //    console.log(errorThrown);
+        //    console.log("Sorry, You're Update Didn't Work!  Try Again!");
+
+        //}
+
+
+
+
+    </script>
+}
+
+
+

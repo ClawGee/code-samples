@@ -1,0 +1,180 @@
+﻿@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+<div class="section parallax light-translucent-bg parallax-bg-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 .text-center">
+                <h1 class="title text-center"><i class="fa fa-home pr-10"></i>My Addresses</h1>
+                <div class="row" data-ng-controller="addressController as ac" id="addressCtrler">
+
+                    <!-- Start Hidden Address Form Template for View-->
+
+                    <div class="col-md-3" data-ng-repeat="add in ac.items track by add.uId">
+                        <div class="">
+                            <ul class="list text-left">
+                                <li><strong></strong></li>
+                                <li><i class="pr-10">{{add.address1}}</i></li>
+                                <li class="" data-ng-if="add.address2">
+                                    <i class="pr-10">{{add.address2}}</i>
+                                </li>
+                                <li><i class="pr-10">{{add.city}}</i></li>
+                                <li><i class="pr-10">{{add.state.name}}</i></li>
+                                <li><i class="pr-10">{{add.zip}}</i></li>
+                            </ul>
+
+                            <div class="col-xs-pull-4">
+                                @* EDIT PENCIL ICON *@
+                                <span class="glyphicon glyphicon-pencil" aria="true"><a href="/address/edit/{{add.uId}}" class="uId">Edit</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Hidden Address Form Template for View-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript" src="~/scripts/sabio.services.users.js"></script>
+    <script type="text/javascript">
+        sabio.page.startUp = function () {
+
+            sabio.page.addressController = sabio.ng.getControllerInstance($("#addressCtrler"));
+            console.log("Here in start up");
+            //sabio.services.users.getAddresses(sabio.page.onShowUserAddress, sabio.page.AjaxError);
+        }
+
+        //Angular Code to List Addresses
+
+        sabio.services.addressFactory = function ($baseService) { //its okay that this doesnt point to a file in services. well aaron says to test it this way.
+            console.log("in sabio.services.addressFactory");
+            var addressService = sabio.services.users; //this is calling the entire service file. giving you access to all the functions in this file. thats why it's a FACTORY. Factory is a service and it knows how to go get some data.
+
+            var newService = $.extend(true, {}, addressService, $baseService);
+
+            return newService;
+        }
+
+
+        sabio.page.addressControllerFactory = function ($scope, $baseController, $addressService) {
+
+            var vm = this;
+            vm.items = null;
+            vm.$addressService = $addressService;
+            vm.receiveItems = _receiveItems;
+            vm.onAddyError = _onAddyError;
+            console.log(vm.receiveItems);
+
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$addressService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$addressService.getAddresses(vm.receiveItems, vm.onAddyError); //.getAddresses -.get is NOT it's own thing, unless you make it a function in your service.
+            }
+
+            function _receiveItems(data) {
+                //this receives the data and calls the special
+                //notify method that will trigger ng to refresh UI
+                console.log("in function receive items")
+                vm.notify(function () {
+                    vm.items = data.items;
+                    console.log(vm.items);
+                });
+            }
+
+            function _onAddyError(jqXhr, error) {
+                console.log("in onaddyerror function");
+                console.error(error);
+
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module, "$addressService", ["$baseService"], sabio.services.addressFactory);//you are creating the name right here, it doesnt come from anywhere else. It's how you call service.
+
+        sabio.ng.addController(sabio.ng.app.module
+    , "addressController"
+    , ['$scope', '$baseController', "$addressService"]
+    , sabio.page.addressControllerFactory)
+
+
+        //event handler
+
+        //sabio.page.onShowUserAddress = function (results) {
+
+        //    console.log(results);
+        //    $.each(results.items, sabio.page.processSingleAddress);
+
+        // Below is the code that the .each does on it's own
+        //for (var i = 0; i < results.items.length; i++)
+        //{
+
+        //    var currentAddress = results.items[i];
+        //    console.log(currentAddress);
+
+        //    sabio.page.processSingleAddress(i, currentAddress);
+        //}
+
+        //}
+
+
+        //Biz Logic - Angular Code
+
+
+
+
+
+        //old jquery Code - IT WORKS
+        //sabio.page.processSingleAddress = function (idx, singleAddress) {
+        //    var newJqObj = sabio.page.completedCloneAddress();
+
+
+        //    $(".Address1", newJqObj).html(singleAddress.address1);
+
+        //    //OPTIONAL FIELD: Below field is optional hence the if statement. Below code removes the line entirely from the clone if there is no data.
+        //    if (!singleAddress.address2) {
+
+        //        $(".Address2", newJqObj).parent().remove();
+
+        //    }
+        //    else {
+        //        $(".Address2", newJqObj).html(singleAddress.address2);
+
+        //    }
+
+        //    $(".City", newJqObj).html(singleAddress.city);
+        //    $(".State", newJqObj).html(singleAddress.state.name);
+        //    $(".Zip", newJqObj).html(singleAddress.zip);
+
+
+        //    var url = "http://santacruz.dev/address/edit/" + singleAddress.uId;
+
+        //    $(".uId", newJqObj).attr("href", url);
+
+        //    console.log(singleAddress);
+        //}
+
+        //sabio.page.cloneAddress = function () {
+
+        //    var clone = $("#address").clone();
+        //    clone.appendTo("#targetContainer");
+        //    return clone;
+        //}
+
+        //sabio.page.completedCloneAddress = function () {
+        //    var cAddress = sabio.page.cloneAddress();
+        //    cAddress.removeClass("hidden").removeAttr("id");
+        //    return cAddress;
+        //}
+    </script>
+}
+

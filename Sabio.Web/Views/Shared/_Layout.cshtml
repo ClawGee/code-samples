@@ -1,0 +1,150 @@
+﻿@model Sabio.Web.Models.ViewModels.BaseViewModel
+
+@{
+
+    //SabioRazor: line #1 demonstrates how a Layout file, like any View file
+    //              has the capability to be stronly typed.
+
+    //SabioRazor: this is a Razor code block. It starts at the "@{" and ends where the closing
+    //"}" is found
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC Starter</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Sabio MVC Starter", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"
+                           role="button" aria-expanded="false">
+                            Routes to View Controllers <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/sabio">No Route</a></li>
+                            <li><a href="/sabio/alpha">Simple Route</a></li>
+                            <li><a href="/sabio/beta">Route != View</a></li>
+                            <li><a href="/sabio/omega">Random View</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/sabio/Epsilon">Missing param</a></li>
+                            <li><a href="/sabio/Epsilon?age=3.2">Bad param</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/sabio/Epsilon?age=3">With QS param</a></li>
+                            <li><a href="/sabio/Epsilon/3">With QS Route</a></li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/sabio/Epsilon/e1128523-e7a4-4816-9663-58c4c34cf76b">Unexpected Guid in Route</a>
+                            </li>
+                            <li>
+                                <a href="/sabio/Epsilon/e1128523-e7a4-4816-9663-58c4c34cf76b">Guid in Route</a>
+                            </li>
+                            <li>
+                                <a href="/sabio/zeta/1000/gregrorio">Two in Route</a>
+                            </li>
+                            <li class="divider">Optional Params</li>
+                            <li>
+                                <a class="disabled">Optional Params</a>
+                            </li>
+                            <li>
+                                <a href="/sabio/eta">count param missing</a>
+                            </li>
+                            <li>
+                                <a href="/sabio/eta?count=5">count param present</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        <!--SabioRazor: At this point in the HTML rendering, Razor will render
+            all the content within the View files that is NOT in a Razor Section.
+
+            Even if the content is split up by different Razor sections, the parsing engine will
+            pull out all parts and render them as on.
+
+            -->
+        @RenderBody()
+
+        <div class="row">
+            <!--Sabio: -->
+            <p>Debug Data from Layout</p>
+            <p>
+                @Json.Encode(ViewContext.RouteData.Values)
+            </p>
+
+            <p>
+                Model:
+                <!--SabioRazor:
+                    Notice how below Razor will detect when it is appropriate to parse other code and
+                    when to switch to HTML
+
+                    -->
+                @if (Model != null)
+                {
+                    @Json.Encode(Model)
+                }
+                else
+                {
+                    <strong>Is Null</strong>
+                }
+
+            </p>
+
+        </div>
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/sabio.js"></script>
+    <!--
+        SabioRazor: notice that this script is not required and that it will be
+        rendered at the
+        very bottom of the rendered HTML file
+        -->
+    @RenderSection("scripts", required: false)
+
+    <div class="modal fade" id="layoutModalContainer" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h4 class="modal-title" id="layoutModalTitleContent"></h4>
+                </div>
+                <div class="modal-body" id="layoutModalBodyContent">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="layoutModalButton"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+</html>

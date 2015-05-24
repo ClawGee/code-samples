@@ -1,0 +1,211 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Dictionary<string, string>>
+
+
+
+@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+
+
+<div data-ng-controller="experienceListController as dashboard" id="expListCntrlr" class="container">
+    <!-- the "as" syntax here is used to simply give a friendlier name to the controller
+    from here and below we have to reference the controller by this name:dashboard
+    the controller in this design also holds the data
+    -->
+
+
+    <div class="box-style-2">
+        <div class="icon-container default-bg">
+            <i class="fa fa-briefcase"></i>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h1 style="margin-top: 0;">Work Experience</h1>
+        <div class="separator-2"></div>
+        <p>Remember to list jobs you've had within the last 10 years.</p>
+    </div>
+
+    <div class="col-md-8">
+
+        <p>Personal Info</p>
+
+
+    </div>
+
+
+    <div id="experienceTemplate" class="Template"
+         data-ng-repeat="exp in dashboard.items track by exp.uid"
+         data-ng-include="'/experience/list/selectedDeveloper.html'">
+        <!-- this special ng-include attribute tells angular
+        to grab the content for the child elments from an
+        HTML snippet that is either embedded on the page or
+        located at the url specified by the url (see below for template)
+        -->
+
+
+
+    </div>
+
+</div>
+
+<!-- TEMPLATE - START -->
+
+<script type="text/ng-template" id="/experience/list/selectedDeveloper.html">
+    <div class="container">
+        <div class="col-xs-offset-0 col-md-9">
+            <div class="panel-body" style="padding-left: 0; padding-top: 0; margin-left: 60px;">
+
+
+
+                <div class="col-xs-8">
+                    <div class="row">
+                        @* TITLE ON ONE LINE *@
+                        <h5 class="title text-capitalize">{{exp.title}}</h5>
+                    </div>
+
+                    <div class="row">
+                        @* COMPANY NAME & DATES ON ONE LINE *@
+
+                        <span class="companyName text-capitalize">{{exp.companyName}}</span>
+                        <span>  </span>
+                    </div>
+
+                    <div class="row">
+                        @* EMPLOYMENT DATES ON ONE LINE *@
+
+                        <span class="startDateMonth">{{exp.startDateMonth}}</span>
+                        <span> , </span>
+                        <span class="startDateYear">{{exp.startDateYear}}</span>
+                        <span>  to  </span>
+                        <span class="endDateMonth">{{exp.endDateMonth}}</span>
+                        <span> , </span>
+                        <span class="endDateYear">{{exp.endDateYear}}</span>
+                    </div>
+
+                    <div class="row">
+                        @* COMPANY CITY & STATE ON ONE LINE *@
+
+                        <span class="companyCity text-capitalize">{{exp.companyCity}}</span>
+                        <span>,  </span>
+                        <span class="companyState">{{exp.companyState}}</span>
+                    </div>
+
+                </div>
+
+
+                <div class="col-xs-8">
+                    <div class="row">
+                        @* DESCRIPTION *@
+                        <span class="description">{{exp.description}}</span>
+                    </div>
+                </div>
+
+                <div class="col-xs-pull-4">
+                    @* EDIT PENCIL ICON *@
+                    <a href="/experience/create" class="btn btn-white btn-sm uid"><i class="glyphicon glyphicon-pencil pr-10"></i> Edit</a>
+
+                    @*<span class="glyphicon glyphicon-pencil" aria-hidden="true"><a href="/experience/create" class="uid">edit</a></span>*@
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</script>
+
+<!-- TEMPLATE - END -->
+@section scripts{
+    <script type="text/javascript">
+
+        sabio.page.months=@Html.Raw(Json.Encode(Model.Item));
+
+    </script>
+
+    <script src="~/Scripts/sabio.services.experiences.js"></script>
+    <script type="text/javascript">
+
+
+        sabio.page.startUp = function () {
+
+            //this is to get an instance of ng controller that is created for the div
+            //sabio.page.experienceListController = sabio.ng.getControllerInstance($("#expListCntrlr"));
+
+        }
+
+
+        sabio.services.experiences.experienceListFactory = function ($baseService) {
+
+            var aSabioServiceObject = sabio.services.experiences;
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+        }
+
+
+        sabio.page.experienceListControllerFactory = function (
+            $scope
+            , $baseController
+            , $experienceListService) {
+
+            var vm = this;
+            vm.items = null;
+            vm.$experienceListService = $experienceListService;
+
+            vm.receiveItems = _receiveItems;
+            vm.onExpError = _onExpError;
+
+            //-- this line to simulate inheritance
+            $.extend( vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$experienceListService.getNotifier($scope);
+
+
+            render();
+
+            function render() {
+                vm.$experienceListService.get(vm.receiveItems, vm.onEmpError);
+                //vm.$experienceListService.getUsStatesDropdown(vm.receiveItems, vm.onEmpError);
+
+            }
+
+            function _receiveItems(data) {
+                //this receives the data and calls the special
+                //notify method that will trigger ng to refresh UI
+                vm.notify(function () {
+                    vm.items = data.items;
+                });
+            }
+
+
+            function _onExpError(jqXhr, error) {
+                console.error(error);
+
+            }
+        }
+
+
+        /*
+      Below here is where we register our service and controller with ng
+      */
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$experienceListService"
+            , ["$baseService"]
+            , sabio.services.experiences.experienceListFactory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "experienceListController"
+            , ['$scope', '$baseController', "$experienceListService"]
+            , sabio.page.experienceListControllerFactory)
+
+
+
+
+    </script>
+}
+

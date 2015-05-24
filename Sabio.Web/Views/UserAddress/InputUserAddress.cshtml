@@ -1,0 +1,382 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid?>
+@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+
+}
+
+<!-- main start -->
+<!-- ================ -->
+<div class="main col-md-12">
+
+    <!-- page-title start -->
+    <!-- ================ -->
+
+    <h1 class="page-title">My Address</h1>
+    <!-- page-title end -->
+    <div class="row">
+        <div class="col-md-6"  data-ng-controller="inputAddyController as addyCtrler" id="iAddyCtrler">
+            <p>Please enter your address below.</p>
+            <div class="alert alert-success hidden" id="contactSuccess">
+                <strong>Success!</strong> Your message has been sent to us.
+            </div>
+            <div class="alert alert-error hidden" id="contactError">
+                <strong>Error!</strong> There was an error sending your message.
+            </div>
+            <div class="address-form" ng-class="{ 'has-error' : address-form.addyCtrler.location.address1.$invalid && !address-form.addyCtrler.location.address1.$pristine }">
+                <form id="address-form" role="form" name="address-form" ng-submit="submitForm(address-form.$valid)" novalidate>
+                    <div class="form-group has-feedback">
+                        <label for="address1">{{addy.address1}}</label>
+                        <input type="text" class="form-control" ng-model="addyCtrler.location.address1" id="address1" name="address1" placeholder="" ng-minlength="2" ng-maxlength="100" required>
+                        <p ng-show="address-form.addyCtrler.location.address1.$invalid && !address-form.addyCtrler.location.address1.$pristine" class="help-block">Your address is required.</p>
+                        <p ng-show="address-form.addyCtrler.location.address1.$error.minlength" class="help-block">Address is too short.</p>
+                        <p ng-show="address-form.addyCtrler.location.address1.$error.maxlength" class="help-block">Address is too long.</p>
+                        <i class="fa fa-envelope form-control-feedback"></i>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="address2">{{addy.address2}}</label>
+                        <input type="text" ng-model="addyCtrler.location.address2" class="form-control" id="address2" name="address2" placeholder="">
+                        <i class="fa fa-navicon form-control-feedback"></i>
+                    </div>
+                    <div class="form-group has-feedback" ng-class="{ 'has-error' : address-form.addyCtrler.location.city.$invalid && !address-form.addyCtrler.location.city.$pristine }">
+                        <label for="city">{{addy.city}}</label>
+                        <input type="text" ng-model="addyCtrler.location.city" class="form-control" id="city" name="city" placeholder="" ng-minlength="2" ng-maxlength="100" required>
+                        <p ng-show="address-form.addyCtrler.location.city.$invalid && !address-form.addyCtrler.location.city.$pristine" class="help-block">Your city is required.</p>
+                        <p ng-show="address-form.addyCtrler.location.city.$error.minlength" class="help-block">City is too short.</p>
+                        <p ng-show="address-form.addyCtrler.location.city.$error.maxlength" class="help-block">City is too long.</p>
+                        <i class="fa fa-navicon form-control-feedback"></i>
+                    </div>
+                    <div class="space-bottom dropdown-display"></div>
+                    <h2>State</h2>
+                    <select data-ng-init="addyCtrler.location.state"
+                            data-ng-model="addyCtrler.location.state.stateProvinceId"
+                            data-ng-options="state.stateProvinceId as state.stateProvinceCode for state in addyCtrler.states" class="form-control" id="state" name="state" type="singleselect" aria-describedby="state-label">
+                        <option value="" disabled selected></option>
+                    </select>
+                    <div class="form-group has-feedback">
+                        <label for="zip">{{addy.zip}}</label>
+                        <input type="text" class="form-control" ng-model="addyCtrler.location.zip" id="zip" name="zip" placeholder="" ng-minlength="5" ng-maxlength="9" required>
+                        <p ng-show="address-form.addyCtrler.location.zip.$invalid && !address-form.addyCtrler.location.zip.$pristine" class="help-block">Your zip is required.</p>
+                        <p ng-show="address-form.addyCtrler.location.zip.$error.minlength" class="help-block">Zip is too short.</p>
+                        <p ng-show="address-form.addyCtrler.location.zip.$error.maxlength" class="help-block">Zip is too long.</p>
+                        <i class="fa fa-navicon form-control-feedback"></i>
+                    </div>
+                    <input type="hidden" value="@Model.Item" name="addressGuid" id="addressGuid" />
+                    <input type="hidden" value="@Model.Item" name="uid" id="uid" />
+                    <input type="button" value="Submit" data-ng-click="addyCtrler.inputAddy()" href="" class="cmdUserAddressBtn" id="cmdUserAddressBtn" ng-disabled="address-form.$invalid">
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- begin modal-->
+    <div class="modal fade" id="layoutModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div class="modal-body">
+                        <div class="modal-body">
+                            <h2 id="layoutModalBodyContent"></h2>
+                            <form role="form" id="replyForm">
+                                <input type="submit" class="btn btn-default" id="layoutModalButton" value="Close Window" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end modal-->
+    </div>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript" src="~/scripts/sabio.services.geography.js"></script>
+    <script type="text/javascript" src="/scripts/sabio.services.users.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.addressGuid = null;
+
+        sabio.page.startUp = function () {
+            //check to see if addressGuid is present
+            sabio.page.inputAddyController = sabio.ng.getControllerInstance($("#iAddyCtrler"));
+            //sabio.services.geography.getUsStatesDropdown(sabio.page.getUsStatesDropdownSuccess, sabio.page.getUsStatesDropdownError);
+            var addressGuid = $("#addressGuid").val();
+            sabio.page.addressGuid = addressGuid; 
+          
+                //Populate address info
+            //    sabio.services.users.getAddress(addressGuid, sabio.page.populateAddressInfoSuccess, sabio.page.populateAddressInfoError);
+            //    console.log("This Guid has a length.");
+            //}
+            //else {
+            //    //Pull up create page.
+            //    console.log("This has NO guid ");
+            //}
+            //$("#address-form").validate
+            //({
+            //    rules:
+            //    {
+            //        address1:
+            //        {
+            //            required: true,
+            //            minlength: 2,
+            //            maxlength: 100
+            //        },
+            //        city:
+            //        {
+            //            required: true,
+            //            minlength: 2,
+            //            maxlength: 100
+            //        },
+            //        state: "required",
+            //        zip:
+            //        {
+            //            required: true,
+            //            minlength: 5,
+            //            maxlength: 9
+            //        }
+            //    }
+            //});
+            $("#cmdUserAddressBtn").on("click", sabio.page.handlers.onValidateUserAddress);
+            $("#layoutModalButton").on("click", sabio.page.handlers.onHideModal);
+        }
+
+        //Angular Code to Create Address
+
+        sabio.services.geographyServiceFactory = function ($baseService) {
+            console.log("in sabio.services.StatesDropdownFactory");
+            var geographyService = sabio.services.geography;
+
+            var newService = $.extend(true, {}, geographyService, $baseService);
+
+            return newService;
+        }
+
+        sabio.services.addressServiceFactory = function ($baseService) {
+            console.log("in sabio.services.iAddyFactory");
+            var inputAddressService = sabio.services.users;
+
+            var newService = $.extend(true, {}, inputAddressService, $baseService);
+
+            return newService;
+        }
+
+
+        sabio.page.inputAddyControllerFactory = function ($scope, $baseController,$inputAddressService, $geographyService) {
+
+            var vm = this; //refers to sabio.page.inputAddyControllerFactory
+            vm.location = {}; // using ng model directive the form fields are bound to the controller, here its called VM above it's called addyctrler but it refers to the same exact object so we call it vm.location
+            //vm.states then we'll fire another call to render the states, and the JSON will need to equal to vm.states. 
+            //-- this line to simulate inheritance
+
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope. the below is being executed on start up
+            vm.$inputAddressService = $inputAddressService;
+            vm.notify = vm.$inputAddressService.getNotifier($scope);
+            vm.receiveItem = _receiveItem;
+            vm.onAddyError = _onAddyError;
+            vm.inputAddy = _inputAddy;
+            vm.$geographyService = $geographyService;
+            vm.onStateSuccess = _onStateSuccess;
+            vm.onStateError = _onStateError; 
+  
+
+            initializeFormData();
+
+            function initializeFormData() { //formerly render() need to get address
+                //console log address giud here
+                console.log(sabio.page.addressGuid);
+                vm.$inputAddressService.getAddress(sabio.page.addressGuid, vm.receiveItem, vm.onAddyError);
+                vm.$geographyService.getUsStatesDropdown(vm.onStateSuccess, vm.onStateError); 
+            }
+
+
+            function _inputAddy() { //wtf do I pass through? you DONT
+                if (vm.$sabio.page.addressGuid.length > 0) {
+                    var payload = {
+                        address1: vm.location.address1,
+                        address2: vm.location.address2,
+                        city: vm.location.city,
+                        state: vm.location.state.stateProvinceId,
+                        zip: vm.location.zip,
+                        uId: vm.location.uId
+                        };
+                    vm.$inputAddressService.updateAddress(vm.$sabio.page.addressGuid, payload, vm.receiveItem, vm.onAddyError); //not passing through all the right arguments. You FORGOT myData
+                    alert("Thank you for your update!"); 
+                }
+                else { 
+                    var payload = {
+                        address1: vm.location.address1,
+                        address2: vm.location.address2,
+                        city: vm.location.city,
+                        state: vm.location.state.stateProvinceId,
+                        zip: vm.location.zip
+                    };
+                    vm.$inputAddressService.createAddress(payload, vm.receiveItem, vm.onAddyError);
+                }
+
+            }
+
+            function _receiveItem(data) {
+                //this receives the data and calls the special
+                //notify method that will trigger ng to refresh UI
+                //this
+                console.log("in function receive item");
+                vm.notify(function () {
+                    console.log(data); 
+                    vm.location = data.item;
+                    alert("Thank you for your address"); 
+      
+                });
+            }
+
+            function _onAddyError(jqXhr, error) {
+                console.log("in onaddyerror function");
+                alert("Your address was not saved. Please Try again."); 
+
+            }
+
+            function _onStateSuccess(data) {
+                //this receives the data and calls the special
+                //notify method that will trigger ng to refresh UI
+                //this
+                console.log("in function on state success");
+                vm.notify(function () {
+                    vm.states = data.items;
+                    
+                });
+
+
+            }
+
+            function _onStateError(jqXhr, error) {
+                console.log("in onStateError function");
+                console.error(error);
+
+            }
+
+        }
+
+        sabio.ng.addService(sabio.ng.app.module, "$inputAddressService", ["$baseService"], sabio.services.addressServiceFactory);
+
+        sabio.ng.addService(sabio.ng.app.module, "$geographyService", ["$baseService"], sabio.services.geographyServiceFactory);
+
+        sabio.ng.addController(sabio.ng.app.module
+    , "inputAddyController"
+    , ['$scope', '$baseController', "$inputAddressService", "$geographyService"]
+    , sabio.page.inputAddyControllerFactory)
+
+
+
+        //Event Handlers
+        sabio.page.handlers.onHideModal = function (event) {
+            event.preventDefault();
+            sabio.layout.hideLayoutModal();
+        }
+
+        //sabio.page.handlers.onValidateUserAddress = function (event) {
+        //    event.preventDefault();
+        //    if ($("#address-form").valid()) {
+        //        sabio.page.submitForm();
+        //    }
+        //    else {
+        //        alert("Form NOT validated!")
+        //    }
+        //}
+
+        //sabio.page.handlers.populateUsStatesDropdown = function (index, singleState) {
+        //    $('#state')
+        //.append($("<option></option>")
+        //.attr("value", singleState.stateProvinceId)
+        //.text(singleState.stateProvinceCode));
+        //}
+
+        //Biz Logic
+
+        //sabio.page.getUsStatesDropdownSuccess = function (results) {
+        //    console.log(results);
+        //           var myData = null;
+
+        //    $.each(results.items, sabio.page.handlers.populateUsStatesDropdown);
+        //};
+        //sabio.page.getUsStatesDropdownError = function () {
+        //    alert("State Dropdown Error");
+        //};
+
+        //sabio.page.populateAddressInfoSuccess = function (data, status, xhr) {
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+        //    $("#address1").val(data.item.address1);
+        //    $("#address2").val(data.item.address2);
+        //    $("#city").val(data.item.city);
+        //    $("#state").val(data.item.state.stateProvinceId);
+        //    $("#zip").val(data.item.zip);
+
+        //}
+
+        //sabio.page.populateAddressInfoError = function () {
+        //    var title = "ERROR - Missing Information"
+        //    var body = "There is no info to edit!"
+        //    var button = "Close Window"
+        //    sabio.layout.showLayoutModal(title, body, button);
+        //}
+
+        //sabio.page.submitForm = function (event) {
+
+        //    var addressGuid = $("#addressGuid").val();
+        //    var serializedForm = $("#address-form").serialize();
+        //    if (addressGuid.length > 0) {
+        //        sabio.page.updateAddress();
+        //    }
+
+        //    else {
+        //        console.log("NO GUID");
+        //        sabio.services.users.createAddress(serializedForm, sabio.page.createAddressSuccess, sabio.page.createAddressError);
+        //    }
+        //}
+
+        //sabio.page.createAddressSuccess = function () {
+        //    var title = "Successful Addition"
+        //    var body = "Thank you for your address!"
+        //    var button = "Close Window"
+        //    sabio.layout.showLayoutModal(title, body, button);
+        //}
+
+        //sabio.page.createAddressError = function () {
+        //    var title = "CREATION ERROR"
+        //    var body = "Your address was not created. Please try again."
+        //    var button = "Close Window"
+        //    sabio.layout.showLayoutModal(title, body, button);
+        //}
+
+
+        //sabio.page.updateAddress = function () {
+        //    var serializedForm = $("#address-form").serialize();
+        //    var addressGuid = $("#addressGuid").val();
+        //    console.log(serializedForm);
+        //    sabio.services.users.updateAddress(addressGuid, serializedForm, sabio.page.updateSuccess, sabio.page.ajaxError);
+        //}
+
+        //sabio.page.updateSuccess = function () {
+        //    var title = "Successful Edit"
+        //    var body = "Thank you for your update!"
+        //    var button = "Close Window"
+        //    sabio.layout.showLayoutModal(title, body, button);
+
+        //}
+
+        sabio.page.ajaxError = function () {
+            var title = "UPDATE ERROR"
+            var body = "Your address was not updated. Please try again!"
+            var button = "Close Window"
+            sabio.layout.showLayoutModal(title, body, button);
+        }
+
+
+    </script>
+}
+
+
+
+

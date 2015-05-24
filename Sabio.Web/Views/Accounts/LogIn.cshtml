@@ -1,0 +1,124 @@
+﻿@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+
+
+<form class="login-form" id="formlogId">
+    <div class="form-group has-feedback">
+        <label  class="control-label">email</label>
+        <input type="text"  id="email" style="width:300px;" name="email" placeholder="" class="form-control">
+        
+    </div>
+    <div class="form-group has-feedback">
+        <label class="control-label">Password</label>
+        <input id="loginPassword" style="width:300px;" name="loginPassword" type="password" placeholder=""  class="form-control">
+        
+
+    </div>
+    <button class="btn btn-group btn-dark btn-sm" type="button" id="cmdLogin">Log In</button>
+    <span>or</span>
+    <button class="btn btn-group btn-default btn-sm" id="cmdSignUp" type="button">Sign Up</button>
+    <ul>
+        <li><a href="http://santacruz.dev/accounts/forgotpassword">Forgot your password?</a></li>
+    </ul>
+
+</form>
+
+@section scripts{
+    
+    <script type="text/javascript">
+        sabio.page.startUp = function () {
+            
+            sabio.page.setUpValidationRules();
+            $("#cmdLogin").on("click", sabio.page.handlers.onlogIn);
+
+            //wire up sign up button
+            $("#cmdSignUp").on("click", sabio.page.handlers.onSignUp);
+          
+        }
+        
+        sabio.page.setUpValidationRules = function () {
+            var validationOption = {
+                rules: {
+                    loginPassword: "required",
+                    email: {
+                        required: true,
+                        email: true
+                    }
+                },
+                messages: {
+                    loginPassword: "*Please Enter Password!!!!",
+                    email: {
+                        required: "*please enter your email!!!!!",
+                        email: "Your email address must be in the format of name@domain.com"
+                    }
+                }
+            };
+            //validationOption.rules.newField = {};
+            // validationOption.rules.newField.required = true; 
+            $("#formlogId").validate(validationOption);
+        }
+            
+       //this is my bussiness logic function
+        sabio.page.logInUser = function () {
+            var inputField = $("#formlogId").serialize();
+           console.log(inputField);
+
+            var url = "/api/accounts/login";
+
+            var myData = $("#formlogId").serialize();
+            var settings = {
+                cache: false
+                , contentType: "application/x-www-form-urlencoded; charset=UTF-8"
+                , data: myData
+                , dataType: "json"
+                , success: sabio.page.handlers.logInSuccess
+                , error: sabio.page.handlers.logInError
+                , type: "POST"
+            };
+
+            $.ajax(url, settings);
+
+
+           
+        };
+
+            ////this is my handler
+            sabio.page.handlers.onlogIn = function (event) {
+
+                event.preventDefault()
+
+
+                var isformValid = $("#formlogId").valid();
+
+                if (isformValid == true) {
+                    sabio.page.logInUser();
+                }
+            };
+
+            sabio.page.handlers.onSignUp = function (event) {
+                window.location = "/signup/";
+            };
+
+            sabio.page.handlers.logInSuccess = function (data, status, xhr) {
+
+                console.log(data);
+                console.log(status);
+                console.log(xhr);
+                console.log("help");
+                document.location.href = '/';
+            };
+           
+            sabio.page.handlers.logInError = function (data) 
+            {
+                var title = "Uh-oh!";
+                var body = data.responseJSON.exceptionMessage;
+                var button = "Okay";
+                
+                sabio.layout.showLayoutModal(title, body, button);
+            };
+
+    </script>
+    }
+

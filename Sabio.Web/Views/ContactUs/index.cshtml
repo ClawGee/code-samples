@@ -1,0 +1,283 @@
+﻿@{
+    ViewBag.Title = "index";
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+<div data-ng-controller="contactUsController as dashboard" id="contactUsCtrler">
+    <section class="main-container">
+
+        <div class="container">
+            <div class="row">
+
+                <!-- main start -->
+                <!-- ================ -->
+                <div class="main col-md-8">
+
+                    <!-- page-title start -->
+                    <!-- ================ -->
+                    <h1 class="page-title">Contact Us</h1>
+                    <!-- page-title end -->
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                    <div class="alert alert-success hidden" id="contactSuccess">
+                        <strong>Success!</strong> Your message has been sent to us.
+                    </div>
+                    <div class="alert alert-error hidden" id="contactError">
+                        <strong>Error!</strong> There was an error sending your message.
+                    </div>
+
+                    <div class="contact-form">
+                        <form id="contactUsForm" name="contactUsForm" novalidate>
+                            <div class="form-group has-feedback">
+                                Name: <input type="text" ng-model="dashboard.user.name" ng-minlength=3 ng-maxlength=20 required />{{name}}<br />
+                                
+                                <i class="fa fa-user form-control-feedback"></i>
+                            </div>
+                            <div class="form-group has-feedback">
+                                Email: <input type="email" ng-model="dashboard.user.email" required />{{email}}<br />
+                                
+                                <i class="fa fa-envelope form-control-feedback"></i>
+                            </div>
+                            <div class="form-group has-feedback">
+                                Subject: <input type="text" ng-model="dashboard.user.Subject" ng-minlength=3 ng-maxlength=50  required />{{Subject}}<br />
+                                <i class="fa fa-navicon form-control-feedback"></i>
+                            </div>
+                            <div class="form-group has-feedback">
+                                Message: <input type="text" ng-model="dashboard.user.Message"ng-minlength=3 ng-maxlength=200  required />{{Message}}<br />
+                                <i class="fa fa-pencil form-control-feedback"></i>
+                            </div>
+                            <button type="submit" ng-click="dashboard.submitButton()" value="Submit" id="contactSubmit" class="btn btn-default" ng-disabled="contactUsForm.$invalid">Submit</button>
+
+                        </form>
+                    </div>
+                </div>
+                <!-- main end -->
+                <!-- sidebar start -->
+                <aside class="col-md-4">
+                    <div class="sidebar">
+                        <div class="side vertical-divider-left">
+                            <h3 class="title">iDea, Inc.</h3>
+                            <ul class="list">
+                                <li><strong></strong></li>
+                                <li><i class="fa fa-home pr-10"></i>795 Folsom Ave, Suite 600<br><span class="pl-20">San Francisco, CA 94107</span></li>
+                                <li><i class="fa fa-phone pr-10"></i><abbr title="Phone">P:</abbr> (000) 867-5309</li>
+                                <li><i class="fa fa-mobile pr-10 pl-5"></i><abbr title="Phone">M:</abbr> (123) 456-7890</li>
+                                <li><i class="fa fa-envelope pr-10"></i><a href="mailto:info@idea.com">info@idea.com</a></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </aside>
+                <!-- sidebar end -->
+
+            </div>
+        </div>
+
+
+
+
+        <!-- ERROR MODAL HERE -->
+        <a id="iErrorModal" href="#errorModalContainer" role="button" class="btn hidden" data-toggle="modal">placeholder</a>
+        <div class="modal fade" id="iErrorModalContainer" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                        <h4 class="modal-title" id="myModalTitleLabel">
+                            ERROR
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        Please complete all the fields of the form.  Thank you!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- SUCCESS MODAL HERE -->
+        <a id="iSuccessModal" href="#successModalContainer" role="button" class="btn hidden" data-toggle="modal">placeholder</a>
+        <div class="modal fade" id="iSuccessModalContainer" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">x</button>
+                        <h4 class="modal-title" id="myModalTitleLabel">
+                            SUCCESS
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        Success! we will contact you soon.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- main-container end -->
+
+    </section>
+</div>
+@section scripts{
+
+    <script src="~/Scripts/sabio.service.contact.js"></script>
+    <script type="text/javascript">
+
+
+        sabio.page.startUp = function () {
+
+
+
+
+
+            //  sabio.page.setUpValidationRules();
+            // $("#contactSubmit").on("click", sabio.page.handlers.onContactUs);
+            //sabio.page.contactUsController = sabio.ng.getControllerInstance($("#contactUsCtrler"));
+
+        };
+        sabio.services.contact.factory = function ($baseService) {
+
+            var aSabioServiceObject = sabio.services.contact;
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+        }
+
+        sabio.page.contactUsControllerFactory = function (
+             $scope,
+             $baseController,
+             $ContactUsService) {
+
+            var vm = this;
+            vm.user = null;
+            vm.selectedEmployee = null;
+            vm.$ContactUsService = $ContactUsService;
+            vm.endPoint = "";
+            //on success
+            vm.onSuccess = _onSuccess;
+            vm.onError = _onError;
+            // vm.selectUsers = _selectUsers;
+            // vm.saveStatus = _saveStatus;
+            vm.submitButton = _submitButton
+            // used for inheritance, like the AdminApiController : ApiController
+            $.extend(vm, $baseController);
+
+            function _submitButton() {
+                console.log(vm.user);
+
+                vm.$ContactUsService.post(vm.user, vm.onSuccess, vm.onError);
+
+            }
+
+            function _onSuccess(data, status, xhr) {
+                console.log(data);
+                $("#iSuccessModalContainer").modal('show');
+            }
+
+
+            function _onError(jqXHR, textStatus, errorThrown) {
+                console.error(errorThrown);
+                $("#iErrorModalContainer").modal('show');
+            }
+
+
+
+
+        }
+
+        sabio.ng.addService(
+           sabio.ng.app.module,
+           "$ContactUsService",
+           ["$baseService"],
+           sabio.services.contact.factory);
+
+        sabio.ng.addController(
+            sabio.ng.app.module,
+            "contactUsController",
+            ['$scope', '$baseController', "$ContactUsService"],
+            sabio.page.contactUsControllerFactory)
+
+
+
+
+
+
+
+
+        //sabio.page.setUpValidationRules = function () {
+        //    var validationOption = {
+        //        rules: {
+        //            name: "required",
+        //            subject: "required",
+        //            message: "required",
+
+        //            email: {
+
+        //                required: true,
+        //                email: true
+        //            }
+        //        },
+        //        messages: {
+        //            name: "*Please Enter your name!!!!",
+        //            subject: "*Please Enter subject!!!!",
+        //            message: "*Please Enter message!!!!",
+        //            email: {
+        //                required: "*please enter your email!!!!!",
+        //                email: "Your email address must be in the format of name@domain.com"
+        //            }
+        //        }
+        //    };
+        //    //validationOption.rules.newField = {};
+        //    // validationOption.rules.newField.required = true;
+        //    $("#contactUsForm").validate(validationOption);
+        //}
+
+        //sabio.page.handlers.onContactUs = function (event) {
+
+        //    event.preventDefault()
+
+        //    var myData = $("#contactUsForm").serialize();
+        //    var isformValid = $("#contactUsForm").valid();
+
+        //    if (isformValid == true) {
+
+
+        //    }
+        //    sabio.services.contact.post(myData, sabio.page.handlers.contactUsSuccess, sabio.page.handlers.contactUsError);
+        //};
+
+
+
+
+
+        //sabio.page.handlers.contactUsSuccess = function (data, status, xhr) {
+
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+        //    console.log("success");
+
+        //    $("#iSuccessModalContainer").modal('show');
+
+        //};
+
+
+
+        //sabio.page.handlers.contactUsError = function (jqXHR, textStatus, errorThrown) {
+        //    console.log("happy");
+        //    console.log(jqXHR);
+        //    console.log(textStatus);
+        //    console.log(errorThrown);
+        //    console.log("Failed");
+        //    $("#iErrorModalContainer").modal('show');
+        //};
+
+
+
+    </script>
+}
+

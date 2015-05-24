@@ -1,0 +1,14 @@
+﻿The home folder for most of our Models.
+
+1) *Requests
+	Data coming in to the application
+
+2) *Responses
+	These Models/Classes will wrap data going back as a result to an ajax call so this is probably
+	going out of an Api Controller.
+	it may be a simple peice of data like a Guid OR a Domain model
+
+3) *ViewModels
+	These Models/Classes will wrap data going back in a respone via a View. 
+	it may be a simple peice of data like a Guid OR a Domain model
+	

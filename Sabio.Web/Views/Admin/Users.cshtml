@@ -1,0 +1,708 @@
+﻿@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+<div data-ng-controller="adminUsersController as dashboard" id="adminUsersCtrler">
+    <h2>Users</h2>
+    <div class="container-fluid">
+        <div class="userRowHeader">
+            <div class="lead row" id="userRowHeader">
+                <div class="col-md-1 tableHeader" id="appUserIdHeader">AUId</div>
+                <div class="col-md-2 tableHeader" id="emailHeader">Email</div>
+                <div class="col-md-1 tableHeader" id="firstNameHeader">First</div>
+                <div class="col-md-1 tableHeader" id="lastNameHeader">Last</div>
+                <div class="col-md-2 tableHeader" id="phoneHeader">Phone</div>
+                <div class="col-md-1 tableHeader" id="userTypeHeader">Type</div>
+            </div>
+        </div>
+        <div class="userRowContainer">
+            <div class="row userRow animate-repeat" data-ng-repeat="users in dashboard.items track by users.id">
+                <a data-ng-click="dashboard.selectUsers(users)" href="">
+                    <div class="guid" hidden>{{users.guid}}</div>
+                </a>
+                <div class="col-md-1 appUserId">{{users.appUserId}}</div>
+                <div class="col-md-2 email">{{users.email}}</div>
+                <div class="col-md-1 firstName">{{users.firstName}}</div>
+                <div class="col-md-1 lastName">{{users.lastName}}</div>
+                <div class="col-md-2 phone">{{users.phone}}</div>
+                <div class="col-md-1 userType">{{users.userType}}</div>
+                <div class="cmdEdit"><a><span class="glyphicon glyphicon-pencil editIcon"></span></a></div>
+            </div>
+        </div>
+        <!-- Question... -->
+        <div data-ng-if="!dashboard.selectedUsers" class="">
+            <p class="text-info center text-center"><strong class="center">Select a User</strong></p>
+        </div>
+        <div class="row animate-if" data-ng-if="dashboard.selectedUsers"
+             data-ng-include=" '/ripts/app/admin/selectedUsers.html'">
+        </div>
+    </div>
+
+
+
+    <div class="modal fade editModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 id="myLargeModalLabel" class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="vertical">
+                        <!-- Nav tabs -->
+                        <ul role="tablist" class="nav nav-tabs">
+                            <li class="active" id="navTab1"><a data-toggle="tab" role="tab" href="#vtab1"><i class="fa fa-magic pr-10"></i> Users</a></li>
+                            <li class="" id="navTab2"><a data-toggle="tab" role="tab" href="#vtab2"><i class="fa fa-life-saver pr-10"></i> Addresses</a></li>
+                            <li class="" id="navTab3"><a data-toggle="tab" role="tab" href="#vtab3"><i class="fa fa-expand pr-10"></i> Experiences</a></li>
+                            <li class="" id="navTab4"><a data-toggle="tab" role="tab" href="#vtab4"><i class="fa fa-file-o pr-10"></i> Projects</a></li>
+                            <li class="" id="navTab5"><a data-toggle="tab" role="tab" href="#vtab5"><i class="fa fa-file-o pr-10"></i>Skills</a></li>
+                            <li class="" id="navTab6"><a data-toggle="tab" role="tab" href="#vtab6"><i class="fa fa-file-o pr-10"></i>Password</a></li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div id="vtab1" class="tab-pane fade active in">
+                                <h1 class="text-center title">Users</h1>
+                                <p></p>
+
+                                <form id="tabUserForm">
+                                    <div class="input-group col-md-12" hidden>
+                                        <label for="tabUserGuid">Guid</label>
+                                        <input type="text" name="id" class="form-control tabUserId" id="tabUserId">
+                                    </div>
+                                    <div class="input-group col-md-12" hidden>
+                                        <label for="tabUserAppUserId">AppUserId</label>
+                                        <input type="text" name="appUserId" class="form-control tabUserAppUserId" id="tabUserAppUserId">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="tabUserEmail">Email</label>
+                                        <input type="text" name="email" class="form-control tabUserEmail" id="tabUserEmail">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label for="tabUserEmailConfirmed">Email Confirmation</label>
+                                        <select name="emailConfirmed" class="form-control tabUserEmailConfirmed" id="tabUserEmailConfirmed">
+                                            <option value="false" id="emailNotConfirmed">Not Confirmed</option>
+                                            <option value="true" id="emailConfirmed">Confirmed</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label for="tabUserPhone">Phone</label>
+                                        <input type="text" name="phoneNumber" class="form-control tabUserPhone" id="tabUserPhone">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label for="tabUserUserName">User Name</label>
+
+                                        <input type="text" name="userName" class="form-control tabUserUserName" id="tabUserUserName">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label for="tabUserFirstName">First Name</label>
+                                        <input type="text" name="firstName" class="form-control tabUserFirstName" id="tabUserFirstName">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label for="tabUserLastName">Last Name</label>
+                                        <input type="text" name="lastName" class="form-control tabUserLastName" id="tabUserLastName">
+                                    </div>
+
+                                    <div class="input-group">
+                                        <label for="tabUserUserType">User Type</label>
+                                        <select name="userType" class="form-control tabUserUserType" id="tabUserUserType">
+                                            <option value="0" id="userType0">Developer</option>
+                                            <option value="1" id="userType1">Employer</option>
+                                            <option value="2" id="userType2">Recruiter</option>
+                                        </select>
+                                    </div>
+
+                                </form>
+                                <a class="btn btn-default" id="cmdSaveUser">Save</a>
+
+                            </div>
+                            <div id="vtab2" class="tab-pane fade">
+                                <h1 class="text-center title">Addresses</h1>
+                                <a class="btn btn-sm btn-primary cmdAddAddress">Add <span class="glyphicon glyphicon-plus"></span></a>
+                                <form id="tabAddressForm" role="form">
+                                    <div class="form-group has-feedback">
+                                        <input type="text" class="form-control" id="address1" name="address1" placeholder="Address">
+                                        <i class="fa fa-envelope form-control-feedback"></i>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <input type="text" class="form-control" id="address2" name="address2" placeholder="Address 2">
+                                        <i class="fa fa-navicon form-control-feedback"></i>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <input type="text" class="form-control" id="city" name="city" placeholder="City">
+                                        <i class="fa fa-navicon form-control-feedback"></i>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <select class="form-control" id="tabAddressState" name="state" type="singleselect" aria-describedby="state-label">
+                                            <option value="" disabled selected></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <input type="text" class="form-control" id="zip" name="zip" placeholder="Postal Code">
+                                        <i class="fa fa-navicon form-control-feedback"></i>
+                                    </div>
+                                    <input type="button" value="Submit" class="btn btn-sm btn-primary cmdCreateUserAddress" id="cmdCreateUserAddress">
+                                </form>
+                                <div class="addressContainer" hidden>
+                                    <ul class="list text-left">
+                                        <li class="address1"></li>
+                                        <li class="address2"></li>
+                                        <li class="city"></li>
+                                        <li class="state-name"></li>
+                                        <li class="state-countryRegionCode"></li>
+                                        <li class="zip"></li>
+                                        <li class="addressGuid"></li>
+                                    </ul>
+                                    <a class="btn btn-sm btn-success cmdEditAddress" id="cmdSaveAddress">Edit</a>
+                                    <a class="btn btn-sm btn-default cmdDeleteAddress">Delete</a>
+                                </div>
+                            </div>
+                            <div id="vtab3" class="tab-pane fade">
+                                <h1 class="text-center title">Experiences</h1>
+                                <ul class="list-icons">
+                                    <li><i class="icon-check pr-10"></i> Lorem ipsum dolor sit amet maiores</li>
+                                    <li><i class="icon-check pr-10"></i> Consectetur adipisicing elit</li>
+                                    <li><i class="icon-check pr-10"></i> Aut earum numquam hic placeat</li>
+                                    <li><i class="icon-check pr-10"></i> Fugiat rem consequatur neque</li>
+                                </ul>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere hic qui non placeat ad explicabo dignissimos amet iusto veniam!</p>
+                                <p>Quo expedita tempore modi minima at adipisci saepe excepturi alias consequuntur sunt asperiores enim ut assumenda hic vitae, odio deleniti illo, veniam quas!</p>
+                                <a class="btn btn-default" id="cmdSaveExperiences">Save</a>
+
+                            </div>
+                            <div id="vtab4" class="tab-pane fade">
+                                <h1 class="text-center title">Well Documented</h1>
+                                <ul class="list-icons">
+                                    <li><i class="icon-check pr-10"></i> Lorem ipsum dolor sit amet maiores</li>
+                                    <li><i class="icon-check pr-10"></i> Consectetur adipisicing elit</li>
+                                    <li><i class="icon-check pr-10"></i> Aut earum numquam hic placeat</li>
+                                    <li><i class="icon-check pr-10"></i> Fugiat rem consequatur neque</li>
+                                </ul>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere hic qui non placeat ad explicabo dignissimos amet iusto veniam!</p>
+                                <p>Quo expedita tempore modi minima at adipisci saepe excepturi alias consequuntur sunt asperiores enim ut assumenda hic vitae, odio deleniti illo, veniam quas!</p>
+                                <a class="btn btn-default" id="cmdSave4">Save</a>
+                            </div>
+                            <div id="vtab6" class="tab-pane fade">
+                                <h1 class="text-center title">Password</h1>
+                                <div class="reset-password-form">
+                                    <form id="updatePasswordForm" role="form">
+                                        <div class="form-group has-feedback hidden" hidden>
+                                            <label for="passwordPaneAspNetUsersId"></label>
+                                            <input type="text" class="form-control" id="passwordTabAspNetUsersId" name="AspNetUsersId" value="" />
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="password">Password</label>
+                                            <input type="password" class="form-control" id="inputPassword" name="password" placeholder="8 characters, 1 upper, 1 number, 1 symbol" />
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <label for="confirmPassword">Confirm Password</label>
+                                            <input type="password" class="form-control" id="inputConfirmPassword" name="confirmPassword" />
+                                        </div>
+                                    </form>
+                                </div>
+                                <a class="btn btn-default" id="cmdSavePassword">Save</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="~/scripts/sabio.services.geography.js"></script>
+    <script type="text/javascript" src="~/scripts/sabio.services.users.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.startUp = function () {
+
+            //sabio.services.admin.get(sabio.page.handlers.onGetUsersSuccess, sabio.page.handlers.onGetUsersError, "getusers");
+            //write function for on hover highlight row, show glyphicon pencil
+            $("#navTab2").on("click", sabio.page.onCmdTabAddresses);
+            $(".cmdCreateUserAddress").on("click", sabio.page.onCmdCreateUserAddress);
+            $("#navTab3").on("click", sabio.page.renderTabExperiences);
+            $("#navTab6").on("click", sabio.page.onCmdTabPassword);
+            sabio.page.adminUsersController = sabio.ng.getControllerInstance($("#adminUsersCtrler"));
+        }
+
+        sabio.services.admin.usersFactory = function ($baseService) {
+
+            var angularServiceObject = sabio.services.admin;
+
+            var newService = $.extend(true, {}, angularServiceObject, $baseService);
+
+            return newService
+
+        }
+
+        sabio.page.adminUsersControllerFactory = function (
+            $scope, 
+            $baseController,
+            $adminUsersService) {
+
+            var vm = this;
+            vm.items = null;
+            vm.selectedEmployee = null;
+            vm.$adminUsersService = $adminUsersService;
+            vm.endPoint = "";
+            //on success
+            vm.receiveItems = _receiveItems;
+            vm.onUsersError = _onUsersError;
+            vm.selectUsers = _selectUsers;
+            vm.saveStatus = _saveStatus;
+
+            // used for inheritance, like the AdminApiController : ApiController
+            $.extend(vm, $baseController);
+
+            vm.notify = vm.$adminUsersService.getNotifier($scope);
+            
+            render();
+
+            function render() {
+               // vm.endPoint = "getusers";
+                vm.$adminUsersService.get(vm.receiveItems, vm.onUsersError, vm.endPoint);
+            }
+
+            function _receiveItems(data){
+
+                vm.notify(function () {
+                    vm.items=data.items;
+                });
+            }
+
+            function _selectUsers(aUsers) {
+                console.log(aUsers);
+                vm.selectedUsers = aUsers;
+            }
+
+            function _saveStatus(anEmp) {
+                console.log("Go and save this new data");
+                console.log(aUsers);
+            }
+
+            function _onUsersError(jqXhr, error) {
+                console.error(error);
+            }
+        }
+
+        sabio.ng.addService(
+            sabio.ng.app.module,
+            "$adminUsersService",
+            ["$baseService"],
+            sabio.services.admin.usersFactory);
+
+        sabio.ng.addController(
+            sabio.ng.app.module,
+            "adminUsersController",
+            ['$scope', '$baseController', "$adminUsersService"],
+            sabio.page.adminUsersControllerFactory)
+
+
+        sabio.page.setUpValidationRules = function (formToValidate, validationOptions) {
+            //use the id of the form you want to validate, then input the rules.
+            formToValidate.validate(validationOptions);
+        }
+
+        sabio.services.admin.get = function (onSuccess, onError, endPoint) {
+            $.ajax({
+                type: "GET",
+                url: "/api/admin/" + endPoint,
+                dataType: "json",
+                success: onSuccess,
+                error: onError
+            });
+        }
+
+        sabio.services.admin.put = function (onSuccess, onError, endPoint, myData) {
+            $.ajax({
+                type: "PUT",
+                url: "/api/admin/" + endPoint,
+                data: myData,
+                success: onSuccess,
+                error: onError
+            });
+        }
+
+        sabio.services.admin.put = function (onSuccess, onError, endPoint, myData) {
+            $.ajax({
+                type: "POST",
+                url: "/api/admin/" + endPoint,
+                data: myData,
+                success: onSuccess,
+                error: onError
+            })
+        }
+
+        sabio.page.cloneDiv = function (id) {
+            //cloning the div
+            var clone = $(id).clone();
+            clone.removeAttr("id");
+            return clone;
+        }
+
+        sabio.page.renderAppUserPanel = function () {
+            var currentUserId = sabio.page.currentUserId;
+            var endPoint = "getAppUser/" + currentUserId;
+            sabio.services.admin.get(sabio.page.handlers.onGetAppUserSuccess, sabio.page.handlers.onAppUserError, endPoint);
+            //$("#cmdSavePanel").on("click", sabio.services.admin.put())
+        }
+
+        //page load users list
+        /*
+        sabio.page.renderUsers = function (data) {
+            //remove hidden attr
+
+            for (var i = 0; i < data.items.length; i++) {
+
+                var guid = data.items[i].id;
+                var appUserId = data.items[i].appUserId;
+                var email = data.items[i].email;
+                var firstName = data.items[i].firstName;
+                var lastName = data.items[i].lastName;
+                var phone = data.items[i].phone;
+                var userType = data.items[i].userType;
+                var newUserRow = sabio.page.cloneDiv("#userRowTemplate");
+                newUserRow.attr("data-uid", i);
+
+                $(".guid", newUserRow).text(guid);
+                $(".appUserId", newUserRow).text(appUserId);
+                $(".email", newUserRow).text(email);
+                $(".firstName", newUserRow).text(firstName);
+                $(".lastName", newUserRow).text(lastName);
+                $(".phone", newUserRow).text(phone);
+                $(".userType", newUserRow).text(userType);
+
+                $(".userRowContainer").append(newUserRow);
+            }
+            $(".cmdEdit").on("click", sabio.page.handlers.onCmdEdit);
+        }
+        */
+
+        sabio.page.handlers.onGetUsersSuccess = function (data) {
+            sabio.page.renderUsers(data);
+        }
+        sabio.page.handlers.onGetUsersError = function (data) {
+            alert("Error Getting All Users");
+        }
+
+        //edit modal
+        sabio.page.showEditModal = function () {
+            sabio.page.renderAppUserPanel();
+            $(".editModal").modal("show");
+        }
+
+        sabio.page.handlers.onCmdEdit = function (event) {
+            var lastClicked = $(this);
+            sabio.page.lastClickedCmdEdit = lastClicked;
+            sabio.page.currentUser = lastClicked.closest(".userRow");
+            sabio.page.currentUserId = $(".guid", sabio.page.currentUser).text();
+            sabio.page.currentUserAppUserId = $(".appUserId", sabio.page.currentUser).text();
+            sabio.page.showEditModal();
+        }
+        sabio.page.handlers.onGetAppUserSuccess = function (data) {
+            var currentUser = data.item;
+            sabio.page.renderTabUser(currentUser);
+        }
+        sabio.page.handlers.onGetAppUserError = function (data) {
+            alert("Get App User Error");
+        }
+
+        //vtab1 user form
+        sabio.page.renderTabUser = function (currentUser) {
+            //render the info in form
+            $("#tabUserId").val(currentUser.id);
+            $("#tabUserAppUserId").val(currentUser.appUserId)
+            $("#tabUserEmail").val(currentUser.email);
+            sabio.page.translateEmailConfirmed(currentUser.emailConfirmed);
+            $("#tabUserPhone").val(currentUser.phoneNumber);
+            $("#tabUserUserName").val(currentUser.userName);
+            $("#tabUserPassword").val(currentUser.passwordHash);
+            $("#tabUserFirstName").val(currentUser.firstName);
+            $("#tabUserLastName").val(currentUser.lastName);
+            sabio.page.translateUserType(currentUser.userType);
+            //set form validation rules.
+            var validationForm = $("#tabUserForm");
+            var validationOptions = {
+                rules: {
+                    appUserId: {
+                        required: true,
+                        digits: true
+                    },
+                    email: {
+                        email: true,
+                        required: true
+                    },
+                    userName: {
+                        required: true,
+                        equalTo: "#tabUserEmail",
+                    },
+                    firstName: {
+                        maxlength: 50
+                    },
+                    lastName: {
+                        maxlength: 50
+                    }
+                }
+            };
+            sabio.page.setUpValidationRules(validationForm, validationOptions);
+            //set up the save button
+            $("#cmdSaveUser").on("click", sabio.page.handlers.onCmdSaveUser);
+        }
+        sabio.page.translateEmailConfirmed = function (confirmation) {
+            if (confirmation == true) {
+                $("#emailConfirmed").attr("selected", true);
+            }
+            else {
+                $("#emailNotConfirmed").attr("selected", true);
+            }
+        }
+        sabio.page.translateUserType = function (type) {
+            switch (type) {
+                case 0:
+                    $("#userType0").attr("selected", true);
+                    break;
+                case 1:
+                    $("#userType1").attr("selected", true);
+                    break;
+                default:
+                    $("#userType2").attr("selected", true);
+            }
+        }
+
+        sabio.page.handlers.onCmdSaveUser = function () {
+            var myData = $("#tabUserForm").serialize();
+            var onSuccess = sabio.page.handlers.onCmdSaveUserSuccess;
+            var onError = sabio.page.handlers.onCmdSaveUserError;
+            var endPoint = "updateuser";
+            sabio.services.admin.put(onSuccess, onError, endPoint, myData);
+        }
+        sabio.page.handlers.onCmdSaveUserSuccess = function (data) {
+            alert("Success! User Updated!");
+        }
+        sabio.page.handlers.onCmdSaveUserError = function (data) {
+            alert("Error, user not updated!");
+        }
+
+        //vtab2 addresses form
+        sabio.page.onCmdTabAddresses = function () {
+            var onSuccess = sabio.page.onGetAddressesSuccess;
+            var onError = sabio.page.onGetAddressesError;
+            var endPoint = "getaddresses/" + sabio.page.currentUserId;
+            sabio.services.admin.get(onSuccess, onError, endPoint);
+            //code to get the dropdown for the addressform
+            sabio.services.geography.getUsStatesDropdown(sabio.page.getUsStatesDropdownSuccess, sabio.page.getUsStatesDropdownError);
+            //set validation rules
+            var validationOptions = {
+                rules:
+                {
+                    address1:
+                    {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 100
+                    },
+                    city:
+                    {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 100
+                    },
+                    state: "required",
+                    zip:
+                    {
+                        required: true,
+                        minlength: 5,
+                        maxlength: 9
+                    }
+                }
+            }
+            sabio.page.setUpValidationRules($("#tabAddressForm"), validationOptions);
+
+        }
+
+        sabio.page.handlers.onCmdCreateUserAddress = function (event) {
+            if ($(".tabUserAddress").valid()) {
+                sabio.page.submitNewUserAddressForm();
+            }
+            else {
+                alert("Your address is not valid");
+            }
+        }
+
+        sabio.page.submitNewUserAddressForm = function () {
+            var addressGuid = $("#addressGuid").val();
+            var serializedForm = $("#address-form").serialize();
+            if (addressGuid.length > 0) {
+                sabio.page.updateAddress();
+            }
+
+            else {
+                console.log("NO GUID");
+                sabio.services.users.createAddress(serializedForm, sabio.page.createAddressSuccess, sabio.page.createAddressError);
+            }
+        }
+
+        sabio.page.handlers.populateUsStatesDropdown = function (index, singleState) {
+            $('#tabAddressState')
+        .append($("<option></option>")
+        .attr("value", singleState.stateProvinceId)
+        .text(singleState.stateProvinceCode));
+        }
+
+        //Biz Logic
+
+        sabio.page.getUsStatesDropdownSuccess = function (results) {
+            console.log(results);
+            //       var myData = null;
+
+            $.each(results.items, sabio.page.handlers.populateUsStatesDropdown);
+        };
+        sabio.page.getUsStatesDropdownError = function () {
+            alert("State Dropdown Error");
+        };
+
+        sabio.page.renderTabAddresses = function (data) {
+
+            $("#cmdUserAddressBtn").on("click", sabio.page.handlers.onValidateUserAddress);
+
+            if (!data.items) {
+                alert("No Addresses in the system! Add One.");
+            } else {
+
+                console.log(data);
+                for (var i = 0; i < data.items.length; i++) {
+                    var clonedDiv = sabio.page.cloneDiv(".addressContainer");
+                    $(".address1", clonedDiv).html(data.items[i].address1);
+                    $(".address2", clonedDiv).html(data.items[i].address2);
+                    $(".city", clonedDiv).html(data.items[i].city);
+                    $(".state-name", clonedDiv).html(data.items[i].state.name);
+                    $(".state-countryRegionCode", clonedDiv).html(data.items[i].state.countryRegionCode);
+                    $(".zip", clonedDiv).html(data.items[i].zip);
+                    clonedDiv.attr("data-addressguid", data.items[i].uId);
+                    $(".cmdEditAddress", clonedDiv).attr("href", "http://santacruz.dev/address/edit/" + data.items[i].uId);
+                    $(".cmdDeleteAddress", clonedDiv).on("click", sabio.page.handlers.onCmdDeleteAddress);
+                    $("#vtab2").append(clonedDiv);
+                    clonedDiv.show();
+                }
+
+            }
+        }
+
+        sabio.page.handlers.onCmdDeleteAddress = function () {
+
+            var currentAddressContainer = $(this).closest(".addressContainer");
+            var currentAddressGuid = currentAddressContainer.attr("data-addressguid");
+            var endPoint = "deleteaddress/" + currentAddressGuid;
+            var onSuccess = sabio.page.onCmdDeleteAddressSuccess;
+            var onError = sabio.page.onCmdDeleteAddressError;
+            var myData = "";
+            sabio.services.admin.put(onSuccess, onError, endPoint, myData);
+        }
+
+        sabio.page.onCmdDeleteAddressSuccess = function () {
+            alert("Success! Address Deleted. Click again to refresh");
+        }
+
+        sabio.page.onCmdDeleteAddressError = function () {
+            alert("Error! Can't delete that address");
+        }
+
+
+        sabio.page.onGetAddressesSuccess = function (data) {
+            sabio.page.renderTabAddresses(data);
+        }
+        sabio.page.onGetAddressesError = function (data) {
+            alert("Error! Can't get your addresses");
+        }
+
+        //vtab3 experiences form
+        sabio.page.renderTabExperiences = function () {
+            var onSuccess = sabio.page.onGetExperiencesSuccess;
+            var onError = sabio.page.onGetExperiencesError;
+            var endPoint = "getexperiences/" + sabio.page.currentUserId;
+            sabio.services.admin.get(onSuccess, onError, endPoint);
+        }
+
+        sabio.page.onGetExperiencesSuccess = function (data) {
+            console.log(data);
+            alert("Success! Got your experiences");
+        }
+        sabio.page.onGetExperiencesError = function (data) {
+            alert("Error! Can't get your experiences");
+        }
+
+        //tab4 projects form
+
+        //tab5 skills form
+
+        //vtab6 password form
+        sabio.page.onCmdTabPassword = function () {
+            //usually if you need to get info to put on the page, you'd do it here as a get
+            //but passwords are secure, so you don't need to get anything. so run the render.
+            sabio.page.renderTabPassword();
+        }
+        sabio.page.renderTabPassword = function () {
+            //set up form validation on tab load
+            var validationForm = $("#updatePasswordForm");
+            var validationOptions = {
+                rules: {
+                    password: {
+                        required: true,
+                        minlength: 8,
+                        pwcheck: true
+                    },
+                    confirmPassword: {
+                        required: true,
+                        equalTo: "#inputPassword",
+                        minlength: 8
+                    }
+                },
+                messages: {
+                    password: {
+                        pwcheck: "Your pwd must contain an upper case, number, and special character."
+                    },
+                    confirmPassword: {
+                        required: "Please confirm your password.",
+                        equalTo: "Your passwords do not match."
+                    }
+                }
+            };
+            sabio.page.setUpValidationRules(validationForm, validationOptions);
+            //add rule for pwd
+            $.validator.addMethod("pwcheck", function (value) {
+                return /^[A-Za-z0-9\d!@@#$%^&*()-_+=~`]/.test(value) &&
+                    /\d/.test(value) &&
+                    /[A-Z]/.test(value) &&
+                    /[~`!@@#$%^&*()-_=+]/.test(value)
+            });
+            //fill in form with the currentUserId
+            var currentUserId = sabio.page.currentUserId;
+            $("#passwordTabAspNetUsersId").val(currentUserId);
+            //on form save click
+            $("#cmdSavePassword").on("click", sabio.page.handlers.onCmdSavePassword);
+        }
+
+        sabio.page.handlers.onCmdSavePassword = function () {
+            var myData = $("#updatePasswordForm").serialize();
+            var onSuccess = sabio.page.handlers.onCmdSavePasswordSuccess;
+            var onError = sabio.page.handlers.onCmdSavePasswordError;
+            var endPoint = "updatepassword";
+            sabio.services.admin.put(onSuccess, onError, endPoint, myData);
+        }
+        sabio.page.handlers.onCmdSavePasswordSuccess = function (data) {
+            alert("Password Updated!");
+        }
+        sabio.page.handlers.onCmdSavePasswordError = function (data) {
+            alert("Password Not Updated!");
+        }
+
+
+
+    </script>
+}

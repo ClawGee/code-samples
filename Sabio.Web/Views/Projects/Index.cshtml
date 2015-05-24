@@ -1,0 +1,119 @@
+﻿@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+
+<div data-ng-controller="projectsController as dashboard" id="projectsControllerContainer">
+
+    <h1>List of Projects for...</h1>
+    <div class="separator-2"></div>
+
+
+    @*Container*@
+
+    <div class="container" id="targetContainer">
+        <div class="row grid-space-20">
+
+            @*Clone*@
+
+            <div class="col-lg-6 col-md-12" data-ng-repeat="project in dashboard.items track by project.uid">
+                <div class="image-box team-member white-bg option-3">
+                    <div class="overlay-container">
+                        <a href="/projects/edit/{{project.uid}}" class="projLink"><img src="~/images/team-member-1.jpg" alt="">{{project.image}}</a>
+                    </div>
+                    <div class="image-box-body">
+                        <h3 class="title"><a href="" class="projLink"></a>{{project.name}}</h3>
+                        <div class="separator-2"></div>
+                        <p class="descrip">{{project.description}}</p>
+                    </div>
+
+                    <a href="/projects/edit/{{project.uid}}" class="btn btn-default editbutton">Edit</a>
+</div>
+            </div>
+        </div>
+        <div class="space"></div>
+    </div>
+</div>
+
+
+@section scripts {
+
+
+    <script type="text/javascript" src="~/Scripts/sabio.services.projects.js"></script>
+    <script type="text/javascript">
+
+
+        sabio.page.startUp = function () {
+
+        }
+
+
+        sabio.services.projects.Factory = function ($baseService) {           
+
+            var angularServiceObject = sabio.services.projects;
+
+            var newService = $.extend(true, {}, angularServiceObject, $baseService);
+
+            return newService
+
+        }
+
+
+        sabio.page.projectsControllerFactory = function (
+           $scope,
+           $baseController,
+           $ProjectService) {
+
+            var vm = this;
+            vm.items = null;
+            vm.$ProjectService = $ProjectService;
+
+            vm.receiveItems = _receiveItems;             //on success
+            vm.onUsersError = _onUsersError;             //on error
+
+            // used for inheritance, like the AdminApiController : ApiController
+            $.extend(vm, $baseController);
+
+                vm.notify = vm.$ProjectService.getNotifier($scope);
+
+                render();
+
+                function render() {
+
+                    vm.$ProjectService.List(vm.receiveItems, vm.onUsersError);  //calling sabio.services.projects.List
+
+                }
+
+                function _receiveItems(data) {
+
+                    vm.notify(function () {
+                        vm.items = data.items;
+                    });
+
+                }
+
+                function _onUsersError(jqXhr, error) {
+
+                    console.error(error);
+
+                }
+            }
+
+
+            sabio.ng.addService(
+                sabio.ng.app.module,
+                "$ProjectService",
+                ["$baseService"],
+                sabio.services.projects.Factory);
+
+
+            sabio.ng.addController(
+                sabio.ng.app.module,
+                "projectsController",
+                ['$scope', '$baseController', "$ProjectService"],
+                sabio.page.projectsControllerFactory);
+
+
+        
+    </script>
+}

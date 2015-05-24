@@ -1,0 +1,185 @@
+﻿@{
+    ViewBag.Title = "Manage";
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+<h2>Update Your Information Below</h2>
+
+<form id="avatar" class="form-horizontal" role="form" method="post" action="/api/accounts/upload" enctype="multipart/form-data">
+    <div class="from-group" id="profilePicture">
+        <div class="col-sm-2">
+            <div class="box-style-1 gray-bg team-member">
+                <div class="overlay-container">
+                    <img src="http://www.swiss-miss.com/wp-content/uploads/2012/02/playground_web_design_grande-480x480.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="body">
+        <div>
+            <label for="fileUpload" class="col-sm-2 control-label"/>
+                Choose a new photo.
+            <input id="fileUpload" type="file"/>
+            <input name="myFile" type="submit" id="cmdUploadFileBtn" value="Upload Photo" class="btn"/>
+        </div>
+    </div>
+</form>
+<div class="clearfix visible-lg-block">
+</div>
+<form id="contactInfo" class="form-horizontal" role="form">
+    <div class="form-group">
+        <label for="firstName" class="col-sm-2 control-label">First Name</label>
+        <div class="col-sm-10">
+            <input name="firstName" type="text" class="form-control" id="firstName" placeholder="First Name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="lastName" class="col-sm-2 control-label">Last Name</label>
+        <div class="col-sm-10">
+            <input name="lastName" type="text" class="form-control" id="lastName" placeholder="Last Name">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="cmdConfirmChangesBtn" type="button" class="btn btn-default">Confirm Changes</button>
+        </div>
+    </div>
+</form>
+<form id="passwordForm" class="form-horizontal" role="form">
+    <div class="form-group">
+        <label for="password" class="col-sm-2 control-label">Current Password</label>
+        <div class="col-sm-10">
+            <input name="currentPassword" type="password" class="form-control" id="currentPassword" placeholder="Current Password">
+            <div id="messages">
+            </div>
+        </div>
+        <label for="password" class="col-sm-2 control-label">New Password</label>
+        <div class="col-sm-10">
+            <input name="newPassword" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" type="password" class="form-control" id="newPassword" placeholder="Min 8 char (1 upper / 1 lower), 1 number, 1 special char">
+            <!-- <input title="Password must contain at least 6 characters, including UPPER/lowercase and numbers" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password" onchange=" this.setCustomValidity(this.validity.patternMismatch ? this.title : ''); if(this.checkValidity()) form.passwordConfirm.pattern = this.value; "> -->
+            <div id="messages">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="passwordConfirm" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" class="col-sm-2 control-label">Confirm Password</label>
+        <div class="col-sm-10">
+            <input name="passwordConfirm" type="password" class="form-control" id="passwordConfirm" placeholder="Confirm Password">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button id="cmdConfirmPWBtn" type="button" class="btn btn-default">Update Password</button>
+        </div>
+    </div>
+</form>
+
+
+@section scripts{
+    <script type="text/javascript" src="/scripts/sabio.services.users.js"></script>
+    <script type="text/javascript">
+        sabio.page.startUp = function () {
+
+            $("#contactInfo").validate({
+                rules: {
+                    firstName: {
+                        required: true,
+                        minlength: 2,
+                    },
+
+                    lastName: {
+                        required: true,
+                        minlength: 2,
+                    },
+
+
+                    emailAddress: {
+                        required: true,
+                        email: true
+                    }
+                }
+            });
+            sabio.services.users.getAccountInfo(sabio.page.onShowAccountInfoSuccess, sabio.page.onShowAccountInfoError);
+            $("#cmdConfirmChangesBtn").on("click", sabio.page.handlers.onValidateContactInfo);
+            $("#cmdUploadFileBtn").on("click", sabio.page.handlers.onFileUpload);
+        }
+        //Handlers
+
+        sabio.page.handlers.onFileUpload = function (event) {
+            event.preventDefault(); 
+            sabio.page.onFileUpload();
+        }
+
+        sabio.page.handlers.onValidateContactInfo = function (event) {
+            event.preventDefault();
+            if ($("#contactInfo").valid()) {
+                console.log("Contact Info Update Validated");
+                sabio.page.updateContactInfoForm();
+            }
+            else {
+                console.log("Contact Info Form NOT validated");
+            }
+
+        }
+
+
+        sabio.page.onShowAccountInfoSuccess = function (results) {
+            console.log(results);
+            $("#firstName").val(results.item.firstName);
+            $("#lastName").val(results.item.lastName);
+            $("#emailAddress").val(results.item.emailAddress);
+        }
+
+        //Biz logic
+
+        sabio.page.updateContactInfoForm = function () {
+            var serializedForm = $("#contactInfo").serialize();
+            sabio.services.users.updateAccountInfo(serializedForm, sabio.page.updateSuccess, sabio.page.updateError);
+        }
+
+        sabio.page.updateError = function () {
+            console.log("UPDATE ERROR");
+        }
+
+        sabio.page.updateSuccess = function () {
+            console.log("SUCCESS ON UPDATING");
+        }
+
+        sabio.page.onShowAccountInfoError = function () {
+            alert("Error on showing account.");
+        }
+
+        sabio.page.processAccountInfo = function (data, success, xhr) {
+            console.log("wheres my info?");
+            console.log(data);
+            console.log(status);
+            console.log(xhr);
+            $("#firstName").val(data.item.firstName);
+            $("#lastName").val(data.item.lastName);
+            $("#emailAddress").val(data.item.email);
+        }
+
+        sabio.page.onFileUpload = function () {
+            
+            var files = $("#fileUpload").get(0).files;
+            var data = new FormData();
+            if (files.length > 0) {
+                //key is the index of the array for the photo. value is the file
+                $.each(files, function (key, value) {
+                    data.append(key, value);
+                    sabio.services.users.postFile(data, sabio.page.fileUploadSuccess, sabio.page.fileUploadError);//examine signature, call correct parameters, passing arguments into a function
+                });
+            }
+
+        };
+        sabio.page.fileUploadSuccess = function () {
+            alert("Thank you for uploading your photo!"); 
+        }
+
+        sabio.page.fileUploadError = function () {
+            alert("ERROR: File not uploaded."); 
+        }
+
+
+    </script>
+}

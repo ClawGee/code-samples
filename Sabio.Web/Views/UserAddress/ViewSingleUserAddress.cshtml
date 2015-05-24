@@ -1,0 +1,153 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid?>
+
+@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+<!-- main-container start -->
+<!-- ================ -->
+<section class="main-container">
+
+    <div class="container">
+        <div class="row">
+
+            <!-- main start -->
+            <!-- ================ -->
+            <div class="main col-md-12">
+
+                <!-- page-title start -->
+                <!-- ================ -->
+                <h1 class="page-title">My Address</h1>
+                <!-- page-title end -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Below is your address and a Google Map. Ta-dah!</p>
+                        <div class="alert alert-success hidden" id="contactSuccess">
+                            <strong>Success!</strong> Your message has been sent to us.
+                        </div>
+                        <div class="alert alert-error hidden" id="contactError">
+                            <strong>Error!</strong> There was an error sending your message.
+                        </div>
+                        <div class="contact" data-ng-controller="singleAddressController as sac" id="sAddressCtrler">
+                            <div id="address" data-ng-include="'/scripts/selectedAddress.html'">
+
+                            </div>
+                            <input type="hidden" value="@Model.Item" name="addressGuid" id="addressGuid" />
+                            <input type="hidden" value="@Model.Item" name="uid" id="uid" />
+                        </div>
+                        <div class="col-md-6">
+                            <!-- google maps start -->
+                            <div id="map-canvas">
+                                <span id="addressMap"> </span>
+                            </div>
+                            <!-- google maps end -->
+                        </div>
+                    </div>
+                </div>
+                <!-- main end -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- main-container end -->
+
+<script type="text/ng-template" id="/scripts/selectedAddress.html">
+    <div>
+        <ul class="list text-left">
+            <li><strong></strong></li>
+            <li><i class="pr-10" id="add1">{{sac.item.address1}}</i></li>
+            <li id="add2" class="" data-ng-if="sac.item.address2">
+                <i class="pr-10">{{sac.item.address2}}</i>
+            </li>
+            <li><i id="city" class="pr-10">{{sac.item.city}}</i></li>
+            <li><i id="state" class="pr-10">{{sac.item.state.name}}</i></li>
+            <li><i id="zip" class="pr-10">{{sac.item.zip}}</i></li>
+        </ul>
+    </div>
+    <div class="col-xs-pull-4">
+        @* EDIT PENCIL ICON *@
+        <span class="glyphicon glyphicon-pencil" aria="true"><a href="/address/edit/{{sac.item.uId}}" class="uId">Edit</a></span>
+    </div>
+
+</script>
+@section scripts{
+
+    <script type="text/javascript" src="~/scripts/sabio.services.users.js"></script>
+    <script type="text/javascript">
+        sabio.page.startUp = function () {
+
+            sabio.page.sAddressController = sabio.ng.getControllerInstance($("#sAddressCtrler"));
+            console.log("Here in start up");
+        }
+
+        //Angular Code to List Addresses
+
+        sabio.services.sAddressFactory = function ($baseService) {
+            console.log("in sabio.services.sAddressFactory");
+            var singleAddressService = sabio.services.users;
+
+            var newService = $.extend(true, {}, singleAddressService, $baseService);
+
+            return newService;
+        }
+
+
+        sabio.page.sAddressControllerFactory = function ($scope, $baseController, $singleAddressService) {
+            addressGuid = $("#addressGuid").val();
+            console.log(addressGuid);
+            var vm = this;
+            vm.item = null;
+            vm.$singleAddressService = $singleAddressService;
+            vm.receiveItem = _receiveItem;
+            vm.onAddyError = _onAddyError;
+            console.log(vm.receiveItem);
+
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$singleAddressService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$singleAddressService.getAddress(addressGuid, vm.receiveItem, vm.onAddyError);
+            }
+
+            function _receiveItem(data) {
+                //this receives the data and calls the special
+                //notify method that will trigger ng to refresh UI
+                //this
+                console.log("in function receive item")
+                vm.notify(function () {
+                    //this
+                    vm.item = data.item;
+
+                    var added = data.item.address1 + " " + (data.item.address2 || "") + " " + data.item.city + " " + data.item.state.name + " " + data.item.zip;
+
+                    var embed = "<iframe width='425' height='350' frameborder='0' scrolling='no'  marginheight='0' marginwidth='0'   src='https://maps.google.com/maps?&amp;q=";
+                    embed = embed + encodeURIComponent(added) + "&amp;output=embed'></iframe>";
+                    console.log("pre embed");
+                    $("#addressMap").html(embed);
+                    console.log("post embed");
+
+                });
+            }
+
+            function _onAddyError(jqXhr, error) {
+                console.log("in onaddyerror function");
+                console.error(error);
+
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module, "$singleAddressService", ["$baseService"], sabio.services.sAddressFactory);
+
+        sabio.ng.addController(sabio.ng.app.module
+    , "singleAddressController"
+    , ['$scope', '$baseController', "$singleAddressService"]
+    , sabio.page.sAddressControllerFactory)
+
+
+    </script>
+}

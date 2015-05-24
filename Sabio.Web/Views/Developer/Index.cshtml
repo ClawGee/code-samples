@@ -1,0 +1,425 @@
+﻿@model Sabio.Web.Models.ViewModels.DeveloperViewModel
+
+@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+<div class="main-container">
+
+    <div class="main">
+
+        <form class="form" id="DeveloperSkillsForm">
+
+            <h1 class="page-title">Developer Skills</h1>
+
+            <br />
+
+            <div class="skills-container">
+
+
+                <header>
+                    <div class="content-wrapper">
+                        <div class="float-left">
+                            <p class="site-title">
+                                <a href="~/">ASP.NET Web API File Upload</a>
+                            </p>
+                        </div>
+                    </div>
+                </header>
+
+
+
+                <div class="row">
+                    <div class="col-md-6 educationLevel form-group">
+                        <div>
+                            <h3>Education Level: <span id="educationLevelViewData"></span></h3>
+
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="educationLevel" value="1" id="radioEducationHighSchool" />
+                                High School(GED)
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="educationLevel" value="2" id="radioEducationCollege" />
+                                College (BA, BS)
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="educationLevel" value="3" id="radioEducationGraduateSchool" />
+                                Graduate Degree (Masters, Doctoral)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <h3>Years of Experience: <span id="yearsOfExperienceViewData"></span></h3>
+                        <label>
+                            <select class="form-control" type="singleselect" name="yearsOfExperience" id="selectYearsOfExperience">
+                                <option value="0" id="optionYears0">None</option>
+                                <option value="1" id="optionYears1">1</option>
+                                <option value="2" id="optionYears2">2</option>
+                                <option value="3" id="optionYears3">3</option>
+                                <option value="4" id="optionYears4">4</option>
+                                <option value="5" id="optionYears5">5</option>
+                                <option value="6" id="optionYears6">6</option>
+                                <option value="7" id="optionYears7">7</option>
+                                <option value="8" id="optionYears8">8</option>
+                                <option value="9" id="optionYears9">9</option>
+                                <option value="10" id="optionYears10">10+</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 skills form-group">
+                        <h3>Stack: <span id="frontEndViewData"></span><span id="backEndViewData"></span><span id="networkViewData"></span></h3>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="frontEnd" value="true" id="chkFrontEnd">Front End
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="backEnd" value="true" id="chkBackEnd">Back End
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="network" value="true" id="chkNetwork">Network
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 certifications form-group">
+                        <h3>Certifications: <span id="certificationsViewData"></span></h3>
+                        <label></label>
+                        <textarea class="form-control" type="text" name="certifications" rows="5" id="textAreaCertifications" placeholder="Separate your certifications by commas."></textarea>
+                    </div>
+                </div>
+                <br />
+                <!-- ***BUTTON TO CREATE SKILLS -->
+
+                <div class="col-sm-offset-1">
+                    <button type="button" id="cmdSubmitSkills" class="btn btn-default">Submit</button>
+                </div>
+
+                <!--***hidden input for uid-->
+                <input type="hidden" id="uid" name="uid" value="@Model.Uid">
+            </div>
+        </form>
+
+        <div id="body">
+            <form id="profilePic" class="form-horizontal" role="form" name="form1" method="post" action="/api/profile/developer/upload" enctype="multipart/form-data">
+                <div class="form-group" id="profilePicture">
+                    <div class="col-sm-2">
+                        <div class="box-style-1 gray-bg team-member">
+                            <div class="overlay-container">
+                                <img src="http://www.swiss-miss.com/wp-content/uploads/2012/02/playground_web_design_grande-480x480.jpg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="body">
+                    <div>
+                        <label for="fileUpload" class="col-sm-2 control-label" />
+                        Choose a new photo.
+                        <input id="fileUpload" type="file" />
+                        <input name="myFile" type="submit" id="cmdUploadProfilePicBtn" value="Upload Photo" class="btn" />
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        sabio.page.educationLevels = @Html.Raw(  Json.Encode(Model.EducationLevels))   ;
+
+
+    </script>
+
+    <script type="text/javascript" src="~/Scripts/sabio.services.developer.js"></script>
+
+    <script type="text/javascript">
+
+        //********F U N C T I O N S***
+
+        // ********START UP
+
+        sabio.page.startUp = function () {
+            sabio.page.validateForm();
+
+            //THEN PASSING IN THE ARGUMENTS OF MYUID IN THE NEW FUNCTION
+            var myUid = $("#uid").val();
+
+            //IF ELSE STATEMENT - checks if there is GUID present for CREATE OR EDIT Mode
+            if (myUid.length > 0) {
+                //  if we have a guid - EDIT Mode
+                //BINDERS - PUT - BY UID - ON CLICK BUTTON
+
+                //$("#cmdAddExperience").on("click", sabio.page.handlers.onEditExperienceByUid);
+                //sabio.services.experiences.getExperienceDataByUid(myUid, sabio.page.onGetExperienceByUidDataSuccess, sabio.page.onGetExperienceByUidDataError);
+
+
+            }
+            else {
+                //  BINDERS - POST - ON CLICK BUTTON- if no guid was located - CREATE mode
+                $("#cmdSubmitSkills").on("click", sabio.page.handlers.onCmdSubmitSkills);
+                $("#cmdUploadProfilePicBtn").on("click", sabio.page.handlers.onProfilePicUpload);
+
+                // JASON'S CODE - call oncmdSubmitSkills every 3 seconds. setInterval(sabio.page.handlers.onCmdSubmitSkills, 3000);
+
+            }
+
+
+            sabio.page.handlers.onDocReadyGetView();
+
+
+        }
+
+        //FUNCTION - POST - VALIDATE Sets up rules-
+        sabio.page.validateForm = function () {
+            var validateOptions = {
+                rules: {
+                    educationLevel: {
+                        required: true
+                    },
+                    yearsOfExperience: {
+                        required: true
+                    }
+                },
+                messages: {
+                    yearsOfExperience: "How long have you been coding?"
+                }
+            }
+
+            $("#DeveloperSkillsForm").validate(validateOptions);
+        }
+
+        //FUNCTIONS--POST profile picture
+
+        sabio.page.onProfilePicUpload = function () {
+
+            var files = $("#fileUpload").get(0).files;
+            var data = new FormData();
+            if (files.length > 0) {
+                //key is the index of the array for the photo. value is the file
+                $.each(files, function (key, value) {
+                    data.append(key, value);
+                    sabio.services.developer.postProfilePicFile(data, sabio.page.profilePicUploadSuccess, sabio.page.profilePicUploadError);//examine signature, call correct parameters, passing arguments into a function
+                });
+            }
+        }
+
+        sabio.page.profilePicUploadSuccess = function () {
+            alert("Thank you for uploading your photo!");
+        }
+
+        sabio.page.profilePicUploadError = function () {
+            alert("ERROR: File not uploaded.");
+        }
+
+
+        sabio.page.translateEducation = function (education) {
+            /*
+            if you decide to use enums, then you must use this line instead.
+            return sabio.page.educationLevels[education];
+            */
+            switch (education){
+                case 2:
+                    $("#radioEducationCollege").attr("checked", "checked");
+                    return education = "College";
+                    break;
+                case 3:
+                    $("#radioEducationGraduateSchool").attr("checked", "checked");
+                    return education = "Graduate School";
+                    break;
+                default:
+                    $("#radioEducationHighSchool").attr("checked", "checked");
+                    return education = "High School";
+            }
+        }
+
+
+        sabio.page.translateYears = function (years) {
+
+            switch (years){
+                case 0:
+                    $("#optionsYears0").attr("selected", true);
+                    return years = "none";
+                case 1:
+                    $("#optionYears1").attr("selected", true);
+                    return years;
+                case 2:
+                    $("#optionYears2").attr("selected", true);
+                    return years;
+                case 3:
+                    $("#optionYears3").attr("selected", true);
+                    return years;
+                case 4:
+                    $("#optionYears4").attr("selected", true);
+                    return years;
+                case 5:
+                    $("#optionYears5").attr("selected", true);
+                    return years;
+                case 6:
+                    $("#optionYears6").attr("selected", true);
+                    return years;
+                case 7:
+                    $("#optionYears7").attr("selected", true);
+                    return years;
+                case 8:
+                    $("#optionYears8").attr("selected", true);
+                    return years;
+                case 9:
+                    $("#optionYears9").attr("selected", true);
+                    return years;
+                case 10:
+                    $("yearsOption10").attr("selected", true);
+                    return years = "10 or more years of experience";
+            }
+        }
+
+
+        sabio.page.translateFront = function (front) {
+            if (front == true) {
+                $("#chkFrontEnd").attr("checked", true);
+                return front = " Front Stack";
+            } else {
+                return front;
+            }
+        }
+
+
+        sabio.page.translateBack = function (back) {
+            if (back == true) {
+                $("#chkBackEnd").attr("checked", true);
+                return back = " Back Stack";
+            } else {
+                return back;
+            }
+        }
+
+
+        sabio.page.translateNetwork = function (network) {
+            if (network == true) {
+                $("#chkNetwork").attr("checked", true);
+                return network = " Network and Server";
+            }
+            return network;
+        }
+
+        sabio.page.translateCertifications = function (certifications){
+            if (certifications){
+                $("#textAreaCertifications").html(certifications);
+                return certifications;
+            }
+            return certifications;
+        }
+
+        sabio.page.renderDeveloperSkills = function (education, years, front, back, network, certifications) {
+
+            education = sabio.page.translateEducation(education);
+            $("#educationLevelViewData").html(education);
+
+            years = sabio.page.translateYears(years);
+            $("#yearsOfExperienceViewData").html(years);
+
+            front = sabio.page.translateFront(front);
+            $("#frontEndViewData").html(front);
+
+            back = sabio.page.translateBack(back);
+            $("#backEndViewData").html(back);
+
+            network = sabio.page.translateNetwork(network);
+            $("#networkViewData").html(network);
+
+            certifications = sabio.page.translateCertifications(certifications);
+            $("#certificationsViewData").html(certifications);
+        }
+
+
+        //HANDLER - POST - Create Skills - VALIDATES AND SUBMITS the fields and prints out the values
+        sabio.page.handlers.onCmdSubmitSkills = function () {
+            var isFormValid = $("#DeveloperSkillsForm").valid();
+
+            if (isFormValid) {
+                var serializedForm = $("#DeveloperSkillsForm").serialize();
+                sabio.services.developer.createSkills(serializedForm, sabio.page.handlers.onAddCreateSuccess, sabio.page.handlers.onAddCreateError);
+            }
+        }
+
+        //HANDLERS - Post - Upload Profile Picture
+
+        sabio.page.handlers.onProfilePicUpload = function (event) {
+            event.preventDefault();
+            sabio.page.onProfilePicUpload();
+        }
+
+
+        //HANDLER - POST - Create Skills - SUCCESS
+        sabio.page.handlers.onAddCreateSuccess = function (data, status, xhr) {
+            console.log(data);
+            console.log(status);
+            console.log(xhr);
+            console.log("Success, It's Working");
+
+            alert("Thank you!");
+
+            window.location.href = '/experience/';
+
+            //  Jason's Code -      sabio.page.handlers.onDocReadyGetView();
+        }
+
+
+        //HANDLER - POST - Create Skills - ERROR
+        sabio.page.handlers.onAddCreateError = function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+
+            alert("Errored out");
+        }
+
+
+        sabio.page.handlers.onDocReadyGetView = function (){
+            sabio.services.developer.get(sabio.page.handlers.onViewSuccess, sabio.page.handlers.onViewError)
+        }
+
+        sabio.page.handlers.onViewSuccess = function (data) {
+            console.log(data);
+            var edu = data.item.educationLevel;
+            var years = data.item.yearsOfExperience;
+            var front = data.item.frontEnd;
+            var back = data.item.backEnd;
+            var network = data.item.network;
+            var certifications = data.item.certifications;
+
+            sabio.page.renderDeveloperSkills(edu, years, front, back, network, certifications);
+        }
+
+        sabio.page.handlers.onViewError = function () {
+            alert("uh oh there's an error in your ajax get call");
+        }
+
+
+
+
+
+    </script>
+}

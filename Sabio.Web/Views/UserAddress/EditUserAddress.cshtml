@@ -1,0 +1,103 @@
+﻿@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+<div class="section parallax light-translucent-bg parallax-bg-2">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 .text-center">
+                <h1 class="title text-center"><i class="fa fa-home pr-10"></i>My Addresses</h1>
+                <div class="row" id="targetContainer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Start Hidden Address Form Template for View-->
+
+<div class=" col-md-3 hidden" id="address">
+    <ul class="list text-left">
+        <li><strong></strong></li>
+        <li><i class="pr-10 Address1"></i></li>
+        <li><i class="pr-10 Address2"></i></li>
+        <li><i class="pr-10 City"></i></li>
+        <li><i class="pr-10 State"></i></li>
+        <li><i class="pr-10 Zip"></i></li>
+    </ul>
+</div>
+<!-- End Hidden Address Form Template for View-->
+@section scripts{
+
+  <script type="text/javascript" src="/scripts/sabio.services.users.js"></script>  
+    <script type="text/javascript">
+        sabio.page.startUp = function () {
+            sabio.page.editUserAddress();
+
+        }
+
+        //Business Logic
+
+        sabio.page.onShowUserAddress = function (results) {
+
+            console.log(results);
+            $.each(results.items, sabio.page.processSingleAddress);
+
+            // Below is the code that the .each does on it's own
+            //for (var i = 0; i < results.items.length; i++)
+            //{
+
+            //    var currentAddress = results.items[i];
+            //    console.log(currentAddress);
+
+            //    sabio.page.processSingleAddress(i, currentAddress);
+            //}
+
+        }
+
+        sabio.page.cloneAddress = function () {
+
+            var clone = $("#address").clone();
+            clone.appendTo("#targetContainer");
+
+            return clone;
+
+        }
+
+        sabio.page.completedCloneAddress = function () {
+            var cAddress = sabio.page.cloneAddress();
+            cAddress.removeClass("hidden").removeAttr("id");
+
+            return cAddress;
+
+        }
+
+        sabio.page.processSingleAddress = function (idx, singleAddress) {
+            var newJqObj = sabio.page.completedCloneAddress();
+
+
+            $(".Address1", newJqObj).html(singleAddress.address1);
+
+
+            if (!singleAddress.address2) {
+
+                $(".Address2", newJqObj).parent().remove();
+
+            }
+            else
+            {
+                $(".Address2", newJqObj).html(singleAddress.address2);
+
+            }
+
+            $(".City", newJqObj).html(singleAddress.city);
+            $(".State", newJqObj).html(singleAddress.state);
+            $(".Zip", newJqObj).html(singleAddress.zip);
+            console.log(singleAddress);
+
+
+        }
+
+
+    </script>
+}

@@ -1,0 +1,131 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid>
+@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+
+
+<section class="main-container" style="margin-top: 0px;">
+
+    <div class="container" id="targetContainer">
+        <div class="row">
+
+            <!-- main start -->
+            <!-- ================ -->
+            <div class="main col-md-12">
+
+                <!-- page-title start -->
+                <!-- ================ -->
+                <h1 class="project"></h1>
+                @*<div class="separator-2"></div>*@
+                <div class="space"></div>
+                <!-- page-title end -->
+
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="box-style-1 gray-bg team-member">
+                            <div class="overlay-container">
+                                <img alt="" src="~/images/team-member-1.jpg">
+                            </div>
+                            <h3></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-sm-8">
+                        <h4><u>Website</u></h4>
+                        <p class="website"></p>
+                        <h4><u>Project Description</u></h4>
+                        <p class="description"></p>
+                        <h4><u>Data Launched</u></h4>
+                        <p class="dlaunch"></p>
+                    </div>
+                </div>
+                <h2>Technologies Used</h2>
+                <div class="progress">
+                    <div data-animate-width="80%" role="progressbar" class="progress-bar progress-bar-default" style="width: 80%;">
+                        <span data-effect-delay="200" data-animation-effect="fadeInLeftBig" class="object-non-visible animated object-visible fadeInLeftBig">HTML5</span>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div data-animate-width="90%" role="progressbar" class="progress-bar progress-bar-default" style="width: 90%;">
+                        <span data-effect-delay="200" data-animation-effect="fadeInLeftBig" class="object-non-visible animated object-visible fadeInLeftBig">CSS3</span>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div data-animate-width="75%" role="progressbar" class="progress-bar progress-bar-default" style="width: 75%;">
+                        <span data-effect-delay="200" data-animation-effect="fadeInLeftBig" class="object-non-visible animated object-visible fadeInLeftBig">JQUERY</span>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div data-animate-width="85%" role="progressbar" class="progress-bar progress-bar-default" style="width: 85%;">
+                        <span data-effect-delay="200" data-animation-effect="fadeInLeftBig" class="object-non-visible animated object-visible fadeInLeftBig">PHP</span>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div data-animate-width="80%" role="progressbar" class="progress-bar progress-bar-default" style="width: 80%;">
+                        <span data-effect-delay="200" data-animation-effect="fadeInLeftBig" class="object-non-visible animated object-visible fadeInLeftBig">DESIGN</span>
+                    </div>
+                </div>
+                <div class="space"></div>
+            </div>
+            <!-- main end -->
+            <input type="hidden" id="projectuid" name="projectuid" value="@Model.Item" />
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+@section scripts {
+
+
+    <script type="text/javascript" src="~/Scripts/sabio.services.projects.js"></script>
+    <script type="text/javascript">
+
+        /******* Startup Function *******/
+
+        sabio.page.startUp = function () {
+
+            var myUid = $("#projectuid").val();
+            sabio.services.projects.get(myUid, sabio.services.projects.onGetSuccess, sabio.services.projects.onGetError);
+
+        }
+
+
+        /****************************** F U N C T I O N S ******************************/
+
+
+
+
+        /****************************** H A N D L E R S ******************************/
+
+
+        sabio.services.projects.onGetSuccess = function (data, status, xhr) {
+
+            //.html Grabs data using .html*****
+
+            $("h1.project").html(data.item.name);
+            $("p.website").html(data.item.url);
+            $("p.image").html(data.item.image);
+            $("p.description").html(data.item.description);
+            $("p.dlaunch").html(data.item.launchdate);
+            //$(".technologies").html(projectList.technologies);
+
+        }
+
+
+        sabio.services.projects.onGetError = function (jqXHR, textStatus, errorThrown) {
+
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+            window.alert("You need to fix your stuff");
+
+        }
+
+
+    </script>
+}

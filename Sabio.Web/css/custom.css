@@ -1,0 +1,35 @@
+/*
+Theme Name: iDea - Clean & Powerful Bootstrap Theme
+Author: HtmlCoder
+Author URI: http://www.htmlcoder.me
+Author e-mail: htmlcoder.me@gmail.com
+Version: 1.0.0 
+Created: August 2014
+License URI: http://wrapbootstrap.com
+File Description: Place here your custom CSS styles
+*/
+.global-login-nav, .global-login-nav a {
+    padding: 10px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #999;
+    min-width: 160px;
+	text-align: center;
+	border-radius: 0;
+	margin: 10px 0;
+    -webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
+	-ms-transition: all 0.2s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+    text-decoration: none;
+    text-transform: capitalize;
+}
+
+.global-login-nav a:hover {
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #FF0000;
+    text-decoration: none;
+    text-transform: capitalize;
+}

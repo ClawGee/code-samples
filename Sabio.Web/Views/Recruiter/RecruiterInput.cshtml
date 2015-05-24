@@ -1,0 +1,403 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid?>
+@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+<div data-ng-controller="recruitersController as dashboard" id="recruiterCtrler">
+    <!-- Forms start -->
+    <!-- ============================================================================== -->
+    <h2>Recruiter Bio</h2>
+
+    <form role="form" id="RecruitBio" name="recruiters" ng-submit="submitForm(dashboard.user.$valid)" novalidate>
+        <div class="form-group">
+            Industry experience: <input type="text" ng-model="dashboard.user.industry" ng-minlength=3 ng-maxlength=50   required /><br />
+        </div>
+        <div class="form-group">
+            placements per year: <input type="text" ng-model="dashboard.user.placements" ng-minlength=3 ng-maxlength=50 required /><br />
+        </div>
+        <div class="form-group">
+            Type of roles: <input type="text" ng-model="dashboard.user.roles" ng-minlength=3 ng-maxlength=50 required /><br />
+        </div>
+        <div class="form-group">
+            Locations: <input type="text" ng-model="dashboard.user.locations"ng-minlength=3 ng-maxlength=50 required /><br />
+        </div>
+        <div class="form-group">
+            Recruiters website: <input type="text" ng-model="dashboard.user.website" required /><br />
+        </div>
+        <div class="form-group">
+            Company Name: <input type="text" ng-model="dashboard.user.companyName" ng-minlength=3 ng-maxlength=50 required /><br />
+        </div>
+        <div class="form-group">
+            Phone numbers: <input type="text" ng-model="dashboard.user.phoneNumbers" required /><br />
+        </div>
+        <div class="form-group">
+            Email: <input type="email" ng-model="dashboard.user.website" required /><br />
+        </div>
+        <div class="form-group">
+
+        </div>
+        <input type="button" value="Submit" ng-click="dashboard.submitButton()" class="btn btn-default" ng-disabled="recruiter.Form.$invalid">
+        
+        <div class="form-group">
+            <label for="experience"></label>
+            <input type="hidden"  ng-model="dashboard.user.id" id="RecuiterUID" placeholder="">
+
+
+        </div>
+    </form>
+
+    <!-- ERROR MODAL HERE -->
+    <a id="2ErrorModal" href="#errorModalContainer" role="button" class="btn hidden" data-toggle="modal">placeholder</a>
+    <div class="modal fade" id="iErrorModalContainer" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h4 class="modal-title" id="myModalTitleLabel">
+                        ERROR
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    Please complete all the fields of the form.  Thank you!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- SUCCESS MODAL HERE -->
+<a id="2SuccessModal" href="#successModalContainer" role="button" class="btn hidden" data-toggle="modal">placeholder</a>
+<div class="modal fade" id="iSuccessModalContainer" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="">x</button>
+                <h4 class="modal-title" id="myModalTitleLabel">
+                    SUCCESS
+                </h4>
+            </div>
+            <div class="modal-body">
+                Success! we will contact you soon.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="body">
+
+    <form name="form1" id="form1" method="post" action="/api/recruiters/upload" enctype="multipart/form-data" class="hidden">
+        @*<form id="avatar" class="form-horizontal" role="form" method="post" action="/api/accounts/upload" enctype="multipart/form-data">*@
+
+        <div>
+
+            <label>
+
+                Brows File
+            </label>
+
+            <input name="myFile" type="file" />
+
+        </div>
+
+        <div>
+            <input type="submit" value="Upload" />
+        </div>
+    </form>
+</div>
+
+<!-- main-container end -->
+@section scripts{
+    <script src="~/Scripts/sabio.services.recuiters.js"></script>
+
+    <script type="text/javascript">
+
+        sabio.page.startUp = function () {
+           
+           
+            //  sabio.page.setUpValidationRulesRec();
+            // $("#SubmitRecBtn").on("click", sabio.page.handlers.onSubmitRecBtn);
+             // var hiddenUid = $("#RecuiterUID").val();
+            //IF ELSE STATEMENT - checks if there is GUID present for CREATE OR EDIT Mode
+
+            //  if we have a guid - EDIT Mode
+            //BINDERS - PUT/UPDATE/EDIT - BY UID - ON CLICK BUTTON
+            //$("#cmdAddExperience").on("click", sabio.page.handlers.onEditExperienceByUid);
+            // sabio.services.recruiters.get(sabio.page.handlers.AjaxRecruiterBioSuccess, sabio.page.handlers.AjaxRecruiterBioError);
+
+          
+
+            //  if no guid was located - CREATE mode
+            //BINDERS - POST/CREATE/ADD - NEW EXPERIENCE - ON CLICK BUTTON
+            // $("#cmdAddExperience").on("click", sabio.page.handlers.onCmdAddExperience);
+
+
+
+        }
+        sabio.services.recruiters.factory = function ($baseService) {
+
+            var aSabioServiceObject = sabio.services.recruiters;
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+        }
+        sabio.page.recruitersControllerFactory = function (
+             $scope,
+             $baseController,
+             $recruitersService) {
+
+            var vm = this;
+            vm.user = null;
+            // EditMode = true;
+
+
+            vm.selectedEmployee = null;
+            vm.$recruitersService = $recruitersService;
+            //vm.endPoint = "";
+            //vm.id = id
+            vm.onSuccess = _onSuccess;
+            vm.onError = _onError;
+            // vm.selectUsers = _selectUsers;
+            // vm.saveStatus = _saveStatus;
+            vm.submitButton = _submitButton
+            //vm.onsubmitButton = _onSubmitRecBtn
+            $.extend(vm, $baseController);
+            render();
+            vm.$recruitersService.get(vm.onSuccess, vm.onError);
+            vm.notify = vm.$recruitersService.getNotifier($scope);
+
+
+           
+            function _submitButton() {
+                console.log(vm.user);
+
+
+            }
+            function render() {
+                //put this back in  when in edit mode
+
+
+
+            }
+            function _onSuccess(data, status, xhr) {
+                console.log(data.item);
+                
+                vm.notify(function () {
+                    vm.user = data.item;
+                });
+            }
+
+            function _onError(jqXHR, textStatus, errorThrown) {
+                console.error(errorThrown);
+
+            }
+            function _submitButton(event) {
+                event.preventDefault();
+                var id = dashboard.user.id
+
+                
+
+                if (id) {
+                    //this is where i update                            
+                    vm.$recruitersService.uidUpdate(vm.user, vm.onSuccess, vm.onError);
+
+                }
+                else {
+                    vm.$recruitersService.add(vm.user, vm.onSuccess, vm.onError);
+
+
+
+
+                }
+            }
+
+        }
+            
+           
+        sabio.ng.addService(
+          sabio.ng.app.module,
+          "$recruitersService",
+          ["$baseService"],
+          sabio.services.recruiters.factory);
+
+        sabio.ng.addController(
+            sabio.ng.app.module,
+            "recruitersController",
+            ['$scope', '$baseController', "$recruitersService"],
+            sabio.page.recruitersControllerFactory)
+
+
+
+        //sabio.page.setUpValidationRulesRec = function () {
+        //    var validationOption = {
+        //        rules: {
+        //            Industry: "required",
+        //            placements: "required",
+        //            roles: "required",
+        //            Locations: "required",
+        //            website: "required",
+        //            CompanyName: "required",
+        //            PhoneNumbers: "required",
+        //            Email: "required",
+        //            //roles: "required",
+
+        //            email: {
+
+        //                required: true,
+        //                email: true
+        //            }
+        //        },
+        //        messages: {
+        //            Industry: "*Please Enter your name!!!!",
+        //            placements: "*Please Enter subject!!!!",
+        //            roles: "*Please Enter message!!!!",
+        //            Locations: "*Please Enter message!!!!",
+        //            website: "*Please Enter your name!!!!",
+        //            CompanyName: "*Please Enter your name!!!!",
+        //            PhoneNumbers: "*Please Enter your name!!!!",
+        //            email: {
+        //                required: "*please enter your email!!!!!",
+        //                email: "Your email address must be in the format of name@domain.com"
+        //            }
+        //        }
+        //    };
+        //    //validationOption.rules.newField = {};
+        //    // validationOption.rules.newField.required = true;
+        //    $("#RecruitBio").validate(validationOption);
+        //}
+
+        //////this is my handler
+        //sabio.page.handlers.onSubmitRecBtn = function (event) {
+        //    event.preventDefault()
+
+        //    var isformValid = $("#RecruitBio").valid();
+        //    if (isformValid) {
+        //        var myData = $("#RecruitBio").serialize();
+
+        //        if (sabio.page.isInEditMode) {
+
+
+        //            //this is where i update
+        //            var hiddenUid = $("#RecuiterUID").val();
+        //            sabio.services.recruiters.uidUpdate(hiddenUid, myData, sabio.page.handlers.OnAjaxRetreiveSuccess, sabio.page.handlers.OnAjaxRetreiveError);
+
+        //        }
+        //        else {
+        //            //this is correct
+        //            sabio.services.recruiters.add(myData, sabio.page.handlers.RecruiterBioSuccess, sabio.page.handlers.RecruiterBioError);
+
+        //        }
+
+
+
+        //    }
+        //};
+
+        //sabio.page.handlers.RecruiterBioSuccess = function (data, status, xhr) {
+        //    sabio.page.isInEditMode = true;//need to store UID in hidden field
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+        //    //console.log("success");
+        //    // alert("success")
+        //    $("#iSuccessModalContainer").modal('show');
+        //    $("#RecuiterUID").val(data.item);
+        //};
+
+
+
+        //sabio.page.handlers.RecruiterBioError = function (jqXHR, textStatus, errorThrown) {
+        //    console.log(jqXHR);
+        //    console.log(textStatus);
+        //    console.log(errorThrown);
+        //    //console.log("Failed");
+        //    $("#iSuccessModalContainer").modal('show');
+        //};
+
+
+        //sabio.page.handlers.AjaxRecruiterBioSuccess = function (data, status, xhr) {
+        //    console.log(data);
+        //    //console.log(status);
+        //    //console.log(xhr);
+        //    //console.log("very cool ajax");
+        //    if (data.item.uid != null && data.item.uid != '') {
+        //        $("#RecuiterUID").val(data.item.uid);
+        //        sabio.page.isInEditMode = true;
+        //        sabio.page.populateInputs(data);
+        //        $('#form1').removeClass('hidden');
+        //    }
+
+        //    // alert("success");
+        //    //$("#2SuccessModalContainer").modal('show');
+
+        //};
+
+        //sabio.page.handlers.AjaxRecruiterBioError = function (jqXHR, textStatus, errorThrown) {
+        //    console.log("not worky ajax");
+        //    console.log(jqXHR);
+        //    console.log(textStatus);
+        //    console.log(errorThrown);
+        //    console.log("Failed");
+        //    $("#2ErrorModalContainer").modal('Success');
+        //};
+
+
+        //sabio.page.populateInputs = function (data) {
+        //    $("#Industry").val(data.item.industry);
+        //    $("#placements").val(data.item.placements);
+        //    $("#roles").val(data.item.roles);
+        //    $("#Locations").val(data.item.locations);
+        //    $("#website").val(data.item.website);
+        //    $("#CompanyName").val(data.item.companyName);
+        //    $("#PhoneNumbers").val(data.item.phoneNumbers);
+        //    $("#Email").val(data.item.email);
+        //};
+
+
+        //// HANDLER - PUT/UPDATE/EDIT - BY UID - VALIDATES AND SUBMITS the fields and prints out the values
+        //sabio.page.handlers.onEditExperienceByUid = function (event) {
+        //    event.preventDefault();
+
+        //    var isFormValid = sabio.page.setUpValidationRulesRec();
+
+        //    if (isFormValid == true) {
+        //        // sabio.page.populateInputs(data);
+        //        //sabio.services.recruiters.uidUpdate();
+        //        //sabio.services.recruiters.add();
+
+        //    };
+        //}
+
+        ////HANDLER - UPDATE - BY UID - SUCCESS
+        //sabio.page.handlers.OnAjaxRetreiveSuccess = function (data, status, xhr) {
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+        //    console.log("Your Update Is Complete!  Thank You!");
+
+
+
+
+        //}
+        ////HANDLER - UPDATE BY UID - ERROR
+        //sabio.page.handlers.OnAjaxRetreiveError = function (jqXHR, textStatus, errorThrown) {
+
+        //    console.log(jqXHR);
+        //    console.log(textStatus);
+        //    console.log(errorThrown);
+        //    console.log("Sorry, You're Update Didn't Work!  Try Again!");
+
+        //}
+
+    </script>
+    
+}

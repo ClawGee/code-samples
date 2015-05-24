@@ -1,0 +1,188 @@
+﻿@{
+    ViewBag.Title = "Hello";
+}
+<style>
+    .error {
+        color: red;
+    }
+
+    #msgWindow
+    {
+        padding:20px;
+    }
+</style>
+<h2>Ajax what</h2>
+<div class="row">
+    <div class="col-md-10">
+        <form id="frmAddPerson">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="FirstName" name="Name">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="LastName" name="Last">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Email" name="Email">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Age" name="Age">
+            </div>
+            <button type="button" id="cmdEchoPerson" class="btn btn-default">Echo a Person</button>
+
+            <button type="button" id="cmdAddPerson" class="btn btn-default">Add a Person</button>
+        </form>
+        <div class="alert alert-warning" role="alert">Be Sure to check the Firebug Net Tab for more detailed information</div>
+        <div class="alert "  id="msgWindow"></div>
+    </div>
+</div>
+
+
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        sabio.page.startUp = function () {
+
+            sabio.page.PostNameValuePairs();
+
+            sabio.page.PostJson();
+
+            $("#cmdAddPerson").on("click", sabio.page.handlers.addInputPerson);
+            $("#cmdEchoPerson").on("click", sabio.page.handlers.echoInputs);
+        }
+
+
+
+
+        /*
+
+        This function is an example of how to send Name value pairs. I want you to focus on how to
+        perform Ajax calls using this method FIRST.
+
+        When we get into Angular, we will use JS Objects in our Ajax calls
+
+        */
+        sabio.page.PostNameValuePairs = function () {
+
+            var url = "/api/testcenter/EchoPerson";
+            var myData = "Name=gregorio&Last=one&Age=10";
+
+            var settings = {
+                cache: false
+                , contentType: "application/x-www-form-urlencoded; charset=UTF-8"
+                , data: myData
+                , dataType: "json"
+                , success: sabio.page.AjaxSuccess
+                , error: sabio.page.AjaxError
+                , type: "POST"
+            };
+
+            $.ajax(url, settings);
+
+        }
+
+        /*
+
+        This is an example on how to make an ajax call using a JS object.
+
+        */
+        sabio.page.PostJson = function () {
+
+            var url = "/api/testcenter/EchoPerson";
+
+            var myData = {
+                "Name": "gregorio",
+                "Last": "one",
+                "Age": 10
+            };
+
+            var settings = {
+                cache: false
+                , contentType: "application/json; charset=utf-8"
+                , data: JSON.stringify(myData)
+                , dataType: "json"
+                , success: sabio.page.AjaxSuccess
+                , error: sabio.page.AjaxError
+                , type: "POST"
+            };
+
+            $.ajax(url, settings);
+
+        }
+
+
+        sabio.page.handlers.echoInputs = function () {
+
+            var url = "/api/testcenter/EchoPerson";
+            var myData = $("#frmAddPerson").serialize();
+
+            var settings = {
+                cache: false
+                , contentType: "application/x-www-form-urlencoded; charset=UTF-8"
+                , data: myData
+                , dataType: "json"
+                , success: sabio.page.AjaxSuccess
+                , error: sabio.page.AjaxError
+                , type: "POST"
+            };
+
+            $.ajax(url, settings);
+
+        }
+
+        sabio.page.handlers.addInputPerson = function () {
+
+            var url = "/api/testcenter/people";
+            var myData = $("#frmAddPerson").serialize();
+
+            var settings = {
+                cache: false
+                , contentType: "application/x-www-form-urlencoded; charset=UTF-8"
+                , data: myData
+                , dataType: "json"
+                , success: sabio.page.AjaxSuccess
+                , error: sabio.page.AjaxError
+                , type: "POST"
+            };
+
+            $.ajax(url, settings);
+
+        }
+
+        /*This function will be called by $ when the ajax
+            request's response is received as succesful.
+            A successul response has a HTTP_STATUS Code of 200
+        */
+        sabio.page.AjaxSuccess = function (data, status, xhr) {
+            console.log(JSON.stringify(data));
+            sabio.page.logToBottom(data);
+            $("#msgWindow").removeClass("alert-danger");
+            $("#msgWindow").addClass("alert-info");
+
+
+        }
+
+        /*This function will be called by $ when the ajax
+            request's response is NOT received as succesful.
+           This has a HTTP_STATUS Code of something OTHER than 200
+        */
+        sabio.page.AjaxError = function (jqXHR, textStatus, errorThrown) {
+
+            sabio.page.logToBottom(jqXHR.responseJSON);
+            $("#msgWindow").addClass("alert-danger");
+            $("#msgWindow").removeClass("alert-info");
+        }
+
+
+        sabio.page.logToBottom = function (data) {
+            $("#msgWindow").html((JSON.stringify(data)));
+
+        }
+
+
+
+    </script>
+
+
+}

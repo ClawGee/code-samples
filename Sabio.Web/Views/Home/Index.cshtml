@@ -1,0 +1,362 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+
+<div class="row">
+    <!-- main start -->
+
+    <!-- ================ -->
+
+
+    <div class="main col-md-9">
+        <!-- page-title start -->
+        <!-- ================ -->
+        <h1 class="page-title" id="forms">Ready for that kickass job?</h1>
+
+        <br>
+        <!-- page-title end -->
+        <!-- Forms start -->
+        <!-- ============================================================================== -->
+        <h3>Search</h3>
+        <form role="form" id="jobSeekerRequirementsForm">
+            <div class ="main row">
+                <div class="col-md-6 form-group">
+                    <label for="jobTitleKeywords" class="sr-only">Keywords</label>
+                    <input type="text" name="wantedJobTitleKeywords" placeholder="Job Title, Keywords" id="wantedJobTitleKeywords" class="form-control">
+
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="location" class="sr-only">Location</label>
+                    <input type="text" name="wantedLocation" placeholder="City, State, or Zip" id="wantedLocation" class="form-control">
+                </div>
+            </div>
+            <div id="cmdAdvancedSearch"><a href="#">Advanced Search</a></div>
+
+            <div class="row advancedSearch hide">
+                <div class="col-md-3 workType">
+                    <h4>Work Type</h4>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="workType" value="1" id="chkTypeFullTime">
+                            Full Time
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="workType" value="2" id="chkTypePartTime">
+                            Part Time
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="workType" value="3" id="chkTypeContract">
+                            Contract
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="workType" value="4" id="chkTypeInternship">
+                            Internship
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="workType" value="5" id="chkTypeTemp">
+                            Temp
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-3 skills">
+                    <h4>Skills</h4>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="skills" value="1" id="chkSkillsFrontEnd">
+                            Front End
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="skills" value="2" id="chkSkillsBackEnd">
+                            Back End
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="skills" value="3" id="chkSkillsFullStack">
+                            Full Stack
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="skills" value="4" id="chkSkillsServer">
+                            Server
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-3 companyType">
+                    <h4>Company Type</h4>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="companyType" value="1" id="chkCompanyTypeLarge">
+                            Large (500pp+)
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="companyType" value="2" id="chkCompanyTypeMedium">
+                            Medium (100-500pp)
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="companyType" value="3" id="chkCompanyTypeSmall">
+                            Small (10-100pp)
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="companyType" value="4" id="chkCompanyTypeStartUp">
+                            Start Up
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-3 salaryRange">
+                    <h4>Salary Range</h4>
+                    <div class="form-group">
+                        <select class="form-control" name="salaryRange" id="salaryRange">
+                            <option value="1">$0-$40k</option>
+                            <option value="2">$40k-80k</option>
+                            <option value="3">$80k-120k</option>
+                            <option value="4">$120k-160k</option>
+                            <option value="5">$160k-$Ballin'</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3 jobLocation">
+                    <h4>Distance</h4>
+                    <div class="form-group">
+                        <select class="form-control" name="jobDistance" id="jobDistance">
+                            <option value="5">5mi</option>
+                            <option value="10">10mi</option>
+                            <option value="25">25mi</option>
+                            <option value="50">50mi</option>
+                            <option value="100">100mi</option>
+                            <option value="">no limit</option>            
+                        </select>
+                    </div>
+                    <div>from</div>
+                    <div class="form-group">
+                        <label for="zipCode" class="sr-only"></label>
+                        <input name="zipCode" type="text" placeholder="zip code" id="zipCode" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-3 languages">
+                    <h4>Proficient Languages</h4>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="1" id="chkLanguageJava">
+                            Java
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="2" id="chkLanguageC">
+                            C
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="3" id="chkLanguageCPlus">
+                            C++
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="4" id="chkLanguagePhp">
+                            PHP
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="5" id="chkLanguageVisualBasic">
+                            Visual Basic
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="6" id="chkLanguagePython">
+                            Python
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="7" id="chkLanguageCSharp">
+                            C#
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="8" id="chkLanguageJavascript">
+                            JavaScript
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="9" id="chkLanguagePerl">
+                            Perl
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="languages" value="10" id="chkLanguageRuby">
+                            Ruby
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="searchButton"><button class="btn btn-default" type="submit" id="cmdSearch">Search</button></div>
+    </form>
+
+   </div>
+    <!-- sidebar end -->
+</div>
+<div class="notification hidden" id="notificationTemplate">test</div>
+
+@section scripts{
+   
+    <script type="text/javascript">
+
+        sabio.page.startUp = function(){
+            $("#cmdAdvancedSearch").on("click", sabio.page.handlers.onCmdAdvancedSearch);
+            $("#cmdSearch").on("click", sabio.page.handlers.onCmdSearch);
+            sabio.page.validateForm();
+        }
+
+        sabio.page.showAdvancedSearch = function () {
+            if ($(".advancedSearch").hasClass("hide")) {
+                $(".advancedSearch").removeClass("hide");
+            }
+            else {
+                $(".advancedSearch").addClass("hide");
+            }
+        }
+
+
+        sabio.page.validateForm = function () {
+            var validationOptions = {
+                rules: {
+
+                    wantedJobTitleKeywords:{
+                        required: true
+                    },
+
+                    wantedLocation:{
+                        required: true
+                    },
+
+                    zipCode: {
+                        maxlength: 5,
+                        minlength: 5
+                    }
+                },
+
+                messages: {
+                    zipCode: "Zip Code must be 5 digits long.",
+                    salaryFloor: "Use a number and it must be smaller than the high.",
+                    salaryCeiling: "Number must be larger than the floor."
+
+                }
+
+            };
+
+            $("#jobSeekerRequirementsForm").validate(validationOptions);
+        }
+
+        sabio.page.prepareClone = function (divToCopy) {
+
+            return $(divToCopy).clone().removeAttr("id");
+        }
+
+        sabio.page.addNotification = function (newHtml, targetElement) {
+            var newClone = sabio.page.prepareClone("#notificationTemplate");
+            newClone.removeClass("hidden");
+            newClone.text(newHtml);
+
+            targetElement.append(newClone);
+        }
+
+        sabio.page.handlers.onCmdAdvancedSearch = function (event) {
+            event.preventDefault();
+            sabio.page.showAdvancedSearch();
+        }
+
+        sabio.page.handlers.onPostSuccess = function (data) {
+            var successMessage = "Like a boss.";
+            var searchButtonClass = $(".searchButton");
+            sabio.page.addNotification(successMessage, searchButtonClass);
+        }
+
+        sabio.page.handlers.onPostError = function () {
+            var errorMessage = "Not like a boss.";
+            var searchButtonClass = $(".searchButton");
+            sabio.page.addNotification(errorMessage, searchButtonClass);
+
+        }
+
+        sabio.page.handlers.onCmdSearch = function (event) {
+            event.preventDefault();
+
+            var isFormValid = $("#jobSeekerRequirementsForm").valid();
+            var serializedForm = $("#jobSeekerRequirementsForm").serialize();
+            
+
+            if (isFormValid){
+            $.ajax({
+                type: "POST",
+                url: "/api/jobseekerrequirements/create",
+                data: serializedForm,
+                dataType: "json",
+                success: sabio.page.handlers.onPostSuccess,
+                error: sabio.page.handlers.onPostError
+              
+            });
+            }
+
+        }
+
+
+        //sabio.page.startUp already done by default
+
+        /*
+            jQuery.validator.addMethod("greaterThan", sabio.page.validateGreaterThan);
+            jQuery.validator.addMethod("lessThan", sabio.page.validateLessThan);
+
+sabio.page.validateGreaterThan = function(value, element, params){
+    if (value.isNumeric() && value <= $(params).val()) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+sabio.page.validateLessThan = function (value, element, params) {
+    if (value.isNumeric() && value >= $(params).val()) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+*/
+    </script>
+
+     }
+

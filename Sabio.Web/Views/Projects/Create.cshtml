@@ -1,0 +1,497 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid?>
+@{
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+
+
+<div data-ng-controller="createProjectsController as dashboard" id="createProjectsCtrler">
+
+
+    <form role="form"
+          name="projectForm"
+          class="form-horizontal"
+          id="formCreateProject" novalidate>
+
+        @*Project Name Field*@
+
+        <div class="form-group" ng-class="{ 'has-error' : projectForm.$invalid && !projectForm.$pristine }">
+
+            <div class="col-md-6 form-group">
+                <label>
+                    Project Name
+                    <input type="text"
+                           name="name"
+                           placeholder="Enter a Project Name"
+                           ng-model="dashboard.item.name"
+                           ng-minlength=2
+                           ng-maxlength=100 required />
+
+
+                    <div role="alert" class="help-inline error">
+                        <span ng-show="projectForm.name.$error.maxlength">First Name is required</span>
+                        <span ng-show="projectForm.name.$error.minlength">Too short! </span>
+                        <span ng-show="projectForm.name.$error.maxlength">Too long! </span>
+                    </div>
+
+                </label>
+            </div>
+
+        </div>
+
+
+        @*Url Field*@
+
+        <div class="form-group" ng-class="{ 'has-error' : projectForm.$invalid && !projectForm.$pristine }">
+
+            <div class="col-md-6 form-group">
+                <label>
+                    Website
+                    <input type="text"
+                           name="url"
+                           placeholder="Enter a Website"
+                           ng-model="dashboard.item.url" required />
+                </label>
+            </div>
+
+
+            @*Description Field*@
+
+            <div class="form-group" ng-class="{ 'has-error' : projectForm.$invalid && !projectForm.$pristine }">
+
+                <div class="col-md-6 form-group">
+                    <label>
+                        Description
+                        <input type="text"
+                               name="description"
+                               placeholder="Enter a Description"
+                               ng-model="dashboard.item.description"
+                               ng-minlength=2
+                               ng-maxlength=100 required />
+
+                        <div role="alert" class="help-inline error">
+                            <span ng-show="projectForm.description.$error.maxlength">First Name is required</span>
+                            <span ng-show="projectForm.description.$error.minlength">Too short! </span>
+                            <span ng-show="projectForm.description.$error.maxlength">Too long! </span>
+                        </div>
+                     </label>
+                </div>
+            </div>
+
+
+                @*Date Launched Field*@
+
+            <div class="form-group" ng-class="{ 'has-error' : projectForm.$invalid && !projectForm.$pristine }">
+
+                <div class="col-md-6 form-group">
+                    <label>
+                        Date Launched
+                        <input type="text"
+                               name="launchdate"
+                               placeholder="Date Launched"
+                               ng-model="dashboard.item.launchdate" required />
+                    </label>
+                </div>
+             </div>
+            
+
+
+                    <div class="col-md-3 technologies">
+
+                        <h4>Technologies Used</h4>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="1" id="chkJava">
+                                Java
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="2" id="chkC">
+                                C
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="3" id="chkCPlus">
+                                C++
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="4" id="chkPhp">
+                                PHP
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="5" id="chkVisualBasic">
+                                Visual Basic
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="6" id="chkPython">
+                                Python
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="7" id="chkCSharp">
+                                C#
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="8" id="chkJavascript">
+                                JavaScript
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="9" id="chkPerl">
+                                Perl
+                            </label>
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="technologies" value="10" id="chkRuby">
+                                Ruby
+                            </label>
+                        </div>
+
+                    </div>
+
+                    @*<label>Technologies</label>
+
+            <div class="form-group">
+
+                <label class="checkbox-inline">
+                    <input type="checkbox"
+                           name="asp"
+                           ng-model="dashboard.item.asp"> ASP.Net
+                </label>
+
+                <label class="checkbox-inline">
+                    <input type="checkbox"
+                           name="sql"
+                           ng-model="dashboard.item.sql"> SQL
+                </label>
+
+                <label class="checkbox-inline">
+                    <input type="checkbox"
+                           name="csharp"
+                           ng-model="dashboard.item.csharp"> C#
+                </label>
+
+                <label class="checkbox-inline">
+                    <input type="checkbox"
+                           name="html"
+                           ng-model="dashboard.item.html"> HTML
+                </label>
+
+                <label class="checkbox-inline">
+                    <input type="checkbox"
+                           name="jscript"
+                           ng-model="dashboard.item.jscript"> Javascript
+                </label>
+
+                <label class="checkbox-inline">
+                    <input type="checkbox"
+                           name="css"
+                           ng-model="dashboard.item.css"> CSS
+                </label>
+
+                <label class="checkbox-inline">
+                    <input type="checkbox"
+                           name="jquery"
+                           ng-model="dashboard.item.jquery"> Jquery
+                </label>
+
+                <label class="checkbox-inline">
+                    <input type="checkbox"
+                           name="angularjs"
+                           ng-model="dashboard.item.angular"> Angular
+                </label>
+            </div>*@
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit"
+                                   class="btn btn-default"
+                                   ng-click="dashboard.submissionbutton()"
+                                   value="submit">
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="projectuid" name="projectuid" value="@Model.Item" />
+
+</form>
+
+</div>
+
+
+
+@section scripts {
+
+
+    <script type="text/javascript" src="~/Scripts/sabio.services.projects.js"></script>
+    <script type="text/javascript">
+
+        /*********************   ANGULAR   *********************/
+
+
+
+        sabio.page.startUp = function () {
+
+
+        }
+
+
+        sabio.services.projects.Factory = function ($baseService) {
+
+            var angularServiceObject = sabio.services.projects;
+
+            var newService = $.extend(true, {}, angularServiceObject, $baseService);
+
+            return newService;
+
+        }
+
+        sabio.page.createProjectsControllerFactory = function (
+           $scope,
+           $baseController,
+           $ProjectService) {
+
+            var vm = this;
+            vm.item = null;
+            vm.$ProjectService = $ProjectService;
+            vm.endPoint = "";
+            vm.projectuid = null;
+
+            vm.receiveItem = _receiveItem;                        //on success
+            vm.onUsersError = _onUsersError;                      //on error
+            vm.submissionbutton = _submissionbutton;
+
+
+            $.extend(vm, $baseController);
+
+            vm.notify = vm.$ProjectService.getNotifier($scope);
+
+            render();
+
+            function render() {
+
+                var projectuid = $("#projectuid").val(); // Uid's extraction from hiddden
+                vm.projectuid = projectuid;
+
+                if (vm.projectuid.length > 0) {
+
+                    vm.$ProjectService.get(vm.projectGuid, vm.receiveItem, vm.onUsersError);
+                    $("#form1").removeClass("hidden");
+
+                }
+            }
+
+            function _receiveItem(data) {
+
+                vm.notify(function () {
+                    vm.item = data.item;
+                });
+
+            }
+
+
+            function _onUsersError(jqXhr, error) {
+
+                console.error(error);
+
+            }
+
+
+            function _submissionbutton() {
+
+                //event.preventDefault();
+
+                var isFormValid = vm.isFormValid;
+
+                if (isFormValid = true) {
+                    vm.$ProjectService.update(vm.projectuid, vm.receiveItem, vm.onUsersError);
+                }
+                else {
+                    vm.$ProjectService.create(vm.item, vm.receiveItem, vm.onUsersError);
+                }
+
+            }
+
+        }
+
+
+        sabio.ng.addService(
+            sabio.ng.app.module,
+            "$ProjectService",
+            ["$baseService"],
+            sabio.services.projects.Factory);
+
+
+        sabio.ng.addController(
+            sabio.ng.app.module,
+            "createProjectsController",
+            ['$scope', '$baseController', "$ProjectService"],
+            sabio.page.createProjectsControllerFactory);
+
+
+        /*********************   END OF ANGULAR   *********************/
+
+
+        /****************************************************      OLD CODING STYLE      ****************************************************/
+
+
+
+        ///******* Startup Function *******/
+
+        //sabio.page.startUp = function () {
+
+        //    sabio.page.validateRules();     // Rules Validation call
+        //    $("#submissionButton").on("click", sabio.page.handlers.onSubmitButton); // Action that happens when you click button
+        //    var myUid = $("#projectuid").val();     // Uid's extraction from hiddden
+
+        //    if (myUid.length > 0) {     // IF statement with condition (myUid.length > 0) to check if there's an uid
+        //        sabio.services.projects.get(myUid, sabio.page.onAjaxGetSuccess, sabio.page.onAjaxGetError);
+        //        $("#form1").removeClass("hidden");
+        //    }
+        //}
+
+
+        /******* GET Functions (Success/Error) *******/
+
+        //sabio.page.onAjaxGetSuccess = function (data, status, xhr) {
+
+        //    console.log(data);
+
+        //    // Grabbing all the values associate them with the id
+
+        //    $("#name").val(data.item.name);
+        //    $("#url").val(data.item.url);
+        //    $("#image").val(data.item.image);
+        //    $("#description").val(data.item.description);
+        //    $("#launchdate").val(data.item.launchdate);
+        //    $("#technologies").val(data.item.technologies);
+
+        //    var myUid = $("#projectuid").val();
+        //    $("#submissionButton").html('Update');  // Switch button text from Submit to Update
+        //    sabio.page.isInEditMode = true; // Sets a boolean
+
+        //}
+
+        //sabio.page.onAjaxGetError = function (jqXHR, textStatus, errorThrown) {
+
+        //    window.alert("Wow, wow, wow !!! I think there's an error.");
+
+        //}
+
+        /****************************** H A N D L E R S ******************************/
+
+
+        /******* CREATE Success Handler *******/
+
+        //sabio.page.handlers.onAjaxCreateSuccess = function (data, status, xhr) {
+
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+        //    window.alert("Creation was successful, good job !!!");
+        //    $("#projectuid").val(data.item);
+        //    sabio.page.isInEditMode = true;
+        //    $("#submissionButton").html('Update');
+
+        //}
+
+        /******* CREATE Error Handler *******/
+
+        //sabio.page.handlers.onAjaxCreateError = function (jqXHR, textStatus, errorThrown) {
+
+        //    console.log(jqXHR);
+        //    console.log(textStatus);
+        //    console.log(errorThrown);
+        //    window.alert("Sorry creation didn't work, try it again !!!");
+
+        //}
+
+        /******* UPDATE Success Handler *******/
+
+        //sabio.page.handlers.onAjaxUpdateSuccess = function (data, status, xhr) {
+
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+        //    window.alert("Update went smooth !!!");
+
+        //}
+
+        /******* UPDATE Error Handler *******/
+
+        //sabio.page.handlers.onAjaxUpdateError = function (jqXHR, textStatus, errorThrown) {
+
+        //    console.log(jqXHR);
+        //    console.log(textStatus);
+        //    console.log(errorThrown);
+        //    window.alert("No update for you today !!!");
+
+        //}
+
+
+        /******* UPLOAD Success Handler *******/
+
+        //sabio.page.handlers.onAjaxUploadSuccess = function (data, status, xhr) {
+
+        //    console.log(data);
+        //    console.log(status);
+        //    console.log(xhr);
+        //    window.alert("Uploading on its way !!!");
+
+        //}
+
+
+        /******* UPLOAD Error Handler *******/
+
+        //sabio.page.handlers.onAjaxUploadError = function (jqXHR, textStatus, errorThrown) {
+
+        //    console.log(jqXHR);
+        //    console.log(textStatus);
+        //    console.log(errorThrown);
+        //    window.alert("Pffff, you better try better !!!");
+
+        //}
+
+        //UPLOAD THING
+
+
+        //<div id="body">
+        //    <form name="form1" id="form1" method="post" action="/api/projects/upload/74305CE0-27B2-4B31-ACE1-35BBFA72551F" enctype="multipart/form-data" class="hidden">
+        //        <div>
+        //            <label>
+        //                Browse File
+        //            </label>
+        //            <input name="myFile" type="file" />
+        //        </div>
+        //        <div>
+        //            <input type="submit" value="Upload" />
+        //        </div>
+        //    </form>
+        //</div>
+
+
+    </script>
+}

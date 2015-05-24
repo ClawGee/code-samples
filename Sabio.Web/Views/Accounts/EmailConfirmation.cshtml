@@ -1,0 +1,94 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid>
+@{
+    ViewBag.Title = "Index";
+    
+    Layout = "~/Views/Shared/_layoutSantaCruz.cshtml";
+}
+
+<section class="main-container">
+    <div class="container">
+        <div class="row">
+
+            <div class="main col-md-8" id="invalidTokenContainer" hidden>
+                <h1 class="page-title">Invalid Token</h1>
+                <p>Your account token is invalid. Please contact customer service.</p>
+
+            </div>
+
+            <div class="main col-md-8" id="validTokenContainer" hidden>
+
+                <h1 class="page-title">Your account is confirmed, ready to Search?</h1>
+                <button>Login</button>
+
+
+                <input type="hidden" class="form-control" id="accountConfirmationToken" name="accountConfirmationToken" value="@Model.Item" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+@section scripts{
+
+    <script type="text/javascript">
+        sabio.page.startUp = function () {
+            //hidden token validation ajax call. if the return is null, you should not be setting up the form.
+            sabio.page.validateAccountConfirmationToken();
+
+        }
+
+        sabio.page.validateAccountConfirmationToken = function () {
+            var token = $("#accountConfirmationToken").val();
+            var url = "/api/accounts/validateaccount/" + token;
+            var myData = null;
+            var settings = {
+                cache: false,
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                data: myData,
+                dataType: "json",
+                success: sabio.page.handlers.onGetSuccessValidateToken,
+                error: sabio.page.handlers.onGetErrorValidateToken,
+                type: "GET"
+            };
+            $.ajax(url,settings);
+        }
+
+        sabio.page.handlers.onGetSuccessValidateToken = function (data, status, xhr) {
+            console.log(data);
+            if (!data.isSuccessFull) {
+                var title = "Error!";
+                var body = "Your info is not in the database.";
+                var button = "Okay";
+                sabio.page.showLayoutModal(title, body, button);
+                $("#invalidTokenContainer").show();
+
+            }
+
+            else {
+                $("#validTokenContainer").show();
+
+            }
+
+        }
+
+        sabio.page.handlers.onGetErrorValidateToken = function (){
+            $("#invalidTokenContainer").show();
+
+            var title = "Error!";
+            var body = "Contact Customer Service, server does not recognize your Token.";
+            var button = "okay";
+            sabio.page.showLayoutModal(title, body, button);
+
+        }
+
+
+
+
+
+    </script>
+
+}
