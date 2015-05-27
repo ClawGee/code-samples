@@ -163,14 +163,12 @@
 
         sabio.page.inputAddyControllerFactory = function ($scope, $baseController,$inputAddressService, $geographyService) {
 
-            var vm = this; //refers to sabio.page.inputAddyControllerFactory
-            vm.location = {}; // using ng model directive the form fields are bound to the controller, here its called VM above it's called addyctrler but it refers to the same exact object so we call it vm.location
-            //vm.states then we'll fire another call to render the states, and the JSON will need to equal to vm.states. 
-            //-- this line to simulate inheritance
-
+            var vm = this; 
+            vm.location = {}; 
+            
             $.extend(vm, $baseController);
 
-            //this is a wrapper for our small dependency on $scope. the below is being executed on start up
+           
             vm.$inputAddressService = $inputAddressService;
             vm.notify = vm.$inputAddressService.getNotifier($scope);
             vm.receiveItem = _receiveItem;
@@ -183,15 +181,15 @@
 
             initializeFormData();
 
-            function initializeFormData() { //formerly render() need to get address
-                //console log address giud here
+            function initializeFormData() { 
+                
                 console.log(sabio.page.addressGuid);
                 vm.$inputAddressService.getAddress(sabio.page.addressGuid, vm.receiveItem, vm.onAddyError);
                 vm.$geographyService.getUsStatesDropdown(vm.onStateSuccess, vm.onStateError); 
             }
 
 
-            function _inputAddy() { //wtf do I pass through? you DONT
+            function _inputAddy() { 
                 if (vm.$sabio.page.addressGuid.length > 0) {
                     var payload = {
                         address1: vm.location.address1,
@@ -218,10 +216,6 @@
             }
 
             function _receiveItem(data) {
-                //this receives the data and calls the special
-                //notify method that will trigger ng to refresh UI
-                //this
-                console.log("in function receive item");
                 vm.notify(function () {
                     console.log(data); 
                     vm.location = data.item;
@@ -231,15 +225,11 @@
             }
 
             function _onAddyError(jqXhr, error) {
-                console.log("in onaddyerror function");
                 alert("Your address was not saved. Please Try again."); 
 
             }
 
             function _onStateSuccess(data) {
-                //this receives the data and calls the special
-                //notify method that will trigger ng to refresh UI
-                //this
                 console.log("in function on state success");
                 vm.notify(function () {
                     vm.states = data.items;
