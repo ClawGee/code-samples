@@ -45,15 +45,14 @@
         sabio.page.startUp = function () {
 
             sabio.page.addressController = sabio.ng.getControllerInstance($("#addressCtrler"));
-            console.log("Here in start up");
             //sabio.services.users.getAddresses(sabio.page.onShowUserAddress, sabio.page.AjaxError);
         }
 
         //Angular Code to List Addresses
 
-        sabio.services.addressFactory = function ($baseService) { //its okay that this doesnt point to a file in services. well aaron says to test it this way.
+        sabio.services.addressFactory = function ($baseService) { 
             console.log("in sabio.services.addressFactory");
-            var addressService = sabio.services.users; //this is calling the entire service file. giving you access to all the functions in this file. thats why it's a FACTORY. Factory is a service and it knows how to go get some data.
+            var addressService = sabio.services.users; 
 
             var newService = $.extend(true, {}, addressService, $baseService);
 
@@ -70,22 +69,17 @@
             vm.onAddyError = _onAddyError;
             console.log(vm.receiveItems);
 
-            //-- this line to simulate inheritance
             $.extend(vm, $baseController);
 
-            //this is a wrapper for our small dependency on $scope
             vm.notify = vm.$addressService.getNotifier($scope);
 
             render();
 
             function render() {
-                vm.$addressService.getAddresses(vm.receiveItems, vm.onAddyError); //.getAddresses -.get is NOT it's own thing, unless you make it a function in your service.
+                vm.$addressService.getAddresses(vm.receiveItems, vm.onAddyError); 
             }
 
             function _receiveItems(data) {
-                //this receives the data and calls the special
-                //notify method that will trigger ng to refresh UI
-                console.log("in function receive items")
                 vm.notify(function () {
                     vm.items = data.items;
                     console.log(vm.items);
@@ -99,7 +93,7 @@
             }
         }
 
-        sabio.ng.addService(sabio.ng.app.module, "$addressService", ["$baseService"], sabio.services.addressFactory);//you are creating the name right here, it doesnt come from anywhere else. It's how you call service.
+        sabio.ng.addService(sabio.ng.app.module, "$addressService", ["$baseService"], sabio.services.addressFactory);
 
         sabio.ng.addController(sabio.ng.app.module
     , "addressController"
@@ -126,14 +120,6 @@
 
         //}
 
-
-        //Biz Logic - Angular Code
-
-
-
-
-
-        //old jquery Code - IT WORKS
         //sabio.page.processSingleAddress = function (idx, singleAddress) {
         //    var newJqObj = sabio.page.completedCloneAddress();
 
