@@ -40,7 +40,6 @@ namespace Sabio.Web.Controllers.Api
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
-            //Below is for consistency's sake/professional way. 
             ItemResponse<bool> response = new ItemResponse<bool>();
             UserAddressService.UpdateAppUsersAddress(model, addressGuid);
 
@@ -62,7 +61,6 @@ namespace Sabio.Web.Controllers.Api
         }
 
 
-        //ANGULAR create new endpoint to return one single address by addressGuid
         [Route("{addressGuid:guid}"), HttpGet]
         [Authorize]
         public HttpResponseMessage GetAddress(Guid addressGuid)
@@ -74,17 +72,6 @@ namespace Sabio.Web.Controllers.Api
             return Request.CreateResponse(response);
         }
 
-        ////create new endpoint to return one single address by addressGuid
-        //[Route("{addressGuid:guid}"), HttpGet]
-        //[Authorize]
-        //public HttpResponseMessage GetAddress(Guid addressGuid)
-        //{
-        //    UserAddress model = UserAddressService.SelectSingleUserAddress(addressGuid);
-        //    ////use same domain model but return only single address
-        //    ItemResponse<UserAddress> response = new ItemResponse<UserAddress>();
-        //    response.Item = UserAddressService.SelectSingleUserAddress(addressGuid);
-        //    return Request.CreateResponse(response);
-        //}
 
 
 
