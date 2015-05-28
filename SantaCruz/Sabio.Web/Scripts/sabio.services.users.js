@@ -1,7 +1,4 @@
-﻿
-//sabio.services.users.getUsStatesDropdown = function (onSuccess, onError) {
-//    sabio.services.geography.getUsStatesDropdown();
-//}
+
 sabio.services.users.createAddress = function (serializedAddressForm, onSuccess, onError) {
     console.log(serializedAddressForm); 
     $.ajax({
@@ -26,7 +23,7 @@ sabio.services.users.updateAddress = function (uid, myData, onSuccess, onError) 
     });
 }
 
-//This will be called by the angular service wrapper, i think
+
 sabio.services.users.getAddress = function (uid, onSuccess, onError) {
     var url = "/api/users/addresses/" + uid;
     var settings =
@@ -44,7 +41,6 @@ sabio.services.users.getAddress = function (uid, onSuccess, onError) {
 
 
 sabio.services.users.getAddresses = function (onSuccess, onError) {
-    //pretend you're already logged in and call AJAX. There is no click event so there are no event handlers. This pulls the data from teh DB and returns it as JSON
 
     var url = "/api/users/addresses";
     var myData = null;
