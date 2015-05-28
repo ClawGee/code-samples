@@ -1,0 +1,165 @@
+﻿@model Sabio.Web.Models.ViewModels.ProjectsViewModel<Guid>
+@{
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+
+
+<section class="main-container" style="margin-top: 10px;">
+
+    <div data-ng-controller="projectDetailController as projDetailCtrler" class="container" id="projDetailCtrler">
+        <div class="row">
+
+            <!-- main start -->
+            <!-- ================ -->
+            <div class="main col-md-12">
+
+                <!-- page-title start -->
+                <!-- ================ -->
+                <h1 class="project">{{projDetailCtrler.item.name}}</h1>
+                @*<div class="separator-2"></div>*@
+                <div class="space"></div>
+                <!-- page-title end -->
+
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="box-style-1 gray-bg team-member">
+                            <div class="overlay-container">
+                                <img alt="" src="~/images/team-member-1.jpg">
+                            </div>
+                            <h3></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-sm-8">
+                        <h4><u>website</u></h4>
+                        <p class="website">{{projDetailCtrler.item.url}}</p>
+                        <h4><u>Description</u></h4>
+                        <p class="description">{{projDetailCtrler.item.description}}</p>
+                        <h4><u>Date Launched</u></h4>
+                        <p class="dlaunch">{{projDetailCtrler.item.launchdate}}</p>
+                    </div>
+                </div>
+                <h2>Technologies</h2>
+                <div class="progress">
+                    <p>{{projDetailCtrler.techNames}}</p>
+                </div>
+
+                <div class="space"></div>
+            </div>
+            <!-- main end -->
+            <input type="hidden" id="projectuid" name="projectuid" value="@Model.Item" />
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+@section scripts {
+
+<script type="application/json" id="technologyOptions">
+    @Html.Raw(Json.Encode(Model.TechnologyOptions))
+</script>
+    <script type="text/javascript" src="~/Scripts/Services/services.public.js"></script>
+    <script type="text/javascript">
+
+
+        sabio.page.startUp = function () {
+
+          sabio.page.projectDetailController = sabio.ng.getControllerInstance($("#projDetailCtrler"));
+          sabio.page.projUid = $("#projectuid").val();
+           
+        }
+
+        sabio.services.public.Factory = function ($baseService) {
+
+            var angularServiceObject = sabio.services.public;
+
+            var newService = $.extend(true, {}, angularServiceObject, $baseService);
+
+            return newService
+        }
+
+        sabio.page.projectDetailControllerFactory = function (
+          $scope,
+          $baseController,
+          $ProjectService) {
+
+            var vm = this;
+            vm.item = null;
+            vm.$ProjectService = $ProjectService;
+
+            vm.receiveItems = _receiveItems;
+            vm.onUsersError = _onUsersError;
+            
+            vm.technologyOptions = JSON.parse($("#technologyOptions").html());
+            
+
+            $.extend(vm, $baseController);
+
+            vm.notify = vm.$ProjectService.getNotifier($scope);
+
+            render();
+
+            function render() {
+
+                vm.$ProjectService.getByProjUid(sabio.page.projUid, vm.receiveItems, vm.onUsersError);
+
+            }
+
+
+
+            function _receiveItems(data) {
+                console.log(vm.technologyOptions); //lists ALL technologies 
+                console.log(data.item.technologies); //lists checked technologies
+                vm.techNames = [];
+                
+                for (var i = 0; i < data.item.technologies.length; i++) {
+                    var currentTech = data.item.technologies[i];
+                    if (currentTech !== 0) {
+                        var thisname = vm.technologyOptions[currentTech];
+
+                        var checkedTech = vm.techNames.push(thisname);
+
+                        
+                    }
+                    
+                }
+                vm.techNames = vm.techNames.join();
+                
+
+ //javascript join - put it in a string or ng-repeat techName in Dashboard.techNames
+
+                vm.notify(function () {
+                    vm.item = data.item;
+                });
+
+            }
+
+            function _onUsersError(jqXhr, error) {
+
+                console.error(error);
+
+            }
+
+        }
+
+        sabio.ng.addService(
+          sabio.ng.app.module,
+          "$ProjectService",
+          ["$baseService"],
+          sabio.services.public.Factory);
+
+
+        sabio.ng.addController(
+           sabio.ng.app.module,
+           "projectDetailController",
+           ['$scope', '$baseController', "$ProjectService"],
+           sabio.page.projectDetailControllerFactory);
+
+
+    </script>
+}

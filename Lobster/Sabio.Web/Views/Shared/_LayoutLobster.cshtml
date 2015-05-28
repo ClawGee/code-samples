@@ -1,0 +1,142 @@
+﻿@model Sabio.Web.Models.ViewModels.BaseViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recruit.Us | The Tech Industry Job Market Standard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Responsive Multipurpose Bootstrap Theme">
+    <meta name="author" content="The Develovers">
+    <!-- CSS -->
+
+    <link href="~/Content/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="/Content/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/main.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/lobster.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/bootstrap-tagsinput.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/simplePagination.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/Content/ng-tags-input.css" type="text/css">
+    <link rel="stylesheet" href="~/Content/ng-tags-input.bootstrap.css" type="text/css">
+
+    <!-- DROPZONE CSS-->
+
+    <link href="/Content/dropzone.css" rel="stylesheet" type="text/css">
+    <!-- IE 9 Fallback-->
+    <!--[if IE 9]>
+        <link href="assets/css/ie.css" rel="stylesheet">
+    <![endif]-->
+    <!-- GOOGLE FONTS -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,300italic,400italic,700,400,300' rel='stylesheet' type='text/css'>
+    <!-- FAVICONS -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/Content/ico/repute144x144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/Content/ico/repute114x114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/Content/ico/repute72x72.png">
+    <link rel="apple-touch-icon-precomposed" href="/Content/ico/repute57x57.png">
+    <link rel="shortcut icon" href="/Content/ico/favicon.png">
+</head>
+
+<body>
+    <!-- WRAPPER -->
+    <div class="wrapper">
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <!-- TOPBAR -->
+
+                <!-- MAIN NAVIGATION -->
+                <div id="main-nav" class="navbar-collapse collapse">
+                    @Html.Partial("_LoginPartial")
+                    @Html.Partial((string)Model.NavigationView)
+                </div>
+                <!-- END MAIN NAVIGATION -->
+            </div>
+        </nav>
+        <!-- END NAVBAR -->
+        <div class="container" id="main-content" data-ng-app="sabioApp">
+            <div ng-cloak>
+                @RenderBody()
+            </div>
+        </div>
+        <!-- CALL-TO-ACTION -->
+        <section class="call-to-action">
+            <div class="container">
+                <div class="pull-left">
+                    <h2 class="section-heading">GET IN TOUCH</h2>
+                </div>
+                <div class="pull-right">
+                    <span>Call us at (888) 888-8888 or</span>&nbsp;&nbsp;
+                    <a href="/ContactUs" class="btn btn-lg btn-primary">CONTACT US</a>
+                </div>
+            </div>
+        </section>
+        <!-- END CALL-TO-ACTION -->
+        <!-- FOOTER -->
+        @Html.Partial("Footer/_DefaultPartial")
+        <!-- END FOOTER -->
+    </div>
+    <!-- END WRAPPER -->
+    <!-- START SABIO LOADER GIF-->
+    <div class="sabio-gif"></div>
+    <!-- END SABIO LOADER GIF-->
+    <!-- START MODAL TEMPLATE -->
+    <div class="modal fade bs-example-modal-lg" id="globalModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="alert" role="alert">
+                    <h4><strong>Heading</strong></h4>
+                    <p>Message</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL TEMPLATE -->
+    <!-- JAVASCRIPTS -->
+
+    <script src="/scripts/jquery-2.1.1.min.js"></script>
+    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="/scripts/plugins/slick/slick.min.js"></script>
+    <script src="/scripts/plugins/stellar/jquery.stellar.min.js"></script>
+    <script src="/scripts/plugins/jquery-easypiechart/jquery.easypiechart.min.js"></script>
+    <script src="/scripts/plugins/autohidingnavbar/jquery.bootstrap-autohidingnavbar.min.js"></script>
+    <script src="/scripts/jquery.validate.min.js"></script>
+    <script src="/scripts/sabio.js"></script>
+    <script src="~/Scripts/ng/angular.js"></script>
+    @RenderSection("pageInitScripts", required: false)
+    <script src="~/Scripts/ng/angular-animate.js"></script>
+    <script src="~/Scripts/ng/angular-route.js"></script>
+    <script src="~/Scripts/sabio.ng.app.js"></script>
+    <script src="~/Scripts/services/services.ratings.js"></script>
+    <script src="~/Scripts/bootstrap-rating.js"></script>
+    <script src="/scripts/services/services.employers.js"></script>
+    <script src="/scripts/services/services.password.js"></script>
+    <script src="/scripts/services/services.address.js"></script>
+    <script src="/scripts/services/sabio.services.recruiters.js"></script>
+    <script src="/scripts/services/services.developer.js"></script>
+    <script src="/scripts/services/services.search.js"></script>
+    <script src="/scripts/services/services.messaging.js"></script>
+    <script src="/scripts/sabio.ng.app.js"></script>
+    <script src="/scripts/dropzone.js"></script>
+    <script src="~/scripts/jquery.simple-pagination.js"></script>
+    <script src="/scripts/bootstrap-tagsinput.js"></script>
+    <script src="~/scripts/jquery.simplePagination.js"></script>
+    <script src="~/scripts/ng/bootstrap-tagsinput-angular.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD2aG8twoXw2wn0x0Xt8jB6XlgNVTOwpFA"></script>
+
+
+    <script type="text/javascript">
+        sabio.layout.showModal = function (alertClass, heading, message) {
+            // Note: your alertClass parameter should be one of alert-warning, alert-danger, alert-info, or alert-success.
+            $("#globalModal .alert").addClass(alertClass);
+            $("#globalModal h4").text(heading);
+            $("#globalModal p").text(message);
+            $("#globalModal").modal("show");
+        }
+    </script>
+
+
+
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>

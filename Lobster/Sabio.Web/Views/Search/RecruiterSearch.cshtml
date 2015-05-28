@@ -1,0 +1,194 @@
+﻿@{
+    ViewBag.Title = "RecruiterSearch";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div class="container" data-ng-controller="recruiterSearchController as search" id="searchControllerContainer">
+    <h2>Recruiter Search</h2>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2>Search</h2>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal searchForm" method="get">
+                    <div class="input-group input-group-lg">
+                        <input class="form-control input-lg searchContainer" ng-model="search.keyWord" name="keyword" type="search" placeholder="type keyword ..." value="">
+                        <span class="input-froup-btn">
+                            <button ng-click="search.searchKey()" type="submit" class="btn btn-primary btn-lg"><i class="icon ion-android-search"></i>Search</button>
+                        </span>
+                    </div>
+                </form>
+                <br />
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <!-- PAGE CONTENT -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2>Find Your Recruiter</h2>
+            </div>
+            <div class="panel-body" id="contentBody">
+                <div class="page-content page-search-result">
+                    <div class="container">
+                        @*<h3 ng-if="search.items.totalCount!=0&&search.keyWord!=null"><span id="numbersFound">{{search.items.totalCount}}</span> results found for {{search.keyWord}}</h3>*@
+                        <h3 ng-if="search.items.totalCount!=0"><span id="numbersFound">{{search.items.totalCount}}</span> results found.</h3>
+                        @*<h3 ng-if="search.items.totalCount==0&&search.keyWord!=null"><span id="numbersFound">No</span> results found for {{search.keyWord}}</h3>*@
+                        <h3 ng-if="search.items.totalCount==0"><span id="numbersFound">No</span> results found.</h3>
+                        <!-- Search Results -->
+                        <!-- End Search Results -->
+                        <div id="developer-container" class="container-fluid">
+                            <div class="row">
+                                <!--Start of Hidden Developer Template-->
+                                <div class="col-md-12">
+                                    <div id="developer-search-template" class="developerSearch col-xs-9" ng-repeat="recruiter in search.items.pagedItems track by recruiter.uid">
+                                        <div>
+                                            <ul class="list-unstyled list-results">
+                                                <!--Template for Developer Search result-->
+                                                <li class="type-portfolio">
+                                                    <a data-ng-href="/profile/recruiter/{{recruiter.recruiterUser.id}}" class="profilePicture developerDetails">
+                                                        <img data-ng-if="recruiter.recruiterPhoto.fullUrl != null" class="col-xs-12 resize Logo" data-ng-src="{{recruiter.recruiterPhoto.fullUrl}}" />
+                                                        <img data-ng-if="recruiter.recruiterPhoto.fullUrl == null" data-ng-src='http://www.propelarizona.com/upload/thumb/no_img.jpg' class="col-xs-12 resize Logo" />
+                                                    </a>
+                                                    <h3 class="developer-name heading-left">
+                                                        <a data-ng-href="/profile/recruiter/{{recruiter.recruiterUser.id}}">{{recruiter.recruiterUser.firstName}} {{recruiter.recruiterUser.lastName}}</a>
+                                                    </h3>
+                                                    <h5>
+                                                        <b>Address: </b>
+                                                        <span class="address">{{recruiter.location}}</span>
+                                                    </h5>
+                                                    <h5>
+                                                        <b>Specialty: </b>
+                                                        <span class="language1">{{recruiter.specialty}}<span>, </span></span>
+                                                    </h5>
+                                                    <h5>
+                                                        <b>Website: </b>
+                                                        <a data-ng-href="{{recruiter.url}}">{{recruiter.url}}</a>
+                                                    </h5>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Start of Angular Pagination-->
+                        <pagination ng-model="search.currPage"
+                                    total-items="search.items.totalCount"
+                                    items-per-page="search.perPage"
+                                    max-size="search.items.totalPages"
+                                    ng-change="search.pageChanged()"
+                                    class="pagination-sm"
+                                    boundary-links="true"
+                                    rotate="false"
+                                    num-pages="search.items.totalPages">
+                        </pagination>
+                        <!--End of Angular Pagination-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section pageInitScripts{
+    <script type="text/javascript" src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+
+}
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/Services/services.search.js"></script>
+    <script type="text/javascript">
+
+
+        sabio.page.recruiterSearchController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.recruiterSearchController = sabio.ng.getControllerInstance($("#searchControllerContainer"));
+            sabio.page.myTemp = $('.myTemp');
+            sabio.page.template = $('.template');
+            sabio.page.form = $('#searchForm');
+        }
+
+        sabio.services.recruiterSearchServiceFactory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.search;
+            $.extend(aSabioServiceObject, $baseService);
+            return aSabioServiceObject;
+        }
+
+        sabio.page.recruiterSearchControllerFactory = function ($scope, $baseController, $recruiterService) {
+            var vm = this;
+            vm.items = null;
+            vm.selectedRecruiter = null;
+            vm.$recruiterService = $recruiterService;
+            vm.receiveItems = _receiveItems;
+            vm.onRecruiterError = _onRecruiterError;
+            vm.selectRecruiter = _selectRecruiter;
+            vm.saveStatus = _saveStatus;
+            vm.searchKey = _searchKey;
+            vm.keyWord = null;
+            vm.pageChanged = _pageChanged;
+            vm.numItems = 0;
+            vm.currPage = 1;
+            vm.perPage = 10;
+            vm.getUrlValue = window.location.href;
+
+            $.extend(vm, $baseController);
+            
+            vm.notify = vm.$recruiterService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                var loadKeyword = vm.getUrlValue.split('=');
+                vm.keyWord = loadKeyword[1];
+                console.log(loadKeyword);
+                vm.$recruiterService.recruiters(vm.keyWord, vm.currPage - 1, vm.perPage, vm.receiveItems, vm.onRecruiterError);
+            }
+
+            function _pageChanged() {
+                vm.$recruiterService.recruiters(vm.keyWord, vm.currPage - 1, vm.perPage, vm.receiveItems, vm.onRecruiterError);
+                window.scrollTo(0, 0);
+            }
+
+            function _searchKey() {
+                vm.$recruiterService.recruiters(vm.keyWord, vm.currPage - 1, vm.perPage, vm.receiveItems, vm.onRecruiterError);
+            }
+            function _receiveItems(data) {
+                vm.notify(function () {
+                    vm.items = data.item;
+                });
+            }
+
+            function _selectRecruiter(anRecruiter) {
+                vm.selectedRecruiter = anRecruiter;
+            }
+
+            function _saveStatus(anRecruiter) {
+            }
+
+            function _onRecruiterError(jqXhr, error) {
+                console.error(error);
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module, "$recruiterService"
+            , ["$baseService"]
+            , sabio.services.recruiterSearchServiceFactory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "recruiterSearchController"
+            , ['$scope', '$baseController', "$recruiterService"]
+            , sabio.page.recruiterSearchControllerFactory)
+
+    </script>
+}
+
+
+
+

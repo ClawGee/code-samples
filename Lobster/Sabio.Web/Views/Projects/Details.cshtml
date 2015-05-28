@@ -1,0 +1,140 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid>
+@{
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+
+
+<section class="main-container" style="margin-top: 10px;">
+
+    <div data-ng-controller="projectDetailController as projDetailCtrler" class="container" id="projDetailCtrler">
+        <div class="row">
+
+            <!-- main start -->
+            <!-- ================ -->
+            <div class="main col-md-12">
+
+                <!-- page-title start -->
+                <!-- ================ -->
+                <h1 class="project"></h1>
+                @*<div class="separator-2"></div>*@
+                <div class="space"></div>
+                <!-- page-title end -->
+
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="box-style-1 gray-bg team-member">
+                            <div class="overlay-container">
+                                <img alt="" src="~/images/team-member-1.jpg">
+                            </div>
+                            <h3></h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-sm-8">
+                        <h4><u>{{projDetailCtrler.item.website}}</u></h4>
+                        <p class="website"></p>
+                        <h4><u>{{projDetailCtrler.item.description}}</u></h4>
+                        <p class="description"></p>
+                        <h4><u>{{projDetailCtrler.item.dlaunch}}</u></h4>
+                        <p class="dlaunch"></p>
+                    </div>
+                </div>
+                <h2>{{projDetailCtrler.item.progress}}</h2>
+                <div class="progress">
+                </div>
+
+                <div class="space"></div>
+            </div>
+            <!-- main end -->
+            <input type="hidden" id="projectuid" name="projectuid" value="@Model.Item" />
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+@section scripts {
+
+
+    <script type="text/javascript" src="~/Scripts/Services/services.public.js"></script>
+    <script type="text/javascript">
+
+
+        sabio.page.startUp = function () {
+
+            sabio.page.projDetailsController = sabio.ng.getControllerInstance($("projDetailCtrler"));
+            var myUid = $("#projectuid").val();
+       
+        }
+
+        sabio.services.projects.Factory = function ($baseService) {
+
+            var angularServiceObject = sabio.services.projects;
+
+            var newService = $.extend(true, {}, angularServiceObject, $baseService);
+
+            return newService
+        }
+
+        sabio.page.projectsControllerFactory = function (
+          $scope,
+          $baseController,
+          $ProjectService) {
+
+            var vm = this;
+            vm.items = null;
+            vm.$ProjectService = $ProjectService;
+
+            vm.receiveItems = _receiveItems;
+            vm.onUsersError = _onError;
+
+            $.extend(vm, $baseController);
+
+            vm.notify = vm.$ProjectService.getNotifier($scope);
+
+            render();
+
+            function render() {
+
+                vm.$ProjectService.getByProjUid(projUid, vm.receiveItems, vm.onUsersError);  //calling sabio.services.projects.List
+
+            }
+
+            function _receiveItems(data) {
+
+                vm.notify(function () {
+                    vm.items = data.items;
+                });
+
+            }
+
+            function _onUsersError(jqXhr, error) {
+
+                console.error(error);
+
+            }
+
+        }
+
+      sabio.ng.addService(
+        sabio.ng.app.module,
+        "$ProjectService",
+        ["$baseService"],
+        sabio.services.projects.Factory);
+
+
+         sabio.ng.addController(
+            sabio.ng.app.module,
+            "projectsController",
+            ['$scope', '$baseController', "$ProjectService"],
+            sabio.page.projectsControllerFactory);
+
+
+
+
+    </script>
+}

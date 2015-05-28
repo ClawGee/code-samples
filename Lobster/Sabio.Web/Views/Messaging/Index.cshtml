@@ -1,0 +1,340 @@
+﻿@model Sabio.Web.Models.ViewModels.BaseViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="panel-heading" id="pageTop">
+        <h1 class="panel-title section-heading no-margin">MESSAGE CENTER</h1>
+        <div class="container">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="#">Profile</a>
+                </li>
+                <li class="active">Message Center</li>
+            </ol>
+            <br />
+        </div>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- BEGIN CONTROLLER SECTION -->
+<div class="container" data-ng-controller="messagingController as dashboard">
+    <div class="conversationSection" id="messagingCntrlr">
+        <!-- BEGIN TABS SECTION -->
+        <div ng-cloak id="tabs">
+            <ul>
+                <li data-ng-repeat="tab in dashboard.tabs"
+                    ng-class="{active:dashboard.isActiveTab(tab.url)}"
+                    ng-click="dashboard.onClickTab(tab)">{{tab.title}}</li>
+            </ul>
+            <div class="col-md-9" id="mainView">
+                <div ng-include="dashboard.currentTab">
+                </div>
+            </div>
+            <!-- BEGIN INBOX SECTION -->
+            <script type="text/ng-template" id="inbox.tpl.html">
+                <div id="viewInbox">
+                    <h1>Inbox</h1>
+                    <h3>Messages Received</h3>
+                    <div class="row animate-repeat" data-ng-repeat="conversation in dashboard.inbox">
+                        <!-- conversation template start -->
+                        <div class="col-md-9" id="cloneTemplate">
+                            <div class="clearfix">
+                                <div ng-cloak class="myConversations-content">
+                                    <p>
+                                        <strong><a href="/messaging/conversation/{{conversation.id}}">View This Message</a></strong>
+                                        <strong>From:</strong> {{conversation.appUserId}}  |  <strong>Sent: </strong> {{conversation.createDate | date:'medium'}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- conversation template end -->
+                    </div>
+                </div>
+            </script>
+            <!-- END INBOX SECTION -->
+            <!-- BEGIN OUTBOX SECTION -->
+            <script type="text/ng-template" id="outbox.tpl.html">
+                <div id="viewOutbox">
+                    <h1>Outbox</h1>
+                    <h3>Messages Sent</h3>
+                    <div class="row animate-repeat" data-ng-repeat="conversation in dashboard.outbox">
+                        <!-- conversation template start -->
+                        <div class="col-md-9" id="cloneTemplate">
+                            <div class="clearfix">
+                                <div ng-cloak class="myConversations-content">
+                                    <p>
+                                        <strong><a href="/messaging/conversation/{{conversation.id}}">View This Conversation</a></strong>
+                                        <strong>Recipient:</strong> {{conversation.recipientId}}  |  <strong>Sent: </strong> {{conversation.createDate | date:'medium'}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- conversation template end -->
+                    </div>
+                </div>
+            </script>
+            <!-- END OUTBOX SECTION -->
+            <!-- BEGIN COMPOSE MESSAGE FORM -->
+            <script type="text/ng-template" id="compose.tpl.html">
+                <div id="viewCompose">
+                    <h1>Compose</h1>
+                    <div class="page-content" id="composeSection">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="contact-form-wrapper">
+                                        <h4>Compose a New Conversation</h4>
+                                        <form novalidate id="messagingForm" class="form-horizontal margin-bottom-30px" role="form" method="post">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="senderId">Sender's Name</label>
+                                                        <input disabled ng-model="dashboard.newConversation.senderId" value="@Model.CurrentUser.Id"
+                                                               id="senderNameInputField" class="form-control" type="text"
+                                                               placeholder="@Model.CurrentUser.FirstName @Model.CurrentUser.LastName" name="senderId">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="recipientId">Recipient's Name</label>
+
+                                                        <input type="text" placeholder="Start Typing a Username . . ."
+                                                               ng-model="dashboard.newConversation.recipientId"
+                                                               typeahead="user.id as user.userName for user in dashboard.users | filter:$viewValue | limitTo:10"
+                                                               typeahead-min-length='1'
+                                                               typeahead-on-select='dashboard.onSelectPart($item, $model, $label)'
+                                                               typeahead-template-url="customTemplate.html" style="width:350px;">
+
+                                                        @*This snipet can replace the <input> autocomplete code above to render a dropdown <select> feature instead.*@
+                                                        @*<select class="form-control" id="recipientNameInputField" name="recipientId"
+                                                                ng-init="dashboard.newConversation.recipientId"
+                                                                ng-model="dashboard.newConversation.recipientId"
+                                                                ng-options="user.id as user.email for user in dashboard.users">
+                                                            <option value="">Select by Username . . .</option>
+                                                        </select>*@
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="subject">Subject</label>
+                                                        <input ng-model="dashboard.newConversation.subject" id="subject" class="form-control"
+                                                               type="text" placeholder="Enter Your Subject (optional)" name="subject">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="body">Message</label>
+                                                        <textarea ng-model="dashboard.newConversation.body" id="body" class="form-control"
+                                                                  placeholder="Enter Your Message" cols="30" rows="5" name="body"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <button data-ng-click="dashboard.selectFormData()" id="composeButton"
+                                                            class="btn btn-success" type="submit">
+                                                        <i class="fa fa-check-circle"></i>
+                                                        <span>Send Message!</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </script>
+            <!-- END COMPOSE MESSAGE FORM -->
+        </div>
+        <!-- END TABS SECTION -->
+     </div>
+</div>
+
+
+
+<!-- END CONTROLLER SECTION -->
+<!-- START CUSTOM TEMPLATE FOR ALL USERS OUTPUT (USED BY THE AUTOCOMPLETE ACTION ABOVE) -->
+<script type="text/ng-template" id="customTemplate.html">
+    <a ng-cloak>
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+        <i>({{match.model.userName}})</i>
+    </a>
+</script>
+<!-- END CUSTOM TEMPLATE FOR OUTPUT -->
+<!-- CUSTOM SCRIPTS -->
+@section pageInitScripts{
+    <script type="text/javascript" src="~/scripts/ng/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+}
+
+@section Scripts{
+    <script type="text/javascript">
+
+        sabio.page.messagingController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.messagingController = sabio.ng.getControllerInstance($("#messagingCntrlr"));
+        }
+
+        sabio.services.messagingFactory = function ($baseService) {
+
+            var aSabioServiceObject = sabio.services.messaging;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+
+        }
+
+        sabio.page.messagingControllerFactory = function ($scope, $baseController, $messagingService, $route) { //add $route to factory since I added it to the controller creator function (look at sabio.ng.app.moduel.config)
+            var vm = this;
+            vm.outbox = null;
+            vm.inbox = null;
+            vm.newConversation = {};
+            vm.users = null;
+            vm.selectedFormData = null;
+            vm.currentTab = '';
+            vm.$routeProvider = _routeProvider;
+            vm.$route = $route;//stored the $route object
+            $scope.$on('$routeChangeSuccess', vm.$routeProvider);//now I need to add a check to make sure that the $route object is instantiated.
+            vm.tabs = [{
+                title: 'Inbox',
+                url: 'inbox.tpl.html'
+            }, {
+                title: 'Outbox',
+                url: 'outbox.tpl.html'
+            }, {
+                title: 'Compose',
+                url: 'compose.tpl.html'
+            }];
+
+            vm.$messagingService = $messagingService;
+            vm.outboxConversationsRetrieved = _outboxConversationsRetrieved;
+            vm.outboxConversationsNotRetrieved = _outboxConversationsNotRetrieved;
+            vm.inboxConversationsRetrieved = _inboxConversationsRetrieved;
+            vm.inboxConversationsNotRetrieved = _inboxConversationsNotRetrieved;
+            vm.selectFormData = _selectFormData;
+            vm.onPostMsgSuccess = _onPostMsgSuccess;
+            vm.onPostMsgError = _onPostMsgError;
+            vm.onUsersPopulateSuccess = _onUsersPopulateSuccess;
+            vm.onUsersPopulateError = _onUsersPopulateError;
+            vm.onClickTab = _onClickTab;
+            vm.isActiveTab = _isActiveTab;
+            vm.onSelectPart = _onSelectPart;
+
+            //This code simulates inheritance.
+            $.extend(vm, $baseController);
+
+            //This code is a wrapper for my small dependency on $scope.
+            vm.notify = vm.$messagingService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$messagingService.getConversationsByUserId(vm.outboxConversationsRetrieved, vm.outboxConversationsNotRetrieved);
+                vm.$messagingService.getConversationsByRecipientId(vm.inboxConversationsRetrieved, vm.inboxConversationsNotRetrieved);
+                vm.$messagingService.getAllUsers(vm.onUsersPopulateSuccess, vm.onUsersPopulateError);
+            }
+
+            function _routeProvider() {
+                vm.currentTab = vm.$route.current.$$route.templateUrl;//console.log vm.$route to see the object structure
+            }
+
+            function _selectFormData() {
+                vm.$messagingService.postMessage(vm.newConversation, vm.onPostMsgSuccess, vm.onPostMsgError);
+            }
+
+            function _outboxConversationsRetrieved(data) {
+                vm.notify(function () {
+                    vm.outbox = data.items;
+                });
+            }
+
+            function _outboxConversationsNotRetrieved() {
+                console.error("Outbox retrieval error.");
+                sabio.layout.showModal("alert-danger", "Oops!", "Your Outbox conversations were not retrieved from the database. Please reload the page to try again.");
+            }
+
+            function _inboxConversationsRetrieved(data) {
+                vm.notify(function () {
+                    vm.inbox = data.items;
+                });
+                $('body, html').scrollTop($('body').offset().top);
+            }
+
+            function _inboxConversationsNotRetrieved() {
+                console.error("Inbox retrieval error.");
+                sabio.layout.showModal("alert-danger", "Oops!", "Your Inbox conversations were not retrieved from the database. Please reload the page to try again.");
+            }
+
+            function _onPostMsgSuccess() {
+                vm.newConversation = {};
+                render();
+                sabio.layout.showModal("alert-success", "Success!", "Your message was sent.");
+            }
+
+            function _onPostMsgError() {
+                sabio.layout.showModal("alert-danger", "Oops!", "Your message was not sent. Please try again.");
+            }
+
+            function _onUsersPopulateSuccess(data) {
+                vm.notify(function () {
+                    vm.users = data.items;
+                });
+            }
+
+            function _onUsersPopulateError(error) {
+                //console.log(error);
+            }
+
+            function _onClickTab(tab) {
+                vm.currentTab = tab.url;
+            }
+
+            function _isActiveTab(tabUrl) {
+                return tabUrl == vm.currentTab;
+            }
+
+            function _onSelectPart($item, $model, $label) {
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$messagingService"
+            , ["$baseService"]
+            , sabio.services.messagingFactory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "messagingController"
+            , ['$scope', '$baseController', "$messagingService", "$route"]//added $route to pull in ngRoute dependency(look at factory)
+            , sabio.page.messagingControllerFactory);
+
+        sabio.ng.app.module.config(function ($routeProvider) {//told the angular module to look for these routes
+            $routeProvider.when('/', {
+                controller: 'messagingController',
+                templateUrl: 'inbox.tpl.html'
+            }).when('/compose', {
+                controller: 'messagingController',
+                templateUrl: 'compose.tpl.html'
+            });
+        });
+
+
+    </script>
+}

@@ -1,0 +1,219 @@
+﻿@{
+    //Sabio:
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+<div id="mainBackgroundPhoto">
+    <div class="" id="innerBackground">
+        <h1 class="frontPageText">RECRUIT.US: Start the right career, find the right developer.</h1>
+        <p class="lead frontPageText"><strong>Search. Hire. Connect.</strong></p>
+        <p><a href="/login/" class="btn btn-primary btn-lg">Log in &raquo;</a></p>
+        <p>
+            <em class="frontPageText"><strong>Don't have an account yet?</strong></em>
+            <a href="/registration/">
+                <strong>Sign Up</strong>
+            </a>
+        </p>
+    </div>
+</div>
+
+<div class="col-md-4 col-lg-4">
+    <article id="job-seeker">
+        <header>
+            <h4><strong>Looking for a Developer Job?</strong></h4>
+        </header>
+        <section>
+            <form id="lookingForJobsForm">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label for="jobKeywordSearch">Keyword Search:</label>
+                            <input id="jobKeywordSearch" class="form-control " type="text" name="jobKeywordSearch">
+                            <p class="help-block">(e.g., full-stack, javascript, jquery)</p>
+                        </div>
+                        @*<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                            <label for="city">Enter City:</label>
+                            <input id="city" class="form-control" type="text" name="city">
+                        </div>*@
+                        @*<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label for="state">State:</label>
+                            <select id="state" class="form-control" name="state">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>*@
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button id="submitBtn1" class="btn btn-success" type="submit">
+                                    <i class="fa fa-check-circle"></i>
+                                    Find Me a Job!
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </article>
+</div>
+
+<div class="col-md-4 col-lg-4">
+    <article id="employer">
+        <header>
+            <h4><strong>Looking for Developers?</strong></h4>
+        </header>
+        <section>
+            <form id="lookingForDevelopersForm">
+                <div class="form-group">
+                    <div class="lookingEmployees">
+                        <div class="form-group">
+                            <label class="control-label" for="devSearch">Developer Search:</label>
+                            <div>
+                                <input id="devSearchKey" class="form-control ac_input" type="text" autocomplete="off" maxlength="255" size="60" title="Enter Job Title" name="devSearch">
+                            </div>
+                            <p class="help-block"> (i.e., Developers who know C#, Java, Javascript, etc.) </p>
+                        </div>
+                       @*<div class="col-md-6">
+                            <label class="control-inline fancy-radio">
+                                <input type="radio" checked="checked" name="inline-radio">
+                                <span>
+                                    <i></i>
+                                    I am an Employer
+                                </span>
+                            </label>
+                           <br />
+                           <br />
+                            <label class="control-inline fancy-radio">
+                                <input type="radio" checked="checked" name="inline-radio">
+                                <span>
+                                    <i></i>
+                                    I am a Recruiter
+                                </span>
+                            </label>
+                        </div>
+                        <br />*@
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button id="submitBtn2" class="btn btn-success" type="submit">
+                                    <i class="fa fa-check-circle"></i>
+                                    Find Me a Developer!
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </article>
+</div>
+
+<div class="col-md-4 col-lg-4">
+    <article id="recruiter">
+        <header>
+            <h4><strong>Looking for a Recruiter?</strong></h4>
+        </header>
+        <section>
+            <form id="lookingForRecruiter">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label for="recruiterSearch">Keyword Search:</label>
+                            <input id="recruiterSearch" class="form-control " type="text" name="recruiterSearch">
+                            <p class="help-block">(e.g., e-commerce)</p>
+                        </div>
+                        @*<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                            <label for="recruiterCity">Enter City:</label>
+                            <input id="recruiterCity" class="form-control" type="text" name="recruiterCity">
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <label for="recruiterState">State:</label>
+                            <select id="recruiterState" class="form-control" name="recruiterState">
+                                <option value="">Select...</option>
+                            </select>
+                        </div>*@
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button id="submitBtn3" class="btn btn-success" type="submit">
+                                    <i class="fa fa-check-circle"></i>
+                                    Find Me a Recruiter!
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </article>
+</div>
+
+<!-- Custom Scripts -->
+@section Scripts{
+    <script type="text/javascript">
+        sabio.page.startUp = function () {
+            sabio.page.getStates();
+            sabio.page.rules();
+            $("#keyword").focus();
+            $("#submitBtn1").on("click", sabio.page.handlers.createJobSearch);
+            $("#submitBtn2").on("click", sabio.page.handlers.createDeveloperSearch);
+            $("#submitBtn3").on("click", sabio.page.handlers.createRecruiterSearch);
+        }
+
+        sabio.page.handlers.createJobSearch = function () {
+            var keyword = $('#jobKeywordSearch').val();
+            console.log(keyword);
+            location.href = "/search/jobs?keyWord=" + keyword;
+        }
+
+        sabio.page.handlers.createRecruiterSearch = function () {
+            var keyword = $('#recruiterSearch').val();
+            console.log(keyword);
+            location.href = "/search/recruiter?keyWord=" + keyword;
+        }
+
+        sabio.page.handlers.createDeveloperSearch = function () {
+            var keyword = $('#devSearchKey').val();
+            console.log(keyword);
+            location.href = "/search/developer?keyWord=" + keyword;
+        }
+
+        sabio.page.getStates = function () {
+            $.ajax({
+                url: "/api/geography/states",
+                data: null,
+                type: "GET"
+            }).done(sabio.page.handlers.statesAreLoaded).fail(sabio.page.handlers.statesNotLoaded)
+        }
+
+        sabio.page.rules = function () {
+            $("#lookingForJobsForm").validate({
+                rules: {
+                    city: "required",
+                    state: {
+                        required: true
+                    }
+                }
+            });
+        $("#lookingForDevelopersForm").validate({
+            rules: {
+                location: "required"
+            }
+        });
+        }
+
+        sabio.page.handlers.statesAreLoaded = function (jqObject) {
+            //console.log(jqObject.items);
+            $.each(jqObject.items, sabio.page.handlers.appendStateOption);
+        }
+
+        sabio.page.handlers.appendStateOption = function (key, value) {
+            //console.debug("ID#: " + value.stateProvinceId + ", Code: " + value.stateProvinceCode + ", Name: " + value.name);
+            var mySelect = $('#state');
+            mySelect.append(
+                $('<option></option>').val(value.stateProvinceId).html(value.name));
+        }
+
+        sabio.page.handlers.statesNotLoaded = function (jqObject) {
+            sabio.layout.showModal("alert-danger", "Error!", "The page did not load properly. Please check back later.");
+        }
+
+    </script>
+}

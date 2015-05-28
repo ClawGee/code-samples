@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "ContactUs";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+<!-- PAGE CONTENT -->
+<div class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <h2>WE ARE HERE TO HELP</h2>
+                <p>Sorry you are experiencing troubles. Please provide, below, your contact information and a message about how we can help you. We'll be sure to get back to you in a timely manner. Thank you!</p>
+
+                <br>
+
+                <!-- CONTACT FORM -->
+               <!--<div class="contact-form-wrapper">-->
+                    <form id="contact-form" method="post" class="form-horizontal margin-bottom-30px" role="form" action="MAILTO:genehan01@gmail.com">
+
+                        <div class="form-group">
+
+                            <label for="contact-name" class="control-label sr-only">Name</label>
+                            <input type="text" class="form-control" id="contactName" name="name" placeholder="Name*">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-email" class="control-label sr-only">Email</label>
+                            <input type="text" class="form-control" id="contact-email" name="email" placeholder="Email*">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-name" class="control-label sr-only">Phone Number</label>
+                            <input type="text" class="form-control" id="contact-phonenumber" name="phoneNumber" placeholder="Phone Number">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-email" class="control-label sr-only">Subject</label>
+                            <input type="text" class="form-control" id="contact-subject" name="subject" placeholder="Subject*">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-message" class="control-label sr-only">Message</label>
+                            <textarea class="form-control" id="contact-message" name="message" rows="5" cols="30" placeholder="Message*"></textarea>
+                        </div>
+
+                        @*<div class="form-group">
+                                <input type="checkbox"  style=" margin-left:0px" id="ccSender" name="ccSender"><label for="ccSender" class="veta">Send a copy to my email address.</label>
+                            </div>*@
+
+                        <div class="form-group">
+                            <button id="submit-button" type="submit" class="btn btn-primary"><i class="fa loading-icon"></i> <span>Submit Message</span></button>
+                        </div>
+                    </form>
+               @* </div>*@
+
+                <!-- END CONCTACT FORM -->
+            </div>
+            <div class="col-md-3">
+                <!-- RIGHT SIDEBAR CONTENT -->
+                <div class="widget">
+                    <h3 class="widget-title">CONTACT US</h3>
+                    <ul class="contact-info fa-ul">
+                        <li><i class="fa fa-li fa-building-o"></i> 400 Corporate Pointe North, Culver City, CA 90025</li>
+                        <li><i class="fa fa-li fa-phone"></i> (888) 888-8888</li>
+                        <li><i class="fa fa-li fa-envelope-o"></i> <a href="mailto:genehan01@gmail.com">sabio@recruit.us</a></li>
+                    </ul>
+                </div>
+                <div class="widget">
+                    <h3 class="widget-title">VISIT US</h3>
+                    <div class="google-map sidebar-map">
+          <!--I added the iframe embed from google maps*-->
+                        <div id="custom-map-canvas"><iframe src="https://www.google.com/maps/embed?pb=!1m24!1m12!1m3!1d13232.583598432573!2d-118.38531340115286!3d33.98878604107924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m9!1i0!3e0!4m5!1s0x80c2b756dbbf98ff%3A0x14770a080d61e138!2sAntioch+University%2C+400+Corporate+Pointe%2C+Culver+City%2C+CA+90230!3m2!1d33.988558999999995!2d-118.384795!4m0!5e0!3m2!1sen!2sus!4v1426696545999" width="400" height="300" frameborder="0" style="border:0"></iframe></div>
+                    </div>
+                </div>
+                <br />
+                <div class="widget">
+                    <h3 class="widget-title">BUSINESS HOURS</h3>
+                    <ul class="list-unstyled">
+                        <li><strong>Monday-Friday: </strong> 8am to 5pm</li>
+                        <li><strong>Saturday: </strong> 10am to 2pm</li>
+                        <li><strong>Sunday: </strong> Closed</li>
+                    </ul>
+                </div>
+                <!-- END RIGHT SIDEBAR CONTENT -->
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+@section Scripts{
+
+<script type="text/javascript">
+
+sabio.page.startUp = function (){
+        
+    $("#contact-form").validate({
+        rules: {
+            name: {
+                required: true,
+                minlength: 3,
+                maxlength: 50
+            },
+                 
+            email: {
+                required: true,
+                email: true,
+                minlength: 5,
+                maxlength: 50
+            },
+
+            phoneNumber: {
+                required: false,
+                digits: true,
+                minlength: 10,
+                maxlength: 16
+            },
+
+            subject: {
+                required: true,
+                minlength: 2,
+                maxlength: 50
+            },
+
+            message: {
+                required: true,
+                minlength: 1,
+                maxlength: 500
+            }
+
+        },
+
+        messages: {
+            name: "Please enter your name",
+            email: "Please enter a valid email address",
+            subject: {
+                required: "Please enter a subject",
+                minlength: "Subject must be at least 2 characters long"
+            },
+            message: {
+                required: "Whoops, the message field is blank",
+                maxlength: "Sorry, there is a maximum of 500 characters."
+            }
+        },
+    });
+
+    $("#submit-button").on("click", sabio.page.handlers.submitContactUsData);
+}
+    
+sabio.page.handlers.submitContactUsData = function (event) {
+    event.preventDefault();
+    //console.debug("sabio.page.handlers.submitContactUsData");
+    var form = $("#contact-form");
+    var formData = form.serialize();
+    if (form.valid()) {
+        $.ajax({
+            // The URL for the request
+            url: "/api/support",// The data to send (will be converted to a query string)
+            data: formData,// Whether this is a POST or GET request
+            type: "POST",
+            // The type of data we expect back
+            //dataType: "json",
+            // Code to run if the request succeeds;
+            // the response is passed to the function
+            success: sabio.page.handlers.ajaxSuccess,
+            // Code to run if the request fails; the raw request and
+            // status codes are passed to the function
+            error: sabio.page.handlers.ajaxError
+        });
+    } else {
+        console.log("form is not valid");
+    };
+    
+}
+
+sabio.page.handlers.ajaxSuccess = function (json) {
+    console.log("ajax success");
+    //$("<h1>").text(json.title).appendTo("body");
+    //$("<div class=\"content\">").html(json.html).appendTo("body");
+};
+
+sabio.page.handlers.ajaxError = function (xhr, status, errorThrown) {
+        alert("Sorry, there was a problem!");
+        console.log("Error: " + errorThrown);
+        console.log("Status: " + status);
+        console.dir(xhr);
+};
+
+sabio.page.handlers.ajaxComplete = function (xhr, status) {
+    alert("Thank you! We will get back to you shortly!");
+};
+
+</script>
+}
+   
+

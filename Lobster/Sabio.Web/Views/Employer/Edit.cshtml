@@ -1,0 +1,268 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<h2 class="center-block">Edit Employer</h2>
+<div class="container">
+    <div data-ng-controller="employerController as emp" id="employerControllerElement">
+        <form method="get" name="form" class="">
+            <div class="col-lg-12">
+                <div class="col-lg-4">
+                    <div class="row form-group">
+                        <label class="text-primary" for="name">Company Name<em class="text-accent-color">*</em></label>
+                        <input type='text' name="name" id="name" class="form-control" data-ng-model="emp.item.name" required="" />
+                        <div data-ng-show="form.$submitted || form.name.$touched">
+                            <div data-ng-show="form.name.$error.required">This field is required.</div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="contactName">Contact Name<em class="text-accent-color">*</em></label>
+                        <input type='text' name="contactName" id="contactName" class="form-control" data-ng-model="emp.item.contactName" required="" />
+                        <div data-ng-show="form.$submitted || form.contactName.$touched">
+                            <div data-ng-show="form.contactName.$error.required">This field is required.</div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="contactEmail">Contact Email<em class="text-accent-color">*</em></label>
+                        <input type='email' id="contactEmail" name="contactEmail" class="form-control" placeholder='example@email.com' data-ng-model="emp.item.contactEmail" required="" />
+                        <div data-ng-show="form.$submitted || form.contactEmail.$touched">
+                            <span data-ng-show="form.contactEmail.$error.required">Tell us your email.</span>
+                            <span data-ng-show="form.contactEmail.$error.email">This is not a valid email.</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="country">Country<em class="text-accent-color">*</em></label>
+                        <select name="country" class="form-control" id="country" data-ng-model="emp.item.country">
+                            <option value="usa">USA</option>
+                            <option value="asia">Asia</option>
+                            <option value="europe">Europe</option>
+                            <option value="canada">Canada</option>
+                        </select>
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="city">City</label>
+                        <input type='text' name="city" class="form-control" placeholder='City' data-ng-model="emp.item.city" />
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="stateOptions">State</label>
+                        <select name="stateOptions" class="form-control" id=" stateOptions" data-ng-model="emp.item.stateOptions">
+                            <option value=0>None</option>
+                            <option value=1>California</option>
+                            <option value=2>New York</option>
+                            <option value=3>New Jersey</option>
+                            <option value=4>Washington</option>
+                        </select>
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="otherLocation">Providence/Region</label>
+                        <input type='text' id="otherLocation" name="otherLocation" class="form-control" placeholder='Providence/Region' data-ng-model="emp.item.otherLocation" />
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row form-group">
+                        <label class="text-primary" for="size">Company Size<em class="text-accent-color">*</em></label>
+                        <select name="size" class="form-control" id="size" data-ng-model="emp.item.size" required="">
+                            <option value="tier1">0-50 Employee(s)</option>
+                            <option value="tier2">51-200 Employees</option>
+                            <option value="tier3">201-500 Employees</option>
+                            <option value="tier4">501-2,000 Employees</option>
+                            <option value="tier5">2,001-10,000 Employees</option>
+                            <option value="tier6">10,000+ Employees</option>
+                        </select>
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="industry">Industry<em class="text-accent-color">*</em></label>
+                        <select name="industry" class="form-control" id="industry" data-ng-model="emp.item.industry" required="">
+                            <option value="retail">Retail</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="technology">Technology</option>
+                            <option value="automotive">Automotive</option>
+                        </select>
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="tech">Technologies<em class="text-accent-color">*</em></label>
+                        <br />
+                        <select multiple name="tech" id="tech" class="col-md-6" data-ng-model="emp.item.tech">
+                            <option value="Android">Android</option>
+                            <option value="iOS">iOS</option>
+                            <option value="Windows">Windows</option>
+                            <option value="Mac">Mac</option>
+                        </select>
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="url">Company Website<em class="text-accent-color">*</em></label>
+                        <input type='url' name="url" id="url" class="form-control" placeholder='http://' data-ng-model="emp.item.url" required="" />
+                        <div data-ng-show="form.$submitted || form.url.$touched">
+                            <span data-ng-show="form.url.$error.required">This field is required.</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="facebook">Facebook Address</label>
+                        <input type='url' id="facebook" name="facebook" class="form-control" placeholder='http://' data-ng-model="emp.item.facebook" />
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="twitter">Twitter Address</label>
+                        <input type='url' id="twitter" name="twitter" class="form-control" placeholder='http://' data-ng-model="emp.item.twitter" />
+                    </div>
+                    <div class="row form-group">
+                        <label class="text-primary" for="linkedIn">LinkedIn Address</label>
+                        <input type='url' id="linkedIn" name="linkedIn" class="form-control" placeholder='http://' data-ng-model="emp.item.linkedIn" />
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row form-group ">
+                        <img class="resize" id="image" data-ng-if="emp.item.media.fullUrl!=null" data-ng-src="{{emp.item.media.fullUrl}}" />
+                        <img class="resize" id="image" data-ng-if="emp.item.media.fullUrl==null" data-ng-src="http://www.propelarizona.com/upload/thumb/no_img.jpg" />
+                        <input type="text" id="uid" name="uid" class="form-control hidden" data-ng-model="emp.item.uid" />
+                    </div>
+                    <div class="container" data-ng-if="emp.item.uid!=null">
+                        <div id="uploadImage">
+                            <form novalidate>
+                                <div dropzone="emp.dropzoneConfig" id="myDropzone" class="fallback dropzone dz-clickable" style="height:50px; width:200px" enctype="multipart/form-data"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="row form-group col-lg-8">
+                    <label class="text-primary" for="description">Description<em class="text-accent-color">*</em></label>
+                    <textarea name="description" id="description" class="form-control" cols="50" rows="5" placeholder="What does your company do?" data-ng-model="emp.item.description" required="" data-ng-minlength="15"></textarea>
+                    <div data-ng-show="form.$submitted || form.description.$touched">
+                        <div data-ng-show="form.description.$error.required">This field is required.</div>
+                        <div data-ng-show="form.description.$error.minlength">Description should be at least 15 characters.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="row form-group col-lg-8">
+                    <label class="text-primary" for="tags">Tags</label>
+                    <tags-input id="tags" name="tags" key-property="name" min-length="1" display-property="name"
+                                data-ng-model="emp.item.tags"></tags-input>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row form-group">
+                    <input class="btn btn-success" type="submit" name="submit" value="Submit" data-ng-click="emp.submit()" />
+                    <input class="btn btn-success" type="button" name="cancel" value="Cancel" data-ng-click="emp.cancel()" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section pageInitScripts{
+    <script type="text/javascript" src="~/scripts/ng/sabio-angular-dropzone.js"></script>
+    <script type="text/javascript" src="~/scripts/ng/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script type="text/javascript" src="~/scripts/ng/ng-tags-input.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ngTagsInput', 'dropzone', 'ui.bootstrap'];
+    </script>
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        sabio.page.employersController = null;
+        sabio.page.userGuid = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.employersController = sabio.ng.getControllerInstance($('#employerControllerElement'));
+            sabio.page.userGuid = $('#uid').val();
+        }
+
+        sabio.services.employers.factory = function ($baseService) {
+            var service = sabio.services.employers;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        sabio.page.employersControllerFactory = function ($scope, $baseController, $employersService) {
+            var viewModel = this;
+            viewModel.item = null;
+            viewModel.$employersService = $employersService;
+            viewModel.returnHome = _return;
+            viewModel.submit = _submit;
+            viewModel.cancel = _cancel;
+            viewModel.receivedItems = _onSuccess;
+            viewModel.onResultError = _onResultError;
+            viewModel.initializeDropzone = $scope.initializeDropzone = _initializeDropzone;
+
+            Dropzone.autoDiscover = false;
+            $scope.dropzoneConfig = {
+                'options': { // passed into the Dropzone constructor
+                    'url': '/api/employer/upload',
+                    'autoProcessQueue': true,
+                    'uploadMultiple': false,
+                    'parallelUploads': 1,
+                    'maxFiles': 1,
+                    init: viewModel.initializeDropzone
+                },
+            }
+
+
+            $.extend(viewModel, $baseController);
+
+            viewModel.notify = viewModel.$employersService.getNotifier($scope);
+
+            render();
+
+            function _initializeDropzone() {
+                console.log("HERE in init dropzone");
+                this.on('complete', function () {
+                    if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                        location.reload();
+                    }
+                });
+            }
+            function render() {
+                viewModel.$employersService.get(viewModel.receivedItems, viewModel.onResultError);
+            }
+
+            function _submit() {
+                var data = viewModel.item;
+                var str = [];
+                for (i = 0; i < data.tags.length; i++) {
+                    str.push(data.tags[i].name);
+                }
+                data.tags = str;
+                if ($('#uid').val() == 0 || $('#uid').val() == "" || $('#uid').val() == "00000000-0000-0000-0000-000000000000") {
+                    viewModel.$employersService.post(data, viewModel.returnHome, viewModel.onResultError);
+                } else {
+                    viewModel.$employersService.put(data, viewModel.returnHome, viewModel.onResultError);
+                }
+            }
+
+            function _return() {
+                window.open('/Employer/index', '_self');
+            }
+
+            function _cancel() {
+                window.open('/Employer/index', '_self');
+            }
+
+            function _onSuccess(result) {
+                viewModel.notify(function () {
+                    viewModel.item = result.item;
+                    viewModel.photoUrl = result.item.media.fullUrl;
+                });
+            }
+
+            function _onResultError(jqXhr, error) {
+                console.log("Danger Will Robinson, Danger!!!");
+                console.log(error);
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module,
+            "$employersService",
+            ["$baseService"],
+            sabio.services.employers.factory);
+
+        sabio.ng.addController(sabio.ng.app.module,
+            "employerController",
+            ['$scope', '$baseController', '$employersService'],
+            sabio.page.employersControllerFactory);
+
+    </script>
+}

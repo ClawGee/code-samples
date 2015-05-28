@@ -1,0 +1,306 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid>
+@{
+    ViewBag.Title = "PublicDeveloper";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Developer Profile</h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/search/developer">Developer Search</a>
+            </li>
+            <li class="active">Developer Profile</li>
+        </ol>
+    </div>
+</div>
+<div class="container">
+    <div ng-cloak class="page-content" data-ng-controller="developerController as dev" id="developerCntrlr">
+        <input type="hidden" data-ng-model="dev.selectedDeveloper.item" value="@Model.Item" name="uid" id="uid" />
+
+
+
+        <h3>{{dev.item.developerPersonalInfo.firstName}} {{dev.item.developerPersonalInfo.lastName}}</h3>
+        <br />
+
+        <img data-ng-if="dev.item.developerPhoto != null" class="resize" ng-src="{{dev.item.developerPhoto.fullUrl}}" />
+        <img data-ng-if="dev.item.developerPhoto == null" ng-src='http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/256/Actions-im-user-icon.png' class="resize" />
+        <br />
+
+        <h4>Programming Languages</h4>
+        <ul>
+            <li ng-if="dev.item.language1.length"><p>{{dev.item.language1}}</p></li>
+            <li ng-if="dev.item.language2.length"><p>{{dev.item.language2}}</p></li>
+            <li ng-if="dev.item.language3.length"><p>{{dev.item.language3}}</p></li>
+            <li ng-if="dev.item.language4.length"><p>{{dev.item.language4}}</p></li>
+            <li ng-if="dev.item.language5.length"><p>{{dev.item.language5}}</p></li>
+        </ul>
+        <br />
+
+        <h4>Professional Summary</h4>
+        <p id="summary">{{dev.item.summary}}</p>
+        <br />
+
+        <h4>Professional Experience</h4>
+        <ul>
+            <li ng-if="dev.item.experience1"><strong>{{dev.item.experience1}} :</strong>  <span id="yearsExperience1">{{dev.profileType(dev.item.yearsExperience1)}}</span></li>
+            <li ng-if="dev.item.experience2"><strong>{{dev.item.experience2}} :</strong> <span id="yearsExperience2">{{dev.profileType(dev.item.yearsExperience2)}}</span></li>
+            <li ng-if="dev.item.experience3"><strong>{{dev.item.experience3}} :</strong> <span id="yearsExperience3">{{dev.profileType(dev.item.yearsExperience3)}}</span></li>
+            <li ng-if="dev.item.experience4"><strong>{{dev.item.experience4}} : </strong> <span id="yearsExperience4">{{dev.profileType(dev.item.yearsExperience4)}}</span></li>
+        </ul>
+        <br />
+
+        <h4>Professional Goals</h4>
+        <p id="goals">{{dev.item.goals}}</p>
+
+        <a class="fa fa-envelope" href="/shareprofile/@Model.Item"> Click here to email this developer's profile to yourself or a colleague!</a>
+        <!--rating widget starts here-->
+        <div class="container page-content well well-sm ">
+            <div class="panel-group">
+                <div ng-cloak class="col-lg-2">
+                    <h3>Developer Rating</h3>
+                    <rating ng-model="dev.item.averageRating" max="dev.maxStars" readonly="dev.isReadOnly"></rating><label class="boxed-content-title text-primary" for="rating-count-display"></label><span><small>({{dev.item.ratingCount}} reviews)</small></span>
+                    <br />
+                    <label class="boxed-content-title text-primary" for="average-rating-display"></label><span class="avg-rating-display"><small>{{dev.item.averageRating| number: 2}} Stars out of 5</small></span>
+                </div>
+            </div>
+            <div class="panel-group">
+                <div class="col-lg-4">
+                    <div ng-include="'/Content/includes/RatingsPartial.html'"></div>
+                </div>
+            </div>
+            <div class="panel-group">
+                <div class="col-lg-6">
+                    <h4>Reviews</h4>
+                    <!--start sort button-->
+                    <div class="btn-group" dropdown is-open="dev.toggleStatus.isopen">
+                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                            <small>Sort By</small><span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a ng-click="dev.getRatingsPage(dev.sortOrder ='old')" href=""><small>Oldest First</small></a></li>
+                            <li><a ng-click="dev.getRatingsPage(dev.sortOrder ='new')" href=""><small>Newest First</small></a></li>
+                            <li><a ng-click="dev.getRatingsPage(dev.sortOrder = 'hi')" href=""><small>High to Low</small></a></li>
+                            <li><a ng-click="dev.getRatingsPage(dev.sortOrder = 'low')" href=""><small>Low to High</small></a></li>
+                        </ul>
+                    </div>
+                    <!--end sort button-->
+                    <div class="rates" data-ng-repeat="rates in dev.existingRatingItems">
+                        <div ng-cloak class="testimonial testimonial-body">
+                            <rating ng-model="rates.ratingValue" max="dev.maxStars" readonly="dev.isReadOnly"></rating>
+                            <span>Rating: {{rates.ratingValue}}</span>
+                            <br />
+                            <span><i><small>Comments:</small></i> {{rates.comments}}</span>
+                            <br />
+                            <span><small><i>Rated on:</i> {{rates.createDate| date}}</small></span>
+                            <span><small><i>Reviewed by: </i><a href="assignmeplease">{{rates.fullUser.firstName}}</a></small></span>
+                            <br />
+                            <span><small>Helpful?</small> </span><button ng-click="dev.disabledVote()" class="glyphicon glyphicon-thumbs-up"></button> <button ng-click="dev.disabledVote()" class=" glyphicon glyphicon-thumbs-down"></button>
+                            <hr />
+                        </div>
+                    </div>
+                    <pagination total-items="dev.totalCount" max-size="dev.maxPagesDisplayed" items-per-page="dev.pageSize" ng-model="dev.currentPage" ng-change="dev.getRatingsPage()"></pagination>
+                </div>
+            </div>
+        </div>
+        <!--rating widget ends here-->
+    </div>
+</div>
+<!-- Custom Ng Scripts -->
+@section pageInitScripts{
+    <script src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+}
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/Services/services.public.js"></script>
+    <script type="text/javascript" src="~/Scripts/Services/services.ratings.js"></script>
+    <script type="text/javascript" src="~/Scripts/sabio.rating.js"></script>
+    <script type="text/javascript">
+        sabio.page.developerController = null;
+        sabio.page.developerUid = null;
+        sabio.page.ratingController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.developerController = sabio.ng.getControllerInstance($("#developerCntrlr"));
+            sabio.page.developerUid = $("#uid").val();
+            sabio.page.ratingController = sabio.ng.getControllerInstance($("#ratingControllerContainer"));
+        }
+
+        sabio.services.public.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.public;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.services.ratings.factory = function ($baseService) {
+            var service = sabio.services.ratings;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        sabio.page.developerControllerFactory = function ($scope, $baseController, $developerService, $ratingService) {
+            // --ng controller factory service variables
+            var vm = this;
+            vm.item = null;
+            vm.$developerService = $developerService;
+            vm.receiveItem = _receiveItem;
+            vm.onDevError = _onDevError;
+            vm.profileType = _profileType;
+
+            //section to enable Display Existing Ratings functionality
+            vm.$ratingService = $ratingService;
+            vm.existingRatingItems = null;
+            vm.onListSuccess = _onListSuccess;
+            vm.onListError = _onListError;
+            vm.maxStars = 5;
+            vm.isReadOnly = true;
+
+            //section to enable listener for ratingspartial submit
+            vm.$scope = $scope;
+            vm.$scope.error = _onListError;
+            vm.$scope.success = _onListSuccess;
+
+            //section to enable paginated listings functions and variables
+            vm.currentPage = 1;
+            vm.maxPagesDisplayed = 5
+            vm.getRatingsPage = _getRatingsPage;
+            vm.ratingListener = _ratingListener;
+            vm.disabledVote = _disabledVote;
+
+            //dropdown section
+            vm.toggleStatus = {
+                isopen: false
+            };
+            vm.toggled = _toggled;
+            vm.toggleDropdown = _toggleDropdown;
+
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$developerService.getNotifier($scope);
+            vm.$scope.$on('submitRating', vm.ratingListener);
+
+            render();
+
+            //Changing Profile Type from Int to value 
+            function _profileType(num) {
+                if (num == 1) {
+                    return "2-5 years of experience.";
+                } else if (num == 2) {
+                    return "6-10 years of experience.";
+                } else if (num == 3) {
+                    return "Freelance";
+                } else {
+                    return "No additional information provided";
+                }
+            }
+
+            function _disabledVote() {
+                sabio.layout.showModal('alert-info', 'Info', 'Sorry, this button is WIP');
+            };
+
+            function _toggled(open) {
+                $log.log('Dropdown is now: ', open);
+            };
+
+            function _toggleDropdown($event) {
+                console.log("click");
+                vm.$event.preventDefault();
+                vm.$event.stopPropagation();
+                vm.toggleStatus.isopen = !vm.toggleStatus.isopen;
+            };
+
+            function render() {
+                vm.$developerService.getDeveloperProfileByUid(sabio.page.developerUid, vm.receiveItem, vm.onDevError);
+            };
+
+            function _ratingListener(event, msg) {
+                vm.currentPage = 1;
+                vm.pageSize = 5;
+
+                vm.getRatingsPage();
+            };
+
+            function _getRatingsPage(sortOrder) {
+
+                switch (sortOrder) {
+                    case 'hi':
+                        vm.sortOrder = 'HiToLow';
+                        break;
+                    case 'low':
+                        vm.sortOrder = 'LowToHi';
+                        break;
+                    case 'old':
+                        vm.sortOrder = 'OldToNew';
+                        break;
+                    case 'new':
+                        vm.sortOrder = 'NewToOld';
+                        break;
+                }
+                vm.$ratingService.listPagedRatingsByEntitySorted(
+                    vm.$sabio.entityId,
+                    vm.$sabio.entityType,
+                    vm.currentPage,
+                    vm.pageSize,
+                    vm.sortOrder,
+                    vm.$scope.success,
+                    vm.$scope.error);
+            };
+
+
+            function _onListSuccess(result) {
+                vm.notify(function () {
+                    vm.existingRatingItems = result.item.pagedItems;
+                    vm.pageSize = result.item.pageSize;
+                    vm.totalCount = result.item.totalCount;
+                });
+            }
+
+            function _onListError(jqXhr, error) {
+                sabio.layout.showModal('alert-danger', 'Error', 'Sorry. Ratings are not available at this time. Please check back later.')
+            };
+
+            function _receiveItem(data) {
+                vm.notify(function () {
+                    vm.item = data.item;
+                    vm.$sabio.entityId = vm.item.id;
+                    vm.$sabio.entityType = 1;
+                    vm.pageSize = 5;
+                    vm.sortOrder = 'NewToOld';
+                    vm.getRatingsPage();
+                });
+            }
+
+            function _onDevError(jqXhr, error) {
+                console.log("Danger Will Robinson, Danger!!!");
+                console.error(error);
+            }
+        }
+
+        /*
+        Below here is where we register our service and controller with ng
+        */
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$developerService"
+            , ["$baseService"]
+            , sabio.services.public.factory);
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$ratingService"
+            , ["$baseService"]
+            , sabio.services.ratings.factory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "developerController"
+            , ['$scope', '$baseController', "$developerService", "$ratingService"]
+            , sabio.page.developerControllerFactory);
+
+    </script>
+}

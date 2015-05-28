@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+<title>Jobs Index page</title>
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Jobs Listings</h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li class="active">Job Listings</li>
+            <li>
+                <a href="/jobs/details/560f5165-4e3f-4bfc-ac30-e1ec3b4482d8">Job Details</a>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="page-content">
+    <div class="col-md-push-3 pull-right">
+        <!-- Contact Info -->
+        <div class="widget">
+            <h3 class="widget-title">SABIO EMPLOYER INFO</h3>
+            <ul class="contact-info fa-ul">
+                <li><i class="fa fa-li fa-building-o"></i> 400 Corporate Pointe, Culver City, CA USA</li>
+                <li><i class="fa fa-li fa-phone"></i> +999 867-5309</li>
+                <li><i class="fa fa-li fa-envelope-o"></i> <a id="jobs-email" href="mailto:hello@yourcompany.com">hello@sabiofellows.com</a></li>
+            </ul>
+            <h3 class="widget-title">Recruiter Info</h3>
+            <ul class="contact-info fa-ul">
+                <li><i class="fa fa-li fa-envelope-o"></i> <a id="jobs-email" href="mailto:recruiter@yourcompany.com">recruiter@sabiofellows.com</a></li>
+            </ul>
+            <a class="btn btn-success" href="/jobs/manage/">Create New Job</a>
+        </div>
+        <!-- End Contact Info -->
+    </div>
+    <!-- START JOBS LISTINGS TEMPLATE-->
+    <div class="col-md-9" data-ng-controller="jobsController as jobs" id="JobsControllerContainer">
+        <div class="jobs" data-ng-repeat="job in jobs.items track by job.uid">
+            <div>
+                <div class="summary jobs" itemprop="title">
+                    <p>
+                        <h3 class="jobs-title heading-left">{{job.title}}</h3>
+                    </p>
+                </div>
+                <div class="summary jobs-description">
+                    <p>{{job.description}} </p>
+                </div>
+                <div class="summary jobs-rate">
+                    <p>{{job.rate}}</p>
+                </div>
+                <div class="summary jobs-terms">
+                    <p>{{job.terms}}</p>
+                </div>
+                <div>
+                    <div class="heading-left jobs-company-name text-uppercase"><em>{{job.companyName}}</em></div>
+                    <span>
+                        <a class="btn btn-primary btn-group btn-group-xs pull-right btn-view-job jobs-view" href="/jobs/details/{{job.uid}}">View Job</a>
+                        <a class="btn btn-info btn-group bottom30 btn-group-xs btn-edit-job jobs-edit" href="/jobs/manage/{{job.uid}}">Edit Job</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END JOBS LISTINGS TEMPLATE-->
+</div class="bottom30">
+
+
+
+<!-- END CUSTOM TABS TOP -->
+<!-- Basic Job Listings Form -->
+<!-- Scripts Start-->
+@section Scripts {
+    <script type="text/javascript" src="~/Scripts/Services/services.jobs.js"></script>
+    <script type="text/javascript">
+        sabio.page.jobsController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.jobsController = sabio.ng.getControllerInstance($("#JobsControllerContainer"));
+            // clickevent handlers kept here
+            //sabio.page.handlers.fetchJobs();
+        };
+
+        sabio.services.jobs.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.jobs
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+        }
+
+        sabio.page.jobsControllerFactory = function ($scope, $baseController, $jobsService) {
+            var vm = this;
+            vm.items = null;
+            //vm.selectedEmployee = null;
+            vm.$jobsService = $jobsService;
+            vm.receiveItems = _receiveItems;
+            vm.onJobsError = _onJobsError;
+
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$jobsService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$jobsService.getJobs(vm.receiveItems, vm.onJobsError);
+            }
+
+            function _receiveItems(data) {
+                //this receives the data and calls the special
+                //notify method that will trigger ng to refresh UI
+                vm.notify(function () {
+                    vm.items = data.items;
+                });
+            }
+
+            function _onJobsError(jqXhr, error) {
+                console.error(error);
+
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module
+           , "$jobsService"
+           , ["$baseService"]
+           , sabio.services.jobs.factory);
+
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "jobsController"
+            , ['$scope', '$baseController', "$jobsService"]
+            , sabio.page.jobsControllerFactory);
+
+
+    </script>
+}
+

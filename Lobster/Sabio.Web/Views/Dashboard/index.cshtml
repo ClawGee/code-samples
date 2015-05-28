@@ -1,0 +1,230 @@
+﻿@model Sabio.Web.Models.ViewModels.BaseViewModel
+
+@{
+    ViewBag.Title = "userDashBoard";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div data-ng-controller="UserDashController as dashboard" id="UserDashBoard">
+
+
+    <div class="form-group">
+
+        <!-- BASIC TAB -->
+        <h2 class="section-heading">Welcome Back, {{dashboard.user.firstName}}!</h2>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active">
+                <a href="#home" data-toggle="tab"  role="tab" ng-if="dashboard.user.userType == '1'">Developer Info</a>
+                <a href="#home" data-toggle="tab"  role="tab" ng-if="dashboard.user.userType == '2'">Recruiter Info</a>
+                <a href="#home" data-toggle="tab"  role="tab" ng-if="dashboard.user.userType == '3'">Employer Info</a>
+            </li>
+            <li>
+                <a href="#profile" role="tab" data-toggle="tab">Address</a>
+            </li>
+            <li>
+                <a href="#settings" role="tab" data-toggle="tab">Recent Messages</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+
+            <div class="tab-pane fade in active" id="home">
+
+                <p> <b>Name:</b> {{dashboard.user.firstName}} {{dashboard.user.lastName}}</p>
+                <p> <b>Email:</b> {{dashboard.user.email}}</p>
+                <p> <b>Phone Number:</b> {{dashboard.user.phoneNumber}}</p>
+            </div>
+            <div class="tab-pane fade" id="profile">
+
+                <p> <b>Address:</b>  {{dashboard.userAdd.addressLine1}}</p>
+                <p> {{dashboard.userAdd.addressLine2}}</p>
+                <p> {{dashboard.userAdd.city}}</p>
+                <p> {{dashboard.userAdd.state}}</p>
+                <p> {{dashboard.userAdd.zip}}</p>
+
+
+                @*//css is where my*@ 
+
+            </div>
+            <div class="tab-pane fade" id="settings">
+
+                <p>Message:{{dashboard.user.message}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section scripts{
+    <script src="~/Scripts/Services/sabio.services.accounts.js"></script>
+    <script src="~/Scripts/Services/services.address.js"></script>
+    <script type="text/javascript">
+
+        sabio.services.accounts.factory = function ($baseService) {
+
+            var aSabioServiceObject = sabio.services.accounts;
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+        }
+
+        sabio.services.address.factory = function ($baseService) {
+
+            var aSabioServiceObject = sabio.services.address;
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+        }
+
+        sabio.services.employers.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.employers;
+            var newService = $.extend(true,{}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.services.recruiters.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.recruiters;
+            var newService = $.extend(true,{}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.services.developer.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.developer;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.page.UserDashControllerFactory = function (
+             $scope,
+             $baseController,
+             $accountsService,
+             $addressService,
+             $developerService,
+             $employerService,
+             $recruiterService) {
+
+            var vm = this;
+            vm.user = null;
+            vm.userAdd = null;
+            vm.entity = null;
+            vm.entityName = "";
+            // EditMode = true;
+            vm.$accountsService = $accountsService;
+            vm.$addressService = $addressService;
+            vm.onSuccess = _onSuccess;
+            vm.onError = _onError;
+            vm.onSuccessAdd = _onSuccessAdd;
+            vm.onErrorAdd = _onErrorAdd;
+            vm.checkProfile = _checkProfile;
+            vm.onEntityGetSuccess = _onEntityGetSuccess;
+
+            $.extend(vm, $baseController);
+            
+            vm.notify = vm.$accountsService.getNotifier($scope);
+            vm.notifyAdd = vm.$addressService.getNotifier($scope);
+            render();
+
+
+            function render() {
+                vm.$accountsService.get(vm.onSuccess, vm.onError);
+                vm.$addressService.get(vm.onSuccessAdd, vm.onErrorAdd);
+            }
+
+            function _onSuccess(data, status, xhr) {
+                vm.notify(function () {
+                    vm.user = data.item;
+                    vm.checkProfile(vm.user.userType);
+                });
+            }
+
+            function _onError(jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+
+
+            function _onSuccessAdd(data, status, xhr) {
+                vm.notifyAdd(function () {
+                    vm.userAdd = data.item;
+                });
+            }
+
+            function _onErrorAdd(jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+
+            function _checkProfile(userType) {
+                switch (userType) {
+                    case 1:
+                        vm.entity = $developerService;
+                        vm.entityName = "Developer";
+                        break;
+                    case 2:
+                        vm.entity = $recruiterService;
+                        vm.entityName = "Recruiter";
+                        break;
+                    case 3:
+                        vm.entity = $employerService;
+                        vm.entityName = "Employer";
+                        break;
+                    default:
+                        break;
+                }
+                vm.entity.get(vm.onEntityGetSuccess, vm.onError);
+            }
+
+            function _onEntityGetSuccess(result) {
+               // vm.notify(function () {
+                 //   vm.user = data.item;
+                   // vm.checkProfile(vm.user.userType);
+                //});
+                if(result.item==null){
+                    sabio.layout.showModal("alert-warning", "Attention", "You have not created a " + vm.entityName + ' profile. Select "Edit Profile" from the ' + vm.entityName + " tab above to fill out your profile.");
+                }
+            }
+        }
+
+        sabio.ng.addService(
+          sabio.ng.app.module,
+          "$accountsService",
+          ["$baseService"],
+           sabio.services.accounts.factory);
+
+        sabio.ng.addService(
+          sabio.ng.app.module,
+           "$addressService",
+          ["$baseService"],
+            sabio.services.address.factory);
+
+        sabio.ng.addService(
+            sabio.ng.app.module,
+            "$employerService",
+            ["$baseService"],
+            sabio.services.employers.factory);
+
+        sabio.ng.addService(
+            sabio.ng.app.module,
+            "$recruiterService",
+            ["$baseService"],
+            sabio.services.recruiters.factory);
+
+        sabio.ng.addService(
+            sabio.ng.app.module,
+            "$developerService",
+            ["$baseService"],
+            sabio.services.developer.factory);
+
+        sabio.ng.addController(
+            sabio.ng.app.module,
+            "UserDashController",
+            ['$scope', "$baseController", "$accountsService", "$addressService", "$developerService","$employerService","$recruiterService"],
+            sabio.page.UserDashControllerFactory);
+
+    </script>
+
+}
+

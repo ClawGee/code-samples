@@ -1,0 +1,236 @@
+﻿@{
+    ViewBag.Title = "AddressIndex";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="panel-heading">
+        <h2 class="panel-title section-heading no-margin">Provide or Update Your Address</h2>
+
+        <div class="container">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li>
+                    <a href="#">Profile</a>
+                </li>
+                <li class="active">Address Update</li>
+            </ol>
+            <br />
+        </div>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- BEGIN ADDRESS FORM -->
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-horizontal col-lg-12" data-ng-controller="addressController as addy" id="addressControllerElement">
+            <form id="addressForm">
+                <div class="col-lg-12">
+                    <div class="col-lg-4 form-group">
+                        <label class="control-label">Address Line 1</label>
+                        <div>
+                            <input class="form-control" type="text" name="addressLine1" id="addressLine1" placeholder="Enter your address line 1" data-ng-model="addy.item.addressLine1" required="">
+                            <div data-ng-show="addressForm.$submitted || addressForm.addressLine1.$touched">
+                                <div data-ng-show="addressForm.addressLine1.$error.required">This field is required.</div>
+                            </div>
+                        </div>
+                        <label class="control-label">Address Line 2</label>
+                        <div>
+                            <input class="form-control" type="text" name="addressLine2" id="addressLine2" placeholder="Enter your address line 2" data-ng-model="addy.item.addressLine2">
+                        </div>
+                        <label class="control-label">City</label>
+                        <div>
+                            <input class="form-control" type="text" name="city" id="city" placeholder="Enter your city" data-ng-model="addy.item.city" required="">
+                            <div data-ng-show="addressForm.$submitted || addressForm.city.$touched">
+                                <div data-ng-show="addressForm.city.$error.required">This field is required.</div>
+                            </div>
+                        </div>
+                        <label class="control-label">State</label>
+                        <div>
+                            <select class="form-control" id="state" name="state" data-ng-options="state.stateProvinceId as state.name for state in addy.itemState" data-ng-model="addy.item.state" required></select>
+                        </div>
+                        <label class="control-label">Zip</label>
+                        <div>
+                            <input class="form-control" type="text" name="zip" id="zip" placeholder="Enter your zip code" data-ng-model="addy.item.zip" required="" data-ng-minlength="5" data-ng-maxlength="10">
+                            <div data-ng-show="addressForm.$submitted || addressForm.zip.$touched">
+                                <div data-ng-show="addressForm.zip.$error.required">This field is required.</div>
+                                <div data-ng-show="form.description.$error.minlength">Description should be at least 5 characters.</div>
+                                <div data-ng-show="form.description.$error.maxlength">Description should be no more than 10 characters.</div>
+                            </div>
+                        </div>
+                        <input type="text" class="hidden" name="addressGuid" id="addressGuid" value="" data-ng-model="addy.item.uid" />
+                        <div>
+                            <button class="btn btn-success" id="submitBtn" type="submit" data-ng-click="addy.submit()">
+                                <i class="fa fa-check-circle"></i>
+                                Click to Submit!
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div id="map">
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <div class="col-lg-6 latlong hidden">
+                                    <label class="control-label">Latitude</label>
+                                    <input id="lat" name="lat" type="text" value="39.5" data-ng-model="addy.item.lat" />
+                                </div>
+                                <div class="col-lg-6 latlong hidden">
+                                    <label class="control-label">Longitude</label>
+                                    <input id="lng" name="lng" type="text" value="-98.35" data-ng-model="addy.item.lng" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- END ADDRESS FORM -->
+<!-- Custom Scripts -->
+@section Scripts{
+
+    <script type="text/javascript">
+
+        sabio.page.addressController = null;
+        sabio.page.addressGuid = null;
+        sabio.page.map = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.addressController = sabio.ng.getControllerInstance($('#addressControllerElement'));
+            sabio.page.addressGuid = $('#addressGuid').val();
+        }
+
+        sabio.services.address.factory = function ($baseService) {
+            var service = sabio.services.address;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        sabio.page.addressControllerFactory = function ($scope, $baseController, addressService) {
+            var viewModel = this;
+            viewModel.item = null;
+            viewModel.itemState = null;
+            viewModel.addressService = addressService;
+            viewModel.submit = _submit;
+            viewModel.submitData = _submitData;
+            viewModel.receivedItems = _onGetSuccess;
+            viewModel.onResultError = _onError;
+            viewModel.states = _stateSuccess;
+            viewModel.statesFail = _stateFail;
+            viewModel.success = _postPutSuccess;
+            $.extend(viewModel, $baseController);
+
+            viewModel.notify = viewModel.addressService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                viewModel.addressService.getStates(viewModel.states, viewModel.statesFail);
+                viewModel.addressService.get(viewModel.receivedItems, viewModel.onResultError);
+            }
+
+            function _stateSuccess(result) {
+                viewModel.notify(function () {
+                    viewModel.itemState = result.items;
+                });
+            }
+
+            function _stateFail() {
+                sabio.layout.showModal("alert-danger", "Error!", "The page did not load properly. Please check back later.");
+            }
+
+            function _onGetSuccess(result) {
+                viewModel.notify(function () {
+                    viewModel.item = result.item;
+                    if (viewModel.item != null)
+                        sabio.page.loadGoogleMaps(viewModel.item.lat, viewModel.item.lng, 16, true);
+                    else
+                        sabio.page.loadGoogleMaps(39.5, -98.35, 4, false);
+                });
+            }
+
+            function _submit() {
+                sabio.page.getCoor();
+            }
+
+            function _submitData() {
+                sabio.page.addressGuid = $('#addressGuid').val();
+                var data = viewModel.item;
+                if (sabio.page.addressGuid == 0 || sabio.page.addressGuid == "" || sabio.page.addressGuid == "00000000-0000-0000-0000-000000000000") {
+                    viewModel.addressService.post(data, viewModel.success, viewModel.onResultError);
+                }
+                else {
+                    viewModel.
+                        addressService.put(sabio.page.addressGuid, data, viewModel.success, viewModel.onResultError);
+                }
+            }
+
+            function _postPutSuccess(result) {
+                //sabio.layout.showModal("alert-success", "Well Done!", "You have successfully submitted/updated your address.");
+                viewModel.notify(function () {
+                    viewModel.item.uid = result.item;
+                });
+            }
+
+            function _onError(jqXhr, error) {
+                //sabio.layout.showModal("alert-danger", "Error!", "Your address was not added to our database. Please contact our Website administrator.");
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module, "addressService", ['$baseService'], sabio.services.address.factory);
+
+        sabio.ng.addController(sabio.ng.app.module, "addressController", ['$scope', '$baseController', 'addressService'], sabio.page.addressControllerFactory);
+
+        sabio.page.loadGoogleMaps = function (lat, lng, zoom, exist) {
+            var myLatlng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+            var mapOptions = {
+                center: myLatlng,
+                zoom: parseInt(zoom)
+            };
+            sabio.page.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            if (exist == true) {
+                var marker = new google.maps.Marker({
+                    map: sabio.page.map,
+                    position: myLatlng
+                });
+            }
+        }
+
+        sabio.page.getCoor = function () {
+            var address = $('#addressLine1').val() + " " + $('#addressLine2').val() + ", " + $('#city').val() + ", " + $('#state').val() + " " + $('#zip').val();
+            var coor = new google.maps.Geocoder();
+            coor.geocode({ address: address }, function (results, status) {
+                console.log(results);
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var cntl = sabio.ng.getControllerInstance($('#addressControllerElement'));
+                    cntl.notify(function () {
+                        cntl.item.lat = results[0].geometry.location.lat();
+                        cntl.item.lng = results[0].geometry.location.lng();
+                        //cntl.item.addressLine1 = results[0].address_components[0].long_name +" "+ results[0].address_components[1].long_name;
+                        //cntl.item.city = results[0].address_components[3].long_name;
+                        //cntl.item.state = results[0].address_components[5].long_name;
+                        //cntl.item.zip = results[0].address_components[7].long_name;
+                    });
+                    sabio.page.map.setCenter(results[0].geometry.location);//center the map over the result
+                    //place a marker at the location
+                    var marker = new google.maps.Marker(
+                    {
+                        map: sabio.page.map,
+                        position: results[0].geometry.location
+                    });
+                    cntl.submitData();
+                    if (results[0].geometry.viewport)
+                        sabio.page.map.fitBounds(results[0].geometry.viewport);
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+    </script>
+}

@@ -1,0 +1,229 @@
+﻿@model Sabio.Web.Models.ViewModels.BaseViewModel
+@{
+    ViewBag.Title = "ResumePreview";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div data-ng-controller="previewController as dashboard" id="previewCntrlr">
+    <div class="container" id="sabioPDF">
+        <div ng-cloak class="col-md-12" id="resumeBorder">
+                <h3 class="blueColor resumeTextCenter"><strong>{{dashboard.fullResume.userData.firstName}} {{dashboard.fullResume.userData.lastName}}</strong></h3>
+                <p class="resumeTextCenter">
+                    {{dashboard.fullResume.addressData.addressLine1}}
+                    {{dashboard.fullResume.addressData.addressLine2 != null ? ", dashboard.fullResume.addressData.addressLine2" : ""}}
+                    {{", " + dashboard.fullResume.addressData.city}}{{", " + dashboard.fullResume.addressData.state}}{{", " + dashboard.fullResume.addressData.zip}}
+                    {{" | phone: " + dashboard.fullResume.userData.phoneNumber}}{{" | email: " + dashboard.fullResume.userData.email}}</p>
+                <hr />
+                <p>@*<span id="bypassme" ng-show="dashboard.fullResume.resumeData.objectiveStmnt != null"><strong>Objective Statement: </strong></span>*@
+                    {{dashboard.fullResume.resumeData.objectiveStmnt != null ? dashboard.fullResume.resumeData.objectiveStmnt : ""}}<p>
+            <br />
+                <h4 class="blueColor"><strong>Education</strong></h4>
+            <br />
+                <p class="twoElementsSameLine closeLineHeight"><strong>{{dashboard.fullResume.resumeData.inst1Name}}</strong>
+                {{", " + dashboard.fullResume.resumeData.inst1Location}}</p>
+                <div class="twoElementsSameLine closeLineHeight">
+                <p>{{" |  " + dashboard.fullResume.resumeData.inst1DateFrom}}{{" - " + dashboard.fullResume.resumeData.inst1DateTo}}</p>
+            </div>
+            <div ng-cloak class="closeLineHeight textIndent">
+                <p><em>{{dashboard.fullResume.resumeData.inst1Degree}}{{", " + dashboard.fullResume.resumeData.inst1DegreeMajor}}
+                    {{dashboard.fullResume.resumeData.inst1DegreeMinor != null ? ", Minor: " + dashboard.fullResume.resumeData.inst1DegreeMinor : ""}}</em></p>
+            </div>
+            <div data-ng-if="dashboard.fullResume.inst2Name != null" class="inst2">
+                <div ng-cloak class="twoElementsSameLine closeLineHeight">
+                    <p><strong>{{dashboard.fullResume.resumeData.inst2Name}}</strong>{{", " + dashboard.fullResume.resumeData.inst2Location}}</p>
+                </div>
+                <div ng-cloak class="twoElementsSameLine closeLineHeight">
+                    <p>{{" |  " + dashboard.fullResume.resumeData.inst2DateFrom}}{{" - " + dashboard.fullResume.resumeData.inst2DateTo}}</p>
+                </div>
+                <div ng-cloak class="closeLineHeight textIndent">
+                    <p>
+                        <em>
+                            {{dashboard.fullResume.resumeData.inst2Degree}}{{", " + dashboard.fullResume.resumeData.inst2DegreeMajor}}
+                            {{dashboard.fullResume.resumeData.inst2DegreeMinor != null ? ", Minor: " + dashboard.fullResume.resumeData.inst2DegreeMinor : ""}}
+                        </em>
+                    </p>
+                </div>
+            </div>
+            <div data-ng-if="dashboard.fullResume.inst3Name != null" class="inst3">
+                <div ng-cloak class="twoElementsSameLine closeLineHeight">
+                    <p><strong>{{dashboard.fullResume.resumeData.inst3Name}}</strong>{{", " + dashboard.fullResume.resumeData.inst3Location}}</p>
+                </div>
+                <div ng-cloak class="twoElementsSameLine closeLineHeight">
+                    <p>{{" |  " + dashboard.fullResume.resumeData.inst3DateFrom}}{{" - " + dashboard.fullResume.resumeData.inst3DateTo}}</p>
+                </div>
+                <div ng-cloak class="closeLineHeight textIndent">
+                    <p>
+                        <em>
+                            {{dashboard.fullResume.resumeData.inst3Degree}}{{", " + dashboard.fullResume.resumeData.inst3DegreeMajor}}
+                            {{dashboard.fullResume.resumeData.inst3DegreeMinor != null ? ", Minor: " + dashboard.fullResume.resumeData.inst3DegreeMinor : ""}}
+                        </em>
+                    </p>
+                    <br />
+                </div>
+                </div>
+                <h4 class="blueColor noTextIndent"><strong>Employment</strong></h4>
+                <br />
+                <div ng-cloak class="closeLineHeight">
+                    <p class="noTextIndent"><strong>{{dashboard.fullResume.resumeData.job1Position}}</strong></p>
+                    <p class="twoElementsSameLine textIndent">
+                        {{dashboard.fullResume.resumeData.job1EmployerName}}
+                        {{dashboard.fullResume.resumeData.job1Department != null ? ", " + dashboard.fullResume.resumeData.job1Department : ""}}
+                        {{", " + dashboard.fullResume.resumeData.job1EmployerLocation}}
+                    </p>
+                    <p class="twoElementsSameLine">
+                        {{" |  " + dashboard.fullResume.resumeData.job1DateFrom}}
+                        {{" - " + dashboard.fullResume.resumeData.job1DateTo}}
+                    </p>
+                    <p class="textIndent"><em>{{dashboard.fullResume.resumeData.job1EmployerDescr}}</em></p>
+                    <h5 class="textIndent"><strong>Select Responsibilities</strong></h5>
+                    <p class="textIndent">{{dashboard.fullResume.resumeData.job1Description}}</p>
+                </div>
+                <br />
+            <div data-ng-if="dashboard.fullResume.resumeData.job2Position != null" class="job2">
+                <div ng-cloak class="closeLineHeight">
+                    <p class="noTextIndent"><strong>{{dashboard.fullResume.resumeData.job2Position}}</strong></p>
+                    <p class="twoElementsSameLine textIndent">
+                        {{dashboard.fullResume.resumeData.job2EmployerName}}
+                        {{dashboard.fullResume.resumeData.job2Department != null ? ", " + dashboard.fullResume.resumeData.job2Department : ""}}
+                        {{", " + dashboard.fullResume.resumeData.job2EmployerLocation}}
+                    </p>
+                    <p class="twoElementsSameLine">
+                        {{" |  " + dashboard.fullResume.resumeData.job2DateFrom}}
+                        {{" - " + dashboard.fullResume.resumeData.job2DateTo}}
+                    </p>
+                    <p class="textIndent"><em>{{dashboard.fullResume.resumeData.job2EmployerDescr}}</em></p>
+                    <h5 class="textIndent"><strong>Select Responsibilities</strong></h5>
+                    <p class="textIndent">{{dashboard.fullResume.resumeData.job2Description}}</p>
+                </div>
+                </div>
+                <br />
+            <div data-ng-if="dashboard.fullResume.resumeData.job3Position != null" class="job3">
+                <div ng-cloak class="closeLineHeight">
+                    <p class="noTextIndent"><strong>{{dashboard.fullResume.resumeData.job3Position}}</strong></p>
+                    <p class="twoElementsSameLine textIndent">
+                        {{dashboard.fullResume.resumeData.job3EmployerName}}
+                        {{dashboard.fullResume.resumeData.job3Department != null ? ", " + dashboard.fullResume.resumeData.job3Department : ""}}
+                        {{", " + dashboard.fullResume.resumeData.job3EmployerLocation}}
+                    </p>
+                    <p class="twoElementsSameLine">
+                        {{" |  " + dashboard.fullResume.resumeData.job3DateFrom}}
+                        {{" - " + dashboard.fullResume.resumeData.job3DateTo}}
+                    </p>
+                    <p class="textIndent"><em>{{dashboard.fullResume.resumeData.job3EmployerDescr}}</em></p>
+                    <h5 class="textIndent"><strong>Select Responsibilities</strong></h5>
+                    <p class="textIndent">{{dashboard.fullResume.resumeData.job3Description}}</p>
+                </div>
+                </div>
+                <br />
+                <h4 class="blueColor"><strong>Front-end Skills</strong></h4>
+                <p ng-cloak>{{dashboard.fullResume.resumeData.frontEndSkills}}</p>
+                <h4 class="blueColor"><strong>Back-end Skills</strong></h4>
+                <p ng-cloak>{{dashboard.fullResume.resumeData.backEndSkills}}</p>
+                <h4 class="blueColor"><span ng-show="dashboard.fullResume.resumeData.additionalSkills != null"><strong>Additional Skills</strong></span></h4>
+                <p ng-cloak>{{dashboard.fullResume.resumeData.additionalSkills}}</p>
+                <h4 class="blueColor"><span ng-show="dashboard.fullResume.resumeData.certifications != null"><strong>Certifications</strong></span></h4>
+                <p ng-cloak>{{dashboard.fullResume.resumeData.certifications}}</p>
+                <h4 class="blueColor"><span ng-show="dashboard.fullResume.resumeData.volunteerExperience != null"><strong>Volunteer Experience</strong></span></h4>
+                <p ng-cloak>{{dashboard.fullResume.resumeData.volunteerExperience}}</p>
+                <h4 class="blueColor"><span ng-show="dashboard.fullResume.resumeData.hobbies != null"><strong>Hobbies</strong></span></h4>
+                <p ng-cloak>{{dashboard.fullResume.resumeData.hobbies}}</p>
+            </div>
+    </div>
+    <br />
+    <a href="" class="btn btn-primary download-pdf" id="bypassme" data-ng-click="dashboard.getPDF();">Download PDF</a>
+</div>
+
+<!-- END RESUME CONTENT SECTION -->
+<!-- CUSTOM SCRIPTS -->
+@section pageInitScripts{
+    <script src="~/scripts/plugins/jsPDF/jspdf.debug.js"></script>
+}
+
+@section Scripts{
+    <script src="/scripts/services/services.resume.js"></script>
+    <script type="text/javascript">
+        sabio.page.previewController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.previewController = sabio.ng.getControllerInstance($("#previewCntrlr"));
+        }
+
+        sabio.services.previewFactory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.resume;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.page.previewControllerFactory = function ($scope, $baseController, $previewService) {
+            var vm = this;
+            vm.fullResume = {};
+            vm.getPDF = _getPDF;
+            vm.$previewService = $previewService;
+            vm.onGetFullResumeSuccess = _onGetFullResumeSuccess;
+            vm.onGetFullResumeError = _onGetFullResumeError;
+
+            //This code simulates inheritance.
+            $.extend(vm, $baseController);
+
+            //This code is a wrapper for my small dependency on $scope.
+            vm.notify = vm.$previewService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                console.log('render');
+                vm.$previewService.getFullResume(vm.onGetFullResumeSuccess, vm.onGetFullResumeError);
+            }
+
+            function _onGetFullResumeSuccess(data) {
+                console.log("fullResume GET attempt success!");
+                console.log("Item: " + data.item);
+                if (data.item != null) {
+                    vm.notify(function () {
+                        vm.fullResume = data.item;
+                    });
+                }
+                console.log(vm.fullResume);
+            }
+
+            function _onGetFullResumeError() {
+                console.log("fullResume GET error!");
+                sabio.layout.showModal("alert-danger", "Oops!", "Your resume was not retrieved correctly. Please refresh the page to try again.");
+            }
+
+            function _getPDF() {
+                console.log("PDF call made.");
+                vm.resumePDF = new jsPDF('p', 'pt', 'letter')
+            , vm.source = $('#sabioPDF')[0]
+            , vm.specialElementHandlers = {
+                '#bypassme': function (element, renderer) {
+                    return true
+                }
+            }
+                vm.margins = {
+                    top: 80
+                    , bottom: 60
+                    , left: 40
+                    , width: 522
+                };
+
+                vm.resumePDF.fromHTML(
+                    vm.source
+                    , vm.margins.left
+                    , vm.margins.top, {
+                        'width': vm.margins.width
+                        , 'elementHandlers': vm.specialElementHandlers
+                    },
+                    function (dispose) {
+                        vm.resumePDF.save('DeveloperResume.pdf');
+                    },
+                    vm.margins
+                )
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module, "$previewService", ["$baseService"], sabio.services.previewFactory);
+
+        sabio.ng.addController(sabio.ng.app.module, "previewController", ['$scope', '$baseController', "$previewService"], sabio.page.previewControllerFactory);
+    </script>
+}

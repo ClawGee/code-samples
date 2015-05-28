@@ -1,0 +1,229 @@
+﻿@{
+    ViewBag.Title = "JobSearch";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+<div class="page-content" data-ng-controller="jobSearchController as dashboard" id="jobSearchCntrlr">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Search</h2>
+                    </div>
+                    <!-- Search Form -->
+                    <div class="panel-body">
+                        <form class="form form-horizontal">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control input-sm" id="input-search-keyword" type="search" placeholder="enter a keyword ..." value="enter a keyword ..." ng-model="dashboard.keyWord">
+                                <span class="input-group-btn">
+                                    <!-- Angular click handler is not hooked up or functioning yet. -->
+                                    <button data-ng-click="dashboard.searchKey()" type="submit" class="btn btn-primary btn-sm" id="btn-search-keyword">
+                                        <i class="icon ion-android-search"></i>
+                                        Search
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                        <br />
+                        <h4>Location</h4>
+                        <form action="demo_form.asp" method="get">
+                            <input type="checkbox" name="vehicle" value="Los Angeles"> Los Angeles<br>
+                            <input type="checkbox" name="vehicle" value="Chicago"> Chicago<br>
+                            <input type="checkbox" name="vehicle" value="San Francisco"> San Francisco Bay Area<br>
+                            <input type="checkbox" name="vehicle" value="New York"> New York<br>
+                            <input type="checkbox" name="vehicle" value="Seattle"> Seattle<br>
+                            <input type="checkbox" name="vehicle" value="San Diego"> San Diego<br>
+                        </form>
+                        <br />
+                        @*<h4>Industry</h4>
+                            <form action="demo_form.asp" method="get">
+                                <input type="checkbox" name="vehicle" value="advertising"> Advertising<br>
+                                <input type="checkbox" name="vehicle" value="consulting"> Consulting<br>
+                                <input type="checkbox" name="vehicle" value="crm"> CRM<br>
+                                <input type="checkbox" name="vehicle" value="ecommerce"> Ecommerce<br>
+                                <input type="checkbox" name="vehicle" value="education"> Education<br>
+                                <input type="checkbox" name="vehicle" value="entertainment"> Entertainment<br>
+                                <input type="checkbox" name="vehicle" value="financial"> Financial<br>
+                                <input type="checkbox" name="vehicle" value="gaming"> Gaming<br>
+                                <input type="checkbox" name="vehicle" value="internet"> Internet<br>
+                                <input type="checkbox" name="vehicle" value="marketing"> Marketing<br>
+                                <input type="checkbox" name="vehicle" value="mobile"> Mobile<br>
+                                <input type="checkbox" name="vehicle" value="security"> Security<br>
+                                <input type="checkbox" name="vehicle" value="travel"> Travel<br>
+                            </form>
+                            <br />
+                            <h4>Employment Type</h4>
+                            <form action="demo_form.asp" method="get">
+                                <input type="checkbox" name="vehicle" value="terms1"> Full Time<br>
+                                <input type="checkbox" name="vehicle" value="terms2"> Part Time<br>
+                                <input type="checkbox" name="vehicle" value="terms3"> Contract<br>
+                                <input type="checkbox" name="vehicle" value="terms4"> Contract to Hire<br>
+                            </form>*@
+                    </div>
+                </div>
+                <!-- End Search Form -->
+            </div>
+
+            <div class="col-md-9">
+                <!-- PAGE CONTENT -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Find Your Future job</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="page-content page-search-result">
+                            <div class="container">
+                                <h3 class=""><span id="numbersFound">{{dashboard.totalCount}}</span> results found</h3> <!--for keyword: <b>"{{dashboard.keyWord}}"</b></h3>-->
+                                <!-- Search Results -->
+                                <!-- START INSERT jobS SEARCH POINT-->
+                                <div id="job-search-container" class="container-fluid">
+                                    <div class="row animate-repeat" data-ng-repeat="pagedItem in dashboard.items"> <!--track by pagedItem.jobId">-->
+                                        <!--Template for job Search result-->
+                                        <ul class="list-unstyled list-results" id="job-search-template">
+                                            <li class="type-portfolio">
+                                                <div class="media-body">
+                                                    <h3>Job Title:  <a href="/profile/job/{{pagedItem.uid}}" class="job-search-name-template">{{pagedItem.title}}</a></h3>
+                                                    <h4>Visit Us:  <a href="{{pagedItem.url}}" class="url job-search-url-template">{{pagedItem.url}}</a></h4>
+                                                    <p><b>Rate:  </b><span class="location job-search-location-template">{{pagedItem.rate}}</span></p>
+                                                    <p><b>Terms:  </b><span class="industry job-search-industry-template">{{pagedItem.terms}}</span> </p>
+                                                    <hr class="col-md-6"/>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!--END INSERT jobS SEARCH POINT-->
+                                <ul class="list-unstyled list-results hidden">
+                                    <!--Fake Result for job Search result-->
+                                    <li class="type-portfolio">
+                                        <div class="media clearfix">
+                                            <a href="#" class="pull-left"><img src="http://www.bumperstickerz.com/images/10000242-00-00-00-00_lg.png" alt="Search Result" class="media-object"></a>
+                                            <div class="media-body">
+                                                <h3><a href="#">Initech Studios</a></h3>
+                                                <h4>Visit Us: <span class="url">http://www.google.com</span></h4>
+                                                <p><b>Location: </b><span class="location">Los Angeles</span></p>
+                                                <p><b>Industry: </b><span class="industry">Web Software, Design</span> </p>
+                                            </div>
+
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- End Search Results -->
+
+                            <pagination ng-model="dashboard.currentPage"
+                                        total-items="dashboard.totalCount"
+                                        items-per-page="dashboard.pageSize"
+                                        max-size="dashboard.maxSize"
+                                        ng-change="dashboard.pageChanged()"
+                                        class="pagination-sm"
+                                        @*boundary-links="true"*@
+                                        rotate="false"
+                                        num-pages="numPages">
+                            </pagination>
+                            <!-- END Pagination -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section pageInitScripts{
+    <script type="text/javascript" src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+}
+
+<!-- END PAGE CONTENT -->
+@section Scripts {
+
+    <script type="text/javascript" src="~/Scripts/bootstrap-paginator.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/Services/services.search.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.jobSearchController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.jobSearchController = sabio.ng.getControllerInstance($("#jobSearchCntrlr"));
+        }
+
+        sabio.services.jobSearchFactory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.search;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.page.jobSearchControllerFactory = function ($scope, $baseController, $jobSearchService) {
+            console.log($jobSearchService);
+            var vm = this;
+            vm.items = null;
+            vm.selectedjobSearch = null;
+            vm.$jobSearchService = $jobSearchService;
+            vm.receiveItems = _receiveItems;
+            vm.onEmpSrchError = _onEmpSrchError;
+            vm.currentPage = 1;
+            vm.pageSize = 5;
+            vm.pageChanged = _pageChanged;
+            vm.keyWord = null;
+            vm.searchKey = _searchKey;
+
+            //section to enable Display Existing Ratings functionality
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$jobSearchService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$jobSearchService.jobs(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onEmpSrchError, vm.keyWord);
+            }
+
+
+            function _receiveItems(data) {
+                console.log(data);
+                vm.notify(function () {
+                    vm.url = data.item.url;
+                    vm.title = data.item.title;
+                    vm.rate = data.item.rate;
+                    vm.terms = data.item.terms;
+                    vm.jobId = data.item.id;
+                    vm.items = data.item.pagedItems;
+                    vm.totalCount = data.item.totalCount;
+                    vm.totalPages = data.item.totalPages;
+                });
+            }
+
+            function _onEmpSrchError(jqXhr, error) {
+                console.error(error);
+            }
+
+            function _searchKey() {
+                vm.$jobSearchService.jobs(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onEmpSrchError, vm.keyWord);
+                console.log(vm.keyWord);
+            }
+
+            function _pageChanged() {
+                vm.$jobSearchService.jobs(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onEmpSrchError, vm.keyWord);
+            }
+
+        }
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$jobSearchService"
+            , ["$baseService"]
+            , sabio.services.jobSearchFactory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "jobSearchController"
+            , ['$scope', '$baseController', "$jobSearchService"]
+            , sabio.page.jobSearchControllerFactory);
+
+    </script>
+}

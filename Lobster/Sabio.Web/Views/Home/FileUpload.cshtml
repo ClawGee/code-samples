@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "FileUpload";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<h2>FileUploadPage</h2>
+
+<header>
+    <div class="content-wrapper">
+        <div class="float-left">
+            <h3 class="widget-title">UPLOAD A PHOTO FOR YOUR PROFILE</h3>
+              <p> (.jpg, .gif, or .png only!)</p>
+            </div>
+        </div>
+    <br />
+</header>
+
+<div id="dropzone-id" class="col-md-6">
+    <form action="/api/user/photo"
+          class="dropzone"
+          id="my-awesome-dropzone"
+          type="file">
+        +-----------------------------------------+ <br />
+        |THIS IS THE DROP POSITION| <br />
+        +-----------------------------------------+ <br />
+    </form>
+</div>
+
+
+
+
+@*<form name="form1" class="dropzone">
+    <div>
+
+    </div>
+</form>*@
+
+@*<div class="col-md-1" id="body"></div>
+    <form name="form1" method="post" action="/api/user/photo" enctype="multipart/form-data">
+        <div>
+            <label>
+                Browse File
+            </label>
+            <input name="myFile" type="file" />
+        </div>
+        <div>
+            <input type="submit" value="Upload" />
+        </div>
+    </form>*@
+
+<!--form 2-->
+<!--form id="my-awesome-dropzone" action="/api/user/photo" class="dropzone">
+    <div class="dropzone-previews"></div>
+    <div class="fallback">
+        <!-- this is the fallback if JS isn't working 
+        <input name="file" type="file" multiple />
+    </div>
+
+</form>
+<button type="submit" id="submit-all" class="btn btn-primary btn-xs">Upload the file</button>-->
+
+
+
+
+
+
+@section Scripts{
+    <script src="~/Scripts/dropzone.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/Services/services.recruiters.js"></script>
+    <script type="text/javascript">
+        sabio.page.startUp = function () {
+        };
+
+    </script>
+    };
+<!--$("div#myId").dropzone({ url: "/file/post" });-->
+
+}
+
+        

@@ -1,0 +1,303 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid?>
+
+@{
+    ViewBag.Title = "Manage";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+ <!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Job Profile</h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/jobs/index">Jobs Index</a>
+            </li>
+            <li class="active">Job Details</li>
+        </ol>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<div id="jobs-content" class="container">
+    <input type="hidden" id="jobGuid" value="@Model.Item" name="jobGuid">
+    <div class="jobs hidden" id="jobs-form">
+        <div>
+            <h2 class="heading-center jobs-header" id="jobs-title">Job Title</h2>
+            <h4 class="heading-left jobs-header">Job Description</h4>
+            <div class="jobs-body" id="jobs-description">
+                <p>The Web Developer will take on day to day responsibilities for the design and development of web based applications, user interfaces and APIs. We are looking for a bright, well rounded web developer with good front-end skills. </p>
+            </div>
+            <hr>
+            <h4 class="heading-left jobs-header">Qualifications/Requirements</h4>
+            <div class="jobs-body" id="jobs-requirements">
+                <p>Minimum of 3 years of hands-on web development experience.  Solid understanding of Javascript, Javascript OOP. Experience with jQuery and other Javascript frameworks(Backbone, Angluar, Knockout, etc.) Programming experience with focus on Object Oriented Programming and MVC design.  Strong HTML, CSS and JavaScript experience required. Experience building web applications, User Interfaces, single page apps, and database driven websites.  Experience with Cross browser compatibility. A good eye for design and be able to match a designers expectations</p>
+            </div>
+            <hr />
+            <h4 class="heading-left jobs-header">Terms</h4>
+            <div class="jobs-body smaller-font" id="jobs-terms">
+                <p>6 month C2H</p>
+            </div>
+            <h4 class="heading-left jobs-header">Rate</h4>
+            <div class="jobs-body smaller-font" id="jobs-rate">
+                <p>65.00/hr</p>
+            </div>
+            <div class="jobs-body smaller-font">
+                <a id="jobs-url" href="http://www.companysite.com">Company Website</a>
+            </div>
+            <h4 class="heading-left jobs-header">Recruiter Contacts</h4>
+            <div class="jobs-body smaller-font" id="jobs-contacts">
+                <p> Recruiting Contact</p>
+                <div class="jobs-author text-center">- <span class="jobs-name">Leonidas</span>, Recruiter of The 300</div>
+            </div>
+
+
+        </div>
+    </div>
+   
+    <!-- END CUSTOM TABS TOP -->
+    <div class="manage-job-location">
+    </div>
+    <!-- Manage Job Form Start-->
+    <div class="manage-job-form container">
+                <form id="jobs-new-form" class="jobs form-horizontal margin-bottom-30px" role="form">
+                    <div class="form-group">
+                        <div>
+                        <div>
+                            <center><h2 class="title jobs-header" id="job-label">Add New Job</h2></center>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="job-title">Job Title</label>
+                                    <input type="text" class="jobs-short-input form-control form-width job-title" placeholder="Senior C# Development Engineer" name="title" aria-required="true" aria-invalid="false">
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="job-description">Job Description</label>
+                                    <textarea class="jobs-input form-control form-width job-description" rows="5" placeholder="Design, develop, and maintain enterprise windows distributed applications" name="description" aria-required="true"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="job-qualifications">Job Qualifications</label>
+                                    <textarea class="jobs-input form-control form-width job-qualifications" rows="5" placeholder="C# Development, iOS Swift Mobile Development" name="qualifications" aria-required="true"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="job-terms">Job Terms</label>
+                                    <input type="text" class="jobs-short-input form-control form-width job-terms" rows="5" placeholder="Contract, FTE, or C2H" name="terms" aria-required="true">
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="job-rate">Rate</label>
+                                    <input type="text" class="jobs-short-input form-control form-width job-rate" rows="5" placeholder="Salary or Hourly Rate" name="rate" aria-required="true">
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="job-email">Email</label>
+                                    <input type="email" class="jobs-short-input form-control form-width job-email" placeholder="recruiter@email.com" name="primaryEmail" aria-required="true">
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="job-url">URL</label>
+                                    <input type="url" class="jobs-short-input form-control form-width job-url" placeholder="URL" name="url" aria-required="false">
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="job-contacts">Recruiter Contact</label>
+                                    <input type="text" class="jobs-short-input form-control form-width job-contacts" placeholder="Contact Person" name="contacts" aria-required="false">
+                                </div>
+                                <button type="button" id="btn-job-submit" class="form-cntol btn btn-primary">Submit</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+</div>
+<!-- Manage Job Form end-->
+<!-- Manage Get Jobs Start-->
+    
+
+    <!-- Scripts Start-->
+    @section Scripts {
+        <script type="text/javascript" src="~/Scripts/Services/services.jobs.js"></script>
+        <script type="text/javascript">
+            sabio.page.handlers.jobLoaded = null;
+            sabio.page.startUp = function () {
+                // clickevent handlers kept here
+                sabio.page.handlers.checkForGuid();
+                sabio.page.handlers.rules();
+                $("#btn-add-job").on("click", sabio.page.handlers.addJob);
+                $("#btn-job-submit").on("click", sabio.page.handlers.submitJob);
+            };
+
+            sabio.page.handlers.checkForGuid = function () {
+                if ($('#jobGuid').val()) {
+                    sabio.page.handlers.jobLoaded = true;
+                    var jobGuid = $("#jobGuid").val();
+                    sabio.services.jobs.getByJobId(jobGuid, sabio.page.handlers.onGetJobSuccess, sabio.page.handlers.onPopulateFailure);
+                };
+            };
+
+            sabio.page.handlers.onPopulateFailure = function (result) {
+                sabio.layout.showModal('alert-danger', 'Error', 'Please contact your system administrator!')
+            };
+
+            sabio.page.handlers.onGetJobSuccess = function (result) {
+                var jobExistingTemplate = $(".manage-job-location");
+                var jobData = result.item;
+                var jobForm = $('.manage-job-form'); //var jobForm = $(".job-template");
+                $(".job-title", jobForm).val(jobData.title);
+                $(".job-qualifications", jobForm).val(jobData.qualifications);
+                $(".job-contacts", jobForm).val(jobData.contacts);
+                $(".job-description", jobForm).val(jobData.description);
+                $(".job-email", jobForm).val(jobData.primaryEmail);
+                $(".job-url", jobForm).val(jobData.url);
+                $(".job-terms", jobForm).val(jobData.terms);
+                $(".job-rate", jobForm).val(jobData.rate);
+                $("#job-label", jobForm).text("Edit/Update Job");
+                //var existingJobForm = newJobForm.clone().removeClass("hidden").removeAttr("id");
+                //newJobForm.addClass("hidden");
+                jobExistingTemplate.append($(jobForm));
+            };
+
+            sabio.page.handlers.submitJob = function () {
+                jobNewFormValidate = $('#jobs-new-form').valid();
+                if (jobNewFormValidate) {
+                    var jobSubmitForm = $("#jobs-new-form");
+                    if ($('#jobGuid').val()) {
+                        jobGuid = $("#jobGuid").val();
+                        var filledJobSubmitForm = jobSubmitForm.serialize();
+                        sabio.page.apiSubmitJobUpdate(jobGuid, filledJobSubmitForm);
+                    } else {
+                        var filledJobSubmitForm = jobSubmitForm.serialize();
+                        sabio.page.apiSubmitJobInsert(filledJobSubmitForm);
+                        sabio.page.handlers.checkForGuid();
+                    }
+                } else {
+                    alert("New Job Input Data Is Invalid, please check your inputs.");
+                };
+            };
+
+            sabio.page.handlers.rules = function () {
+                jQuery.validator.setDefaults({
+                    debug: true,
+                    success: "valid"
+                });
+                $('#jobs-new-form').validate({
+                    rules: {
+                        "title": {
+                            required: true,
+                            rangelength: [5, 50]
+                        },
+                        "description": {
+                            required: true,
+                            rangelength: [25, 2000]
+                        },
+                        "qualifications": {
+                            required: true,
+                            rangelength: [25, 1000]
+                        },
+                        "primaryEmail": {
+                            required: true,
+                            rangelength: [10, 50],
+                            email: true
+                        },
+                        "url": {
+                            rangelength: [5, 100],
+                            url: true
+                        },
+                        "terms": {
+                            required: true,
+                            rangelength: [5, 20]
+                        },
+                        "rate": {
+                            required: true,
+                            rangelength: [2, 20]
+                        },
+                        "contacts": {
+                            required: true,
+                            rangelength: [10, 500]
+                        }
+                    },
+                    messages: {
+                        "title": {
+                            required: "Job Title is a required field.",
+                            rangelength: "Job Title must be between 5 and 50 letters long."
+                        },
+                        "description": {
+                            required: "Job Description is a required field.",
+                            rangelength: "Job Description must be between 25 and 2000 letters long."
+                        },
+                        "qualifications": {
+                            required: "Job Qualifications is a required field.",
+                            rangelength: "Job Qualifications must be between 25 and 1000 letters long."
+                        },
+                        "primaryEmail": {
+                            required: "Email is a required field.",
+                            rangelength: "Email must be between 10 and 50 letters long.",
+                            email: "Email must be in the format of name@domain.com."
+                        },
+                        "url": {
+                            rangelength: "Url must be between 5 and 100 letters long.",
+                            url: "Url must be in the format of 'http://www.test.com'."
+                        },
+                        "terms": {
+                            required: "Terms is a required field.",
+                            rangelength: "Terms must be between 5 and 20 characters long."
+                        },
+                        "rate": {
+                            required: "Rate is a required field.",
+                            rangelength: "Rate must be between 2 and 20 characters long."
+                        },
+                        "contacts": {
+                            required: "Recruitment Contact is a required field.",
+                            rangelength: "Recruitment Contact must be between 10 and 500 letters long."
+                        }
+                    }
+                });
+            };
+
+            sabio.page.apiSubmitJobUpdate = function (jobGuid, inputData) {
+                console.log("updating existing job");
+                $.ajax({
+                    url: "/api/jobs/" + jobGuid,
+                    data: inputData,
+                    type: "PUT"
+                })
+                .done(function (data) {
+                    window.location.href="/jobs/details/" + jobGuid;
+                })
+                .fail(function () { alert("Error"); })
+                ;
+            };
+
+            sabio.page.apiSubmitJobInsert = function (inputData) {
+                console.log("posting new job");
+                sabio.services.jobs.post(inputData, sabio.page.handlers.ajaxDone, sabio.page.handlers.ajaxFail);
+            };
+            
+
+            sabio.page.handlers.ajaxDone = function (data) {
+                if (data.item) {
+                    var assignGuid = data.item
+                    $("#jobGuid").val(assignGuid);
+                    window.location.href="/jobs/details/" + assignGuid;
+                } else {
+                    alert("Post Failed!");
+                };
+            };
+
+            sabio.page.handlers.ajaxFail = function (data) {
+                alert("Error "+ data);
+            };
+
+        </script>
+    }

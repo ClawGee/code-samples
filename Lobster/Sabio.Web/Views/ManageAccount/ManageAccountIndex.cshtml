@@ -1,0 +1,316 @@
+﻿@{
+    ViewBag.Title = "ManageAccountIndex";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<h2 class="section-heading">Manage Account</h2>
+
+<!-- BEGIN CHANGE-NAME INPUT GROUP -->
+<div class="panel panel-default" data-ng-controller="userManageFormController as userManageForm" id="userManageFormControllerContainer">
+    <div>
+        <div class="panel-heading">
+            <h2 class="panel-title section-heading no-margin">Change Name and Phone Number</h2>
+        </div>
+        <div class="panel-body">
+            <form role="form" novalidate name="userDataForm" ng-submit="userDataForm.$valid && userManageForm.userDataSubmit()">
+                <!--first name field begin-->
+                <div class="form-group has-feedback">
+                    <label for="firstName" class="col-md-3 control-label">First Name</label>
+                    <div class="col-md-3">
+                        <input class="form-control"
+                               type="text"
+                               id="firstName"
+                               ng-model="userManageForm.userData.firstName"
+                               name="firstName"
+                               ng-minlength="2"
+                               ng-maxlength="50"
+                               required>
+                        <div role="alert" class="help-inline error">
+                            <span ng-show="userDataForm.firstName.$error.required">First Name is required</span>
+                            <span ng-show="userDataForm.firstName.$error.minlength">Too short! </span>
+                            <span ng-show="userDataForm.firstName.$error.maxlength">Too long! </span>
+                        </div>
+                    </div>
+                </div>
+                <!--first name field end-->
+                <!--last name field begin-->
+                <div class="form-group has-feedback">
+                    <label for="lastName" class="col-md-3 control-label">Last Name</label>
+                    <div class="col-md-3">
+                        <input class="form-control"
+                               type="text"
+                               id="lastName"
+                               ng-model="userManageForm.userData.lastName"
+                               name="lastName"
+                               ng-minlength="2"
+                               ng-maxlength="50"
+                               required>
+                        <div class="help-inline error" role="alert">
+                            <div ng-show="userDataForm.lastName.$error.required">Last Name is required </div>
+                            <div ng-show="userDataForm.lastName.$error.minlength">Too short! </div>
+                            <div ng-show="userDataForm.lastName.$error.maxlength">Too long! </div>
+                        </div>
+                    </div>
+                </div>
+                <!--last name field end-->
+                <!--phone number field begin-->
+                <div class="form-group has-feedback">
+                    <label for="phoneNumber" class="col-md-3 control-label">Phone Number</label>
+                    <div class="col-md-3">
+                        <input class="form-control"
+                               type="text"
+                               id="phoneNumber"
+                               ng-model="userManageForm.userData.phoneNumber"
+                               name="phoneNumber"
+                               ng-minlength="10"
+                               ng-maxlength="15"
+                               required>
+                        <div role="alert" class="help-inline error">
+                            <span ng-show="userDataForm.phoneNumber.$error.required && userDataForm.phoneNumber.$dirty">Phone number is required</span>
+                            <span ng-show="userDataForm.phoneNumber.$error.minlength">Too short! </span>
+                            <span ng-show="userDataForm.phoneNumber.$error.maxlength">Too long! </span>
+                        </div>
+                    </div>
+                </div>
+                <!--phone number field end-->
+                <!-- BEGIN SUBMIT CHANGE BUTTON-->
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <button type="submit" id="nameUpdate" class="btn btn-success pull-right"> Submit Changes</button>
+                    </div>
+                </div>
+                <!-- END SUBMIT CHANGE BUTTON-->
+            </form>
+        </div>
+    </div>
+    <!-- END CHANGE-NAME INPUT GROUP -->
+    <!-- BEGIN CHANGE-PASSWORD INPUT GROUP-->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title section-heading no-margin">Change Password</h2>
+        </div>
+        <div class="panel-body">
+            <form id="form-passwordNew" novalidate name="passwordDataForm" role="form" ng-submit="passwordDataForm.$valid && userManageForm.passwordSubmit()">
+                <!-- change current password field begin-->
+                <div class="form-group has-feedback">
+                    <label for="password" class="col-md-3 control-label">Current Password</label>
+                    <div class="form-group-sm col-md-3">
+                        <input type="password"
+                               class="form-control"
+                               ng-model="passwordDataForm.passwordData.password"
+                               id="password"
+                               name="password">
+                        <div role="alert" class="error">
+                            <span ng-show="passwordDataForm.password.$error.required">Remember your password?</span>
+                            <span ng-show="passwordDataForm.password.$error.minlength">Too short! </span>
+                            <span ng-show="passwordDataForm.password.$error.maxlength">Too long! </span>
+                        </div>
+                    </div>
+                </div>
+                <!--change current password field end-->
+                <!--new password field begin-->
+                <div class="form-group">
+                    <label for="passwordNew" class="col-md-3 control-label">New Password</label>
+                    <div class="from-group-sm col-md-3">
+                        <input class="form-control"
+                               type="password"
+                               id="passwordNew"
+                               ng-model="passwordDataForm.passwordData.passwordNew"
+                               ng-minlength="8"
+                               name="passwordNew"
+                               ng-maxlength="20">
+                        <div role="alert" class="error">
+                            <span ng-show="passwordDataForm.passwordNew.$error.required">Phone number is required</span>
+                            <span ng-show="passwordDataForm.passwordNew.$error.minlength">Too short! </span>
+                            <span ng-show="passwordDataForm.passwordNew.$error.maxlength">Too long! </span>
+                        </div>
+                    </div>
+                </div>
+                <!--new password field end-->
+                <!--verify new password field begin-->
+                <div class="form-group">
+                    <label for="passwordConfirm" class="col-md-3 control-label">Verify New Password</label>
+                    <div class="form-group-sm col-md-3">
+                        <input class="form-control"
+                               type="password"
+                               ng-model="userManageForm.passwordData.passwordConfirm"
+                               id="passwordConfirm"
+                               name="passwordConfirm"
+                               ng-minlength="8"
+                               ng-maxlength="20">
+                        <div role="alert" class="error">
+                            <span ng-show="passwordDataForm.passwordConfirm.$error.required">New Password must be confirmed!</span>
+                            <span ng-show="passwordDataForm.passwordConfirm.$error.minlength">Too short! </span>
+                            <span ng-show="passwordDataForm.passwordConfirm.$error.maxlength">Too long! </span>
+                        </div>
+                    </div>
+                </div>
+                <!--verify new password field end-->
+                <!-- BEGIN SUBMIT CHANGE BUTTON-->
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <button type="submit" id="passwordRenew" class="btn btn-success pull-right">Submit Changes</button>
+                    </div>
+                </div>
+                <!-- END SUBMIT CHANGE BUTTON-->
+            </form>
+        </div>
+        <!-- END CHANGE-PASSWORD INPUT GROUP-->
+        <!-- BEGIN CHANGE-PHOTO INPUT GROUP-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title section-heading no-margin">Change Photo</h2>
+            </div>
+            <div class="panel-body">
+                <div class="content-wrapper">
+                    <div class="col-md-3">
+                        <form novalidate>
+                            <div dropzone="userManageForm.dropzoneConfig" id="myDropzone" class="fallback dropzone" style="height:180px"></div>
+                        </form>
+                    </div>
+                    <div class="col-md-3">
+                        <img id="avatar" ng-show="userManageForm.avatarUrl != null" style="height:180px" class="userPic center-block" data-ng-model="userManageForm.avatarUrl" ng-src="{{userManageForm.avatarUrl}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END CHANGE-PHOTO INPUT GROUP-->
+@section pageInitScripts{
+    <script type="text/javascript" src="~/scripts/ng/sabio-angular-dropzone.js"></script>
+    <script type="text/javascript" src="~/scripts/ng/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['dropzone', 'ui.bootstrap'];
+    </script>
+}
+
+<!-- BEGIN CUSTOM SCRIPTS-->
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/ng/angular-messages.js"></script>
+    <script type="text/javascript" src="~/Scripts/Services/sabio.services.accounts.js"></script>
+    <script type="text/javascript">
+        sabio.page.editPhoto = $("#editPhoto");
+        sabio.page.startUp = function () {
+            sabio.page.userManageFormController = sabio.ng.getControllerInstance($("#userManageFormControllerContainer"));
+        }
+
+        sabio.services.accounts.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.accounts
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.page.userManageFormControllerFactory = function ($scope, $baseController, $userManageFormService) {
+            var vm = this;
+            //vm.item = null;
+            vm.passwordData = null;
+            vm.userData = null;
+            //vm.selectedEmployee = null;
+            vm.$userManageFormService = $userManageFormService;
+            vm.passwordSubmit = _passwordSubmit;
+            vm.userDataSubmit = _userDataSubmit;
+            vm.onPwSubmitSuccess = _onPwSubmitSuccess;
+            vm.onUserSubmitSuccess = _onUserSubmitSuccess;
+            vm.onSubmitError = _onSubmitError;
+            vm.receiveItems = _receiveItems;
+            vm.initializeDropzone = $scope.initializeDropzone = _initializeDropzone;
+
+            Dropzone.autoDiscover = false;
+            $scope.dropzoneConfig = {
+                'options': { // passed into the Dropzone constructor
+                    'url': '/api/user/photo',
+                    'autoProcessQueue': true,
+                    'uploadMultiple': false,
+                    'parallelUploads': 1,
+                    'maxFiles': 1,
+                    init: vm.initializeDropzone
+                },
+            }
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$userManageFormService.getNotifier($scope);
+
+
+            render();
+
+            function render() {
+                vm.$userManageFormService.get(vm.receiveItems, vm.onProfileError);
+            }
+
+            function _receiveItems(data) {
+                vm.notify(function () {
+                    vm.item = data.item;
+
+                    if (vm.item.avatar == null) {
+                        vm.avatarUrl = null;
+                    } else {
+                        vm.avatarUrl = vm.item.avatar.fullUrl;
+                    }
+                    vm.passwordData = {
+                        password: vm.item.password,
+                        passwordNew: vm.item.passwordNew,
+                        passwordConfirm: vm.item.passwordConfirm
+                    },
+                    vm.userData = {
+                        phoneNumber: vm.item.phoneNumber,
+                        firstName: vm.item.firstName,
+                        lastName: vm.item.lastName
+                    }
+                });
+            }
+
+            function _initializeDropzone() {
+                console.log("HERE in init dropzone");
+                this.on('complete', function () {
+                    if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                        //location.reload();
+                    }
+                });
+            }
+
+
+            function _userDataSubmit() {
+                vm.$userManageFormService.put(vm.userData, vm.onUserSubmitSuccess, vm.onSubmitError);
+            };
+
+            function _passwordSubmit() {
+                vm.$userManageFormService.putPassword(vm.passwordData, vm.onPwSubmitSuccess, vm.onSubmitError);
+            };
+
+            function _onPwSubmitSuccess(data) {
+                if (data.item) {
+                    sabio.layout.showModal('alert-success', 'Password Updated!', 'You have successfully updated your Password!')
+                } else {
+                    sabio.layout.showModal('alert-danger', 'Error', 'Password not updated!')
+                };
+            }
+
+            function _onUserSubmitSuccess(data) {
+                if (data.item) {
+                    sabio.layout.showModal('alert-success', 'Profile Updated!', 'You have successfully updated your Profile!')
+                } else {
+                    sabio.layout.showModal('alert-danger', 'Error', 'Profile not updated!')
+                };
+            }
+
+            function _onSubmitError(jqXhr, error) {
+                sabio.layout.showModal('alert-danger', 'Error', 'Bummer, Profile not updated!')
+            };
+        };
+
+        sabio.ng.addService(sabio.ng.app.module
+           , "$userManageFormService"
+           , ["$baseService"]
+           , sabio.services.accounts.factory);
+
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "userManageFormController"
+            , ['$scope', '$baseController', "$userManageFormService"]
+            , sabio.page.userManageFormControllerFactory);
+
+    </script>
+}

@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Write your own review</title>
+</head>
+<body>
+    <div class="container">
+        <div class="form-group" data-ng-controller="ratingController as rating" id="ratingControllerContainer">
+            <!--begin rating form-->
+            <form role="form" novalidate name="ratingForm" ng-submit="rating.ratingSubmit()">
+                <h4>Write a review</h4>
+                <!--begin rating stars-->
+                <div class="form-group has-feedback">
+                    <label for="ratingStar" class="label label-primary">Rate 1-5 Stars</label>
+                    <br />
+                    <rating ng-model="rating.item.rating"
+                            id="rating-star"
+                            max="rating.max"
+                            name="ratingStar"
+                            class="clearfix">
+                    </rating>
+                </div>
+                <!--end rating stars-->
+                <!--begin rating comments-->
+                <div class="form-group">
+                    <label for="ratingComment" class="label label-primary">Share Comments</label>
+                    <br />
+                    <textarea ng-model="rating.item.comment"
+                              id="rating-comment"
+                              name="ratingComment"
+                              rows="20"
+                              cols="40"
+                              class="clearfix"></textarea>
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-primary" id="btn-rating-submit" type="submit" value="Submit Rating and Comments">
+                </div>
+                <!--end rating form-->
+            </form>
+        </div>
+    </div>
+</body>
+</html>

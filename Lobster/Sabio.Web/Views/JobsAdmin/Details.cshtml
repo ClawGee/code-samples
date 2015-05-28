@@ -1,0 +1,290 @@
+﻿@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div style=margin-top:50px class="page-content" data-ng-controller="jobsAdminController as dashboard">
+    <div id="adminControlContainer">
+        <h1> Administration of Jobs </h1>
+
+        <div class="table-responsive">
+            <table class="table" style="width:90%">
+                <thead>
+                    <tr>
+                        <th height="25" width="50%"><b>Job Position</b></th>
+                        <th height="25" width="25%"><b>Terms</b></th>
+                        <th height="25" width="15%"><b>Edit</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="job in dashboard.items">
+                        <td colspan="3" width="100%">
+                            <table style="width:100%">
+                                <tr>
+                                    <td width="50%">{{job.title}}</td>
+                                    <td width="25%">{{job.terms}}</td>
+                                    <td width="15%">
+                                        <a data-ng-click="isCollapsed = !isCollapsed" href="#">
+                                            <i class="fa fa-user"></i>Edit
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr ng-show="isCollapsed">
+                                    <td colspan="3">
+                                        <div ng-show="isCollapsed" id="rcorners1">
+                                            <form class=" admin-form" ng-submit="">
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 control-label">Position</label>
+                                                    <div class="col-md-10">
+                                                        <input class="form-control" type="text" placeholder="Title" name="Title" data-ng-model="job.title" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 control-label">Description</label>
+                                                    <div class="col-md-10">
+                                                        <textarea class="form-control" rows="4" style="width: 669px; height: 167px;" placeholder="Description" name="Description" data-ng-model="job.description" required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 control-label">Company</label>
+                                                    <div class="col-md-10">
+                                                        <input class="form-control" type="text" placeholder="Company Name" name="CompanyName" data-ng-model="job.companyname" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 control-label">Qualifications</label>
+                                                    <div class="col-md-10">
+                                                        <input class="form-control" type="text" placeholder="Qualifications" name="Qualifications" data-ng-model="job.qualifications" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 control-label">Contacts</label>
+                                                    <div class="col-md-10">
+                                                        <input class="form-control" type="text" placeholder="Contacts" name="Contacts" data-ng-model="job.contacts" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 control-label">E-mail</label>
+                                                    <div class="col-md-10">
+                                                        <input class="form-control" type="text" placeholder="Primary Email" name="PrimaryEmail" data-ng-model="job.primaryEmail" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 control-label">Website</label>
+                                                    <div class="col-md-10">
+                                                        <input class="form-control" type="text" placeholder="Url" name="Url" data-ng-model="job.url" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 control-label">Rate</label>
+                                                    <div class="col-md-10">
+                                                        <input class="form-control" type="text" placeholder="Rate" name="Rate" data-ng-model="job.rate" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-2 control-label">Terms</label>
+                                                    <div class="col-md-10">
+                                                        <input class="form-control" type="text" placeholder="Terms" name="Terms" data-ng-model="job.terms" required>
+                                                    </div>
+                                                </div>
+                                                <div class="fancy-radio row">
+                                                    <label class="col-md-2 control-label">Approved</label>
+                                                    <div class="col-md-10">
+                                                        <label class="control-inline fancy-radio">
+                                                            <input type="radio" checked="checked" name="inline-radio">
+                                                            <span>
+                                                                <i></i>
+                                                                Yes
+                                                            </span>
+                                                        </label>
+                                                        <label class="control-inline fancy-radio2">
+                                                            <input type="radio" checked="checked" name="inline-radio">
+                                                            <span>
+                                                                <i></i>
+                                                                No
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="pull-right" style="padding-right:8px">
+                                                        <button class="btn btn-primary" type="button">Submit</button>
+                                                        <button class="btn btn-danger" type="button">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        @*<pagination ng-model="dashboard.currentPage"
+                        total-items="dashboard.totalCount"
+                        items-per-page="dashboard.pageSize"
+                        max-size="dashboard.maxSize"
+                        ng-change="dashboard.pageChanged()"
+                        class="pagination-sm"
+                        boundary-links="true"
+                        rotate="false"
+                        num-pages="numPages">
+            </pagination>*@
+
+    </div>
+</div>
+
+
+
+@section pageInitScripts{
+
+    <script type="text/javascript" src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+
+}
+
+
+
+
+<!--  Start JavaScript  -->
+@section Scripts {
+
+    <script type="text/javascript" , src="~/Scripts/Services/services.jobs.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.jobsAdminController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.jobsAdminController = sabio.ng.getControllerInstance($("#adminControlContainer"));
+        }
+
+
+        sabio.services.jobsAdminFactory = function ($baseService) {
+
+            var aSabioServiceObject = sabio.services.jobs;
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+
+        }
+
+
+        sabio.page.jobsAdminControllerFactory = function (
+            $scope
+            , $baseController
+            , $jobsService) {
+
+            var vm = this;  // "this" means the actual controller we are building
+
+            $.extend(vm, $baseController);  // this line simulates inheritance
+
+
+            //  attach injected dependencies
+
+            vm.$jobsService = $jobsService;
+            vm.$scope = $scope;
+
+
+            //  this is a wrapper for our small dependency on $scope
+
+            vm.notify = vm.$jobsService.getNotifier($scope);
+
+
+            //  Ajax Success and Error
+
+            vm.onSuccess = _onSuccess;
+            vm.onError = _onError;
+
+
+            //  expose this controller's public API
+
+            vm.processForm = _processForm;
+
+            vm.items = null;
+
+            vm.onJobClick = _onJobClick;
+
+            // Pagination
+
+            //vm.currentPage = 1;
+            //vm.pageSize = 10;
+            ////vm.totalCount = null;
+            ////vm.maxSize = 5;
+            //vm.pageChanged = _pageChanged;
+
+            $.extend(vm, $baseController);
+
+            render();
+
+
+            function render() {
+
+                vm.$jobsService.getPendingJobs(vm.onSuccess, vm.onError);
+
+            }
+
+
+            function _onSuccess(data) {
+
+                vm.notify(function () {
+                    vm.items = data.items;
+                    //vm.totalCount = data.item.totalCount;
+                    //vm.totalPages = data.item.totalPages;
+
+                });
+            }
+
+
+            function _onError(jqXhr, error) {
+
+                console.error(error);
+
+            }
+
+
+            function _pagechanged() {
+                vm.$jobsservice.getpendingjobs(vm.currentpage - 1, vm.pagesize, vm.onsuccess, vm.onerror);
+                console.log('page changed to: ' + vm.currentpage);
+            }
+
+
+
+            function _processForm() {
+
+                if (vm.processForm.$valid) {
+                    console.log("data is valid! go save this object -> ", vm.processForm);
+                }
+                else {
+                    console.log("form submitted with invalid data :(")
+                }
+            }
+
+            function _onJobClick(job) {
+
+                console.log(job);
+            }
+
+
+        }
+
+        sabio.ng.addService(
+            sabio.ng.app.module,
+            "$jobsService",
+            ["$baseService"],
+            sabio.services.jobsAdminFactory);
+
+        sabio.ng.addController(
+            sabio.ng.app.module,
+            "jobsAdminController",
+            ['$scope', '$baseController', "$jobsService"],
+            sabio.page.jobsAdminControllerFactory);
+
+
+    </script>
+}
+
+

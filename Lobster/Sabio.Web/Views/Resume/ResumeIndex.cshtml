@@ -1,0 +1,719 @@
+﻿@model Sabio.Web.Models.ViewModels.BaseViewModel
+@{
+    ViewBag.Title = "ResumeIndex";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="panel-heading">
+        <h2 class="panel-title section-heading no-margin blueColor">Build Your Resume</h2>
+        <div class="container">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li>
+                    <a href="#">Profile</a>
+                </li>
+                <li class="active">Build Resume</li>
+            </ol>
+            <br />
+        </div>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- BEGIN CONTROLLER SECTION -->
+<div class="container" data-ng-controller="resumeController as dashboard">
+    <div class="resumeSection" id="resumeCntrlr">
+            <!-- BEGIN BUILD RESUME SECTION -->
+            <div id="developerProfileLink">
+                <p style="color: red"><span><strong>Note: </strong></span>
+                If you haven't yet completed your Developer Profile, <a href="~/developer/">please click here </a>prior to building your resume!</p>
+            </div>
+            <div id="addressUpdateLink">
+                <p style="color: red"><span><strong>Note: </strong></span>
+                If you haven't yet submitted your address, <a href="~/address/">please click here </a>prior to building your resume!</p>
+            </div>
+                <!-- BEGIN RESUME FORM SECTION -->
+                <div id="formSection">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="contact-form-wrapper">
+                                    <form novalidate id="resumeForm" class="form-horizontal margin-bottom-30px" role="form" method="get"
+                                          ng-submit="dashboard.processForm()">
+                                        <h4 class="blueColor">Name</h4>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    @*<label class="control-label" for="appUserId">My Name</label>*@
+                                                    <input disabled value=""
+                                                           id="appUserIdInputField" class="form-control" type="text"
+                                                           placeholder="@Model.CurrentUser.FirstName @Model.CurrentUser.LastName" name="appUserId">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <accordion close-others="oneAtATime">
+                                            <accordion-group heading="Step One: Education Information" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+                                                <h4 class="blueColor">Education</h4>
+                                                <p>Enter, first, your most recent education information (required).</p>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst1Name">Institution One</label>
+                                                            <input ng-model="dashboard.resume.inst1Name" id="inst1Name" class="form-control"
+                                                                    type="text" placeholder="Institution One*" name="inst1Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst1Location">Institution One Location</label>
+                                                            <input ng-model="dashboard.resume.inst1Location" id="inst1Location" class="form-control"
+                                                                    type="text" placeholder="Institution One Location*" name="inst1Location">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst1DateTo">Date Finished</label>
+                                                            <input ng-model="dashboard.resume.inst1DateTo" id="inst1DateTo" class="form-control"
+                                                                    type="text" placeholder="Date Finished" name="inst1DateTo">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst1DateFrom">Date Started</label>
+                                                            <input ng-model="dashboard.resume.inst1DateFrom" id="inst1DateFrom" class="form-control"
+                                                                    type="text" placeholder="Date Started*" name="inst1DateFrom">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst1Degree">Degree Earned</label>
+                                                            <input ng-model="dashboard.resume.inst1Degree" id="inst1DateFrom" class="form-control"
+                                                                    type="text" placeholder="Degree Earned" name="inst1Degree">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst1DegreeMajor">Major</label>
+                                                            <input ng-model="dashboard.resume.inst1DegreeMajor" id="inst1DegreeMajor" class="form-control"
+                                                                    type="text" placeholder="Major or Concentration*" name="inst1DegreeMajor">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst1DegreeMinor">Minor</label>
+                                                            <input ng-model="dashboard.resume.inst1DegreeMinor" id="inst1DegreeMinor" class="form-control"
+                                                                    type="text" placeholder="Minor" name="inst1DegreeMinor">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst1DegreeGpa">GPA (optional field)</label>
+                                                            <input ng-model="dashboard.resume.inst1DegreeGpa" id="inst1DegreeMinor" class="form-control"
+                                                                    type="text" placeholder="GPA" name="inst1DegreeGpa">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <p>Enter your next most recent education information (optional section).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst2Name">Institution 2</label>
+                                                            <input ng-model="dashboard.resume.inst2Name" id="inst2Name" class="form-control"
+                                                                    type="text" placeholder="Institution Two" name="inst2Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst2Location">Institution 2 Location</label>
+                                                            <input ng-model="dashboard.resume.inst2Location" id="inst2Location" class="form-control"
+                                                                    type="text" placeholder="Institution Two Location" name="inst2Location">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst1DateTo">Date Finished</label>
+                                                            <input ng-model="dashboard.resume.inst2DateTo" id="inst2DateTo" class="form-control"
+                                                                    type="text" placeholder="Date Finished" name="inst2DateTo">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst2DateFrom">Date Started</label>
+                                                            <input ng-model="dashboard.resume.inst2DateFrom" id="inst2DateFrom" class="form-control"
+                                                                    type="text" placeholder="Date Started" name="inst2DateFrom">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst2Degree">Degree Earned</label>
+                                                            <input ng-model="dashboard.resume.inst2Degree" id="inst2DateFrom" class="form-control"
+                                                                    type="text" placeholder="Degree Earned" name="inst2Degree">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst2DegreeMajor">Major</label>
+                                                            <input ng-model="dashboard.resume.inst2DegreeMajor" id="inst2DegreeMajor" class="form-control"
+                                                                    type="text" placeholder="Major or Concentration" name="inst2DegreeMajor">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst2DegreeMinor">Minor</label>
+                                                            <input ng-model="dashboard.resume.inst2DegreeMinor" id="inst2DegreeMinor" class="form-control"
+                                                                    type="text" placeholder="Minor" name="inst2DegreeMinor">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst2DegreeGpa">GPA</label>
+                                                            <input ng-model="dashboard.resume.inst2DegreeGpa" id="inst2DegreeMinor" class="form-control"
+                                                                    type="text" placeholder="GPA" name="inst2DegreeGpa">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p>Enter your next most recent education information (optional section).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst3Name">Institution 3</label>
+                                                            <input ng-model="dashboard.resume.inst3Name" id="inst3Name" class="form-control"
+                                                                    type="text" placeholder="Institution Three" name="inst3Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst3Location">Institution 3 Location</label>
+                                                            <input ng-model="dashboard.resume.inst3Location" id="inst3Location" class="form-control"
+                                                                    type="text" placeholder="Institution Location" name="inst3Location">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst3DateTo">Date Finished</label>
+                                                            <input ng-model="dashboard.resume.inst3DateTo" id="inst3DateTo" class="form-control"
+                                                                    type="text" placeholder="Date Finished" name="inst3DateTo">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst3DateFrom">Date Started</label>
+                                                            <input ng-model="dashboard.resume.inst3DateFrom" id="inst3DateFrom" class="form-control"
+                                                                    type="text" placeholder="Date Started" name="inst3DateFrom">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst3Degree">Degree Earned</label>
+                                                            <input ng-model="dashboard.resume.inst3Degree" id="inst3DateFrom" class="form-control"
+                                                                    type="text" placeholder="Degree Earned" name="inst3Degree">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst3DegreeMajor">Major</label>
+                                                            <input ng-model="dashboard.resume.inst3DegreeMajor" id="inst3DegreeMajor" class="form-control"
+                                                                    type="text" placeholder="Major or Concentration" name="inst3DegreeMajor">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst3DegreeMinor">Minor</label>
+                                                            <input ng-model="dashboard.resume.inst3DegreeMinor" id="inst3DegreeMinor" class="form-control"
+                                                                    type="text" placeholder="Minor" name="inst3DegreeMinor">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="inst3DegreeGpa">GPA</label>
+                                                            <input ng-model="dashboard.resume.inst3DegreeGpa" id="inst3DegreeMinor" class="form-control"
+                                                                    type="text" placeholder="GPA" name="inst3DegreeGpa">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </accordion-group>
+                                            <accordion-group heading="Step Two: Employment Information" is-disabled="status.isFirstDisabled">
+                                                <br />
+                                                <h4 class="blueColor">Employment</h4>
+                                                <p>Enter, first, your current or most recent/relevant employment information (required section).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job1EmployerName">Employer One</label>
+                                                            <input ng-model="dashboard.resume.job1EmployerName" id="job1EmployerName" class="form-control"
+                                                                    type="text" placeholder="Employer One Name*" name="job1EmployerName">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job1Department">Department/Division in Which You Worked</label>
+                                                            <input ng-model="dashboard.resume.job1Department" id="job1Department" class="form-control"
+                                                                    type="text" placeholder="Department/Division (optional field)" name="job1Department">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job1EmployerLocation">Location</label>
+                                                            <input ng-model="dashboard.resume.job1EmployerLocation" id="job1EmployerLocation" class="form-control"
+                                                                    type="text" placeholder="Location*" name="job1EmployerLocation">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job1EmployerDescr">Description of Employer's Business or Service</label>
+                                                            <input ng-model="dashboard.resume.job1EmployerDescr" id="job1EmployerDescr" class="form-control"
+                                                                    type="text" placeholder="Employer's Business or Service*" name="job1EmployerDescr">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job1Position">Your Posistion</label>
+                                                            <input ng-model="dashboard.resume.job1Position" id="job1Position" class="form-control"
+                                                                    type="text" placeholder="Position*" name="job1Position">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job1DateFrom">Date Started</label>
+                                                            <input ng-model="dashboard.resume.job1DateFrom" id="job1DateFrom" class="form-control"
+                                                                    type="text" placeholder="Date Started*" name="job1DateFrom">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job1DateTo">Date Ended (optional field)</label>
+                                                            <input ng-model="dashboard.resume.job1DateTo" id="job1DateTo" class="form-control"
+                                                                    type="text" placeholder="Date Ended" name="job1DateTo">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job1Description">Job Description and Accomplishments</label>
+                                                            <textarea ng-model="dashboard.resume.job1Description" id="job1Description" class="form-control"
+                                                                      placeholder="Description of Job Duties*" cols="30" rows="5" name="job1Description"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p>Enter your next most recent/relevant employment information (optional section).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job2EmployerName">Employer 2</label>
+                                                            <input ng-model="dashboard.resume.job2EmployerName" id="job2EmployerName" class="form-control"
+                                                                    type="text" placeholder="Employer Two Name" name="job2EmployerName">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job2Department">Department/Division</label>
+                                                            <input ng-model="dashboard.resume.job2Department" id="job2Department" class="form-control"
+                                                                    type="text" placeholder="Department/Division" name="job2Department">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job2EmployerLocation">Location</label>
+                                                            <input ng-model="dashboard.resume.job2EmployerLocation" id="job2EmployerLocation" class="form-control"
+                                                                    type="text" placeholder="Location" name="job2EmployerLocation">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job2EmployerDescr">Description of Employer's Business or Service</label>
+                                                            <input ng-model="dashboard.resume.job2EmployerDescr" id="job2EmployerDescr" class="form-control"
+                                                                    type="text" placeholder="Employer's Business or Service" name="job2EmployerDescr">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job2Position">Your Posistion</label>
+                                                            <input ng-model="dashboard.resume.job2Position" id="job2Position" class="form-control"
+                                                                    type="text" placeholder="Position" name="job2Position">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job2DateFrom">Date Started</label>
+                                                            <input ng-model="dashboard.resume.job2DateFrom" id="job2DateFrom" class="form-control"
+                                                                    type="text" placeholder="Date Started" name="job2DateFrom">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job2DateTo">Date Ended</label>
+                                                            <input ng-model="dashboard.resume.job2DateTo" id="job2DateTo" class="form-control"
+                                                                    type="text" placeholder="Date Ended" name="job2DateTo">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job2Description">Job Description and Accomplishments</label>
+                                                            <textarea ng-model="dashboard.resume.job2Description" id="job2Description" class="form-control"
+                                                                      placeholder="Description of Job Duties" cols="30" rows="5" name="job2Description"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p>Enter your next most recent/relevant employment information (optional section).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job3EmployerName">Employer 3</label>
+                                                            <input ng-model="dashboard.resume.job3EmployerName" id="job3EmployerName" class="form-control"
+                                                                    type="text" placeholder="Employer Three Name" name="job3EmployerName">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job3Department">Department/Division</label>
+                                                            <input ng-model="dashboard.resume.job3Department" id="job3Department" class="form-control"
+                                                                    type="text" placeholder="Department/Division" name="job3Department">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job3EmployerLocation">Location</label>
+                                                            <input ng-model="dashboard.resume.job3EmployerLocation" id="job3EmployerLocation" class="form-control"
+                                                                    type="text" placeholder="Location" name="job3EmployerLocation">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job3EmployerDescr">Description of Employer's Business or Service</label>
+                                                            <input ng-model="dashboard.resume.job3EmployerDescr" id="job3EmployerDescr" class="form-control"
+                                                                    type="text" placeholder="Employer's Business or Service" name="job3EmployerDescr">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job3Position">Your Posistion</label>
+                                                            <input ng-model="dashboard.resume.job3Position" id="job3Position" class="form-control"
+                                                                    type="text" placeholder="Position" name="job3Position">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job3DateFrom">Date Started</label>
+                                                            <input ng-model="dashboard.resume.job3DateFrom" id="job3DateFrom" class="form-control"
+                                                                    type="text" placeholder="Date Started" name="job3DateFrom">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job3DateTo">Date Ended</label>
+                                                            <input ng-model="dashboard.resume.job3DateTo" id="job3DateTo" class="form-control"
+                                                                    type="text" placeholder="Date Ended" name="job3DateTo">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="job3Description">Job Description and Accomplishments</label>
+                                                            <textarea ng-model="dashboard.resume.job3Description" id="job3Description" class="form-control"
+                                                                        placeholder="Description of Job Duties" cols="30" rows="5" name="job3Description"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </accordion-group>
+                                            <accordion-group heading="Step Three: Supplemental Information" is-disabled="status.isFirstDisabled">
+                                                <h4 class="blueColor">Additional Details</h4>
+                                                <p>If you wish, provide an objective statement summarizing your job search intentions and/or qualifications and experience. (optional).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="objectiveStmnt">Objective Statement</label>
+                                                            <textarea ng-model="dashboard.resume.objectiveStmnt" id="objectiveStmnt" class="form-control"
+                                                                        placeholder="Objective Statement" cols="30" rows="5" name="objectiveStmnt"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p>If you wish, list your relevant volunteer activities (optional).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="volunteerExperience">Volunteer Experience</label>
+                                                            <textarea ng-model="dashboard.resume.volunteerExperience" id="volunteerExperience" class="form-control"
+                                                                        placeholder="Volunteer Experience" cols="30" rows="5" name="volunteerExperience"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p>To help personalize your resume you may enter a list of your hobbies (optional).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="hobbies">Hobbies</label>
+                                                            <textarea ng-model="dashboard.resume.hobbies" id="hobbies" class="form-control"
+                                                                        placeholder="Hobbies" cols="30" rows="5" name="hobbies"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p>Please list your front-end skills (required).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="frontEndSkills">Front-end Skills</label>
+                                                            <textarea ng-model="dashboard.resume.frontEndSkills" id="frontEndSkills" class="form-control"
+                                                                        placeholder="Front-end Skills*" cols="30" rows="5" name="frontEndSkills"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p>Please list your back-end skills (required).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="backEndSkills">Back-end Skills</label>
+                                                            <textarea ng-model="dashboard.resume.backEndSkills" id="backEndSkills" class="form-control"
+                                                                        placeholder="Back-end Skills*" cols="30" rows="5" name="backEndSkills"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p>Please list any additional skills relevant to your job search (optional).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="additionalSkills">Additional Skills</label>
+                                                            <textarea ng-model="dashboard.resume.additionalSkills" id="additionalSkills" class="form-control"
+                                                                        placeholder="Additional Skills" cols="30" rows="5" name="additionalSkills"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p>Please list any certifications you've earned which may be relevant to your job search (optional).</p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label" for="certifications">Certifications</label>
+                                                            <textarea ng-model="dashboard.resume.certifications" id="certifications" class="form-control"
+                                                                        placeholder="Certifications" cols="30" rows="5" name="certifications"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </accordion-group>
+                                        </accordion>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <button data-ng-click="dashboard.selectFormData(dashboard.resume)" id="submitButton"
+                                                        class="btn btn-success" type="submit">
+                                                    <i class="fa fa-check-circle"></i>
+                                                    <span>Save Resume!</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <a href="~/resume/preview" class="btn btn-primary">Preview PDF</a>
+                                        <div class="hidden form-group">
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" id="uid" name="uid" ng-model="dashboard.resume.uId">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END RESUME FORM SECTION -->
+                <!-- END BUILD RESUME SECTION -->
+    </div>
+</div>
+<!-- END CONTROLLER SECTION -->
+<!-- CUSTOM SCRIPTS -->
+
+@section pageInitScripts{
+    <script type="text/javascript" src="~/scripts/ng/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap']; //Provides the accordion functionality
+    </script>
+}
+
+@section Scripts{
+    <script src="/scripts/services/services.resume.js"></script> @*Reference to file with AJAX calls*@
+    <script type="text/javascript">
+        sabio.page.resumeController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.resumeController = sabio.ng.getControllerInstance($("#resumeCntrlr")); 
+        }
+
+        sabio.services.resumeFactory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.resume;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.page.resumeControllerFactory = function ($scope, $baseController, $resumeService) {
+            var vm = this;
+            vm.resume = {};
+            vm.resumeData = null;
+            vm.selectedFormData = null;
+            vm.$resumeService = $resumeService;
+
+            vm.status = {
+                isFirstOpen: true,
+                isFirstDisabled: false
+            };
+
+            vm.selectFormData = _selectFormData;
+            vm.onGetResumeSuccess = _onGetResumeSuccess;
+            vm.onGetResumeError = _onGetResumeError;
+            vm.onPostResumeSuccess = _onPostResumeSuccess;
+            vm.onPostResumeError = _onPostResumeError;
+            vm.onResumeUpdateSuccess = _onResumeUpdateSuccess;
+            vm.onResumeUpdateFailure = _onResumeUpdateFailure;
+
+            //This code simulates inheritance.
+            $.extend(vm, $baseController);
+
+            //This code is a wrapper for my small dependency on $scope.
+            vm.notify = vm.$resumeService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$resumeService.getResume(vm.onGetResumeSuccess, vm.onGetResumeError);
+            }
+
+            function _selectFormData(formData) {
+                console.log(formData);
+                vm.selectedFormData = formData;
+                vm.selectedFormData.appUserId = $("#appUserId").val();
+                if (vm.resume.uId == null || vm.resume.uId == "" || vm.resume.uId == "00000000-0000-0000-0000-000000000000") {
+                    vm.$resumeService.createResume(vm.selectedFormData, vm.onPostResumeSuccess, vm.onPostResumeError);
+                } else {
+                    vm.$resumeService.updateResume(vm.selectedFormData, vm.onResumeUpdateSuccess, vm.onResumeUpdateFailure);
+                }
+            }
+
+            function _onGetResumeSuccess(data) {
+                console.log("Resume GET attempt success!");
+                console.log("Resume Id: " + data.item);
+                if (data.item != null) {
+                    vm.notify(function () {
+                        vm.resume = data.item;
+                    });
+                }
+                console.log(vm.resume);
+            }
+
+            function _onGetResumeError() {
+                console.log("Resume GET error!");
+                sabio.layout.showModal("alert-danger", "Oops!", "Your previously saved resume was not retrieved correctly. Please refresh the page to try again.");
+            }
+
+            function _onPostResumeSuccess(data) {
+                //vm.resume = {};
+                console.log("ResumeId: " + data.item);
+                sabio.layout.showModal("alert-success", "Success!", "Your resume has been submitted.");
+                vm.notify(function () {
+                    vm.resume.uId = data.item;
+                });
+            }
+
+            function _onPostResumeError() {
+                console.error("Resume submit error!");
+                sabio.layout.showModal("alert-danger", "Oops!", "Your Resume was not submitted correctly. Please try again.");
+            }
+
+            function _onResumeUpdateSuccess() {
+                console.log('resume updated');
+                sabio.layout.showModal("alert-success", "Success!", "Your resume has been updated.");
+            }
+
+            function _onResumeUpdateFailure() {
+                console.error("Resume update error!");
+                sabio.layout.showModal("alert-danger", "Oops!", "Your Resume was not updated correctly. Please try again.");
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module, "$resumeService", ["$baseService"], sabio.services.resumeFactory);
+
+        sabio.ng.addController(sabio.ng.app.module, "resumeController", ['$scope', '$baseController', "$resumeService"], sabio.page.resumeControllerFactory);
+
+    </script>
+}
+

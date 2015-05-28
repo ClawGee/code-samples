@@ -1,0 +1,137 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid>
+@{
+    ViewBag.Title = "Public";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+<input type="hidden" value="@Model.Item" name="uid" id="uid" />
+<div data-ng-controller="projectsController as dashboard" id="projectsControllerContainer">
+
+    <h1>{{dashboard.devProfile.developerPersonalInfo.firstName}}'s Projects</h1>
+    <div class="separator-2"></div>
+
+
+    @*Container*@
+
+    <div class="container" id="targetContainer">
+        <div class="row grid-space-20">
+
+            @*Clone*@
+
+            <div class="col-lg-6 col-md-12" data-ng-repeat="project in dashboard.items track by project.uid">
+                <div class="image-box team-member white-bg option-3">
+                    <div class="overlay-container">
+                        <a href="projects/{{project.uid}}" class="projLink"><img src="~/images/team-member-1.jpg" alt="">{{project.image}}</a>
+                    </div>
+                    <div class="image-box-body">
+                        <h3 class="title"><a href="" class="projLink"></a>{{project.name}}</h3>
+                        <div class="separator-2"></div>
+                        <p class="descrip">{{project.description}}</p>
+                    </div>
+
+                    <a href="/profile/projects/{{project.uid}}" class="btn btn-default ProjDetailsbutton">Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="space"></div>
+    </div>
+</div>
+
+
+@section scripts {
+
+
+    <script type="text/javascript" src="~/Scripts/Services/services.public.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.developerUid = $("#uid").val();
+        sabio.page.startUp = function () {
+            sabio.page.projectsController = sabio.ng.getControllerInstance($("#projectsControllerContainer"));
+            
+
+        }
+
+
+        sabio.services.public.Factory = function ($baseService) {
+
+            var angularServiceObject = sabio.services.public;
+
+            var newService = $.extend(true, {}, angularServiceObject, $baseService);
+
+            return newService
+
+        }
+
+
+        sabio.page.projectsControllerFactory = function (
+           $scope,
+           $baseController,
+           $ProjectService) {
+
+            var vm = this;
+            vm.items = null;
+            vm.$ProjectService = $ProjectService;
+
+            vm.receiveItems = _receiveItems;             //on success
+            vm.onUsersError = _onUsersError;             //on error
+            vm.receiveDevName = _receiveDevName;
+
+            // used for inheritance, like the AdminApiController : ApiController
+            $.extend(vm, $baseController);
+
+            vm.notify = vm.$ProjectService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                
+                vm.$ProjectService.getDeveloperProfileByUid(sabio.page.developerUid, vm.receiveDevName, vm.onUsersError);
+            }
+
+            function _receiveItems(data) {
+                
+                vm.notify(function () {
+                    vm.items = data.items;
+                    console.log("in recv items");
+                    console.log(data.items); 
+                    
+                });
+
+            }
+
+            function _onUsersError(jqXhr, error) {
+
+                console.error(error);
+
+            }
+
+            function _receiveDevName(data) {
+                vm.notify(function () {
+                    vm.devProfile = data.item;
+                    console.log("in devname");
+                    console.log(data.item.developerPersonalInfo.firstName);
+                    console.log(vm.devProfile.developerPersonalInfo.firstName);
+                    vm.$ProjectService.getProjectsByAppUserId(sabio.page.developerUid, vm.receiveItems, vm.onUsersError);  //calling sabio.services.public.List
+                }); 
+            }
+        }
+
+
+        sabio.ng.addService(
+            sabio.ng.app.module,
+            "$ProjectService",
+            ["$baseService"],
+            sabio.services.public.Factory);
+
+
+        sabio.ng.addController(
+            sabio.ng.app.module,
+            "projectsController",
+            ['$scope', '$baseController', "$ProjectService"],
+            sabio.page.projectsControllerFactory);
+
+
+
+    </script>
+}
+
+

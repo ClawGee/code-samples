@@ -1,0 +1,378 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid?>
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div class="page-content" data-ng-controller="eventController as event" id="eventControllerContainer">
+    <div class="container">
+        <!-- ======================= Start of Events form ======================= -->
+        <div class=" panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title section-heading no-margin">Create an Event!</h2>
+            </div>
+            <!--start of form group-->
+            <div class=" panel-body col-md-4">
+                <form novalidate id="eventForm" class="manage-event-form" method="post" ng-submit="event.submitForm()">
+
+                    <div class="form-group">
+                        <label for="text-input">Start Date</label>
+                        <p class="input-group">
+                            <input type="text" id="startDate" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="event.item.startDate" is-open="event.startDateOpened" min-date="event.today" ng-required="true" close-text="Close" placeholder="MM/dd/yyyy" date-type="string" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="event.openDatePicker($event, 'start')"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="text-input">End Date</label>
+                        <p class="input-group">
+                            <input type="text" id="endDate" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="event.item.endDate" is-open="event.endDateOpened" min-date="event.today" ng-required="true" close-text="Close" placeholder="MM/dd/yyyy" date-type="string" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="event.openDatePicker($event, 'end')"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="text-input">Start Time (required)</label>
+                        <input type="text" id="startTime" ng-model="event.item.startTime" name="startTime" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="text-input">End Time</label>
+                        <input type="text" id="endTime" ng-model=" event.item.endtime" name="endTime" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="text-input">All Day? (enter 1 for yes and 0 for no)</label>
+                        <input type="text" ng-model="event.item.allDay" id="allDay" name="allDay" class="form-control" placeholder="1 or 2">
+                    </div>
+                    <div class="form-group">
+                        <label for="text-input">Address Line 1 (required)</label>
+                        <input type="text" ng-model="event.item.eventAddress.addressLine1" id="addressLine1" name="addressLine1" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="text-input">Address Line 2</label>
+                        <input type="text" ng-model="event.item.eventAddress.addressLine2" id="addressLine2" name="addressLine2" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="text-input">City (required)</label>
+                        <input type="text" ng-model="event.item.eventAddress.city" id="city" name="city" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="text-input">State</label><br>
+                        <select id="state" ng-model="event.item.eventAddress.state" ng-options="state.stateProvinceId as state.name for state in event.listOfStates">
+                            <!--bring back state.StateProvinceID (id) as the state.Name  (name) for (each) state in event.states(DB)-->
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="text-input">Zip Code (required)</label>
+                        <input type="text" ng-model="event.item.eventAddress.zip" id="zip" name="zip" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="text-input">Title (required)</label>
+                        <input type="text" ng-model="event.item.title" id="" name="title" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea ng-model="event.item.description" class="form-control" name="description" rows="5" cols="30"></textarea>
+                    </div>
+                    <div class="form-group col-md-4">
+                    <input type="submit" ng-disabled="eventForm.$invalid" ng-click="event.item.save" id="saveEventButton" class="btn btn-primary" value="Create Event!">
+                    </div>
+                </form>
+            </div>
+            <!--end of form group-->
+            <!--start of google map-->
+            <div class="col-md-8">
+                <div id="map">
+                    <!--placeholder for google map-->
+        </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <div class="col-lg-6 latlong hidden">
+                            <label class="control-label">Latitude</label>
+                            <input id="lat" name="lat" type="text" value="39.5" data-ng-model="event.item.eventAddress.lat" />
+                        </div>
+                        <div class="col-lg-6 latlong hidden">
+                            <label class="control-label">Longitude</label>
+                            <input id="lng" name="lng" type="text" value="-98.35" data-ng-model="event.item.eventAddress.lng" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end of google map-->
+        </div>
+        <!-- ======================= End of Events form ======================= -->
+    </div>
+    <!--Start: hidden div to hold user guid-->
+    <div>
+        <!--id="responseGuid" class="hidden" data-ng-model="event.item.uid"-->
+        <input type="text" class="hidden" name="responseGuid" id="responseGuid" value="@Model.Item" data-ng-model="event.item.uid" />
+    </div>
+    <!--End: hidden div to hold user guid-->
+</div>
+
+
+
+
+<!--==============================Start of Scripts=================================-->
+@section pageInitScripts{
+    <script type="text/javascript" src="~/scripts/ng/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+};
+@section Scripts {
+    <script type="text/javascript" , src="~/Scripts/Services/services.events.js"></script>
+    <script type="text/javascript">
+
+
+        sabio.page.eventController = null;
+        sabio.page.map = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.eventController = sabio.ng.getControllerInstance($("#eventControlContainer"));
+            console.log("sabio.page.eventController for #eventControlContainer");
+
+        }
+        //*************Start of Services***********************************
+        sabio.services.events.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.events;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.services.address.factory = function ($baseService) {
+            var service = sabio.services.address;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        //*************End of Services***********************************
+
+        //*************Start of Controller***********************************
+        sabio.page.eventsControllerFactory = function ($scope, $baseController, $eventsService, $stateService) {
+            var vm = this;
+            vm.item = null;
+            vm.formFilled = false;
+            vm.$eventsService = $eventsService;
+            vm.$stateService = $stateService;
+            vm.receiveItem = _receiveItem;
+            vm.onProfileError = _onProfileError;
+            vm.submitForm = _submitForm
+            vm.processForm = _processForm;
+            vm.onInsertSuccess = _onInsertSuccess;
+            vm.onInsertFailure = _onInsertFailure;
+            vm.onUpdateSuccess = _onUpdateSuccess;
+            vm.onUpdateFailure = _onUpdateFailure;
+            vm.onSelectSuccess = _onSelectSuccess;
+            vm.onSelectFailure = _onSelectFailure;
+            //for states drop down menu:
+            vm.receiveStates = _receiveStates;
+            vm.states = _stateSuccess;
+            vm.statesFail = _stateFail;
+            vm.listOfStates = null;
+            //Date picker items:
+            vm.today = new Date();
+            vm.openDatePicker = _openDatePicker;
+            vm.startDateOpened = false;
+            vm.endDateOpened = false;
+
+            $.extend(vm, $baseController);
+
+            vm.notify = vm.$eventsService.getNotifier($scope);
+
+            render();
+            function render() {
+                console.log("executed function render");
+                vm.$stateService.getStates(vm.states, vm.statesFail);
+                var responseGuid = $('#responseGuid').val();
+                //below tests GET to see if the guid field is poplualted. if it is, then do the consolelog..
+                if ($('#responseGuid').val()) {
+                    console.log("test for getEventByUid");
+                    vm.$eventsService.getEventByUid(responseGuid, vm.onSelectSuccess, vm.onSelectFailure);
+                };
+            }
+
+            function _stateSuccess(result) {
+                console.log('function _stateSuccess(result)');
+                vm.notify(function () {
+                    vm.listOfStates = result.items;
+                });
+            }
+
+            function _stateFail() {
+                sabio.layout.showModal("alert-danger", "Error!", "The page did not load properly. Please check back later.");
+            }
+
+            function _receiveStates(data) {
+                //this receives the states list data and calls the special notify method that will trigger ng to refresh UI
+                vm.notify(function () {
+                    vm.states = data.items;
+                });
+            }
+            function _submitForm() {
+                sabio.page.getCoor();
+
+            };
+            function _processForm() {
+                sabio.page.responseGuid = $('#responseGuid').val();
+                var data = vm.item;
+
+                data.startDate = _dateFromPicker(vm.item.startDate);
+                if (data.endDate) {
+                    data.endDate = _dateFromPicker(vm.item.endDate);
+                }
+                data.addressGuid = data.eventAddress.uid;
+                data.addressLine1 = data.eventAddress.addressLine1;
+                data.addressLine2 = data.eventAddress.addressLine2;
+                data.city = data.eventAddress.city;
+                data.state = data.eventAddress.state;
+                data.zip = data.eventAddress.zip;
+                data.lat = data.eventAddress.lat;
+                data.lng = data.eventAddress.lng;
+
+                console.log("event data", data);
+
+                if ($('#responseGuid').val() == null || $('#responseGuid').val() == "" || $('#responseGuid').val() == "00000000-0000-0000-0000-000000000000") {
+
+                    vm.$eventsService.post(data, vm.onInsertSuccess, vm.onInsertFailure);
+                }
+                else {
+                    console.log("executed function _processForm() -----else {");
+                    vm.$eventsService.put(sabio.page.responseGuid, data, vm.onUpdateSuccess, vm.onUpdateFailure);
+                }
+                console.log("function '_processForm' calls sabio.page.getCoor()");
+              
+
+            }
+
+            function _openDatePicker($event, type) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                if (type === "start") {
+                    vm.startDateOpened = true;
+
+                } else if (type === "end") {
+                    vm.endDateOpened = true;
+                };
+            }
+
+            function _dateFromPicker(d) {
+                console.log("executed function _dateFromPicker(d)");
+                console.log(typeof d);
+                //below fixes, post that brings in obj to be converted to string, then put takes the existing string and returns it right back
+                if (typeof d === "object") {
+                    var curr_date = d.getDate();
+                    var curr_month = d.getMonth() + 1; //Months are zero based
+                    var curr_year = d.getFullYear();
+                    return curr_month + "/" + curr_date + "/" + curr_year;
+                } else if (typeof d === "string") {
+                    return d;
+                } else {
+                    return null;
+                }
+            }
+
+            //*******Start AJAX success/error handlers/functions************
+            function _onProfileError(jqXhr, error) {
+                console.error("event failed to load");
+                console.error(error);
+            }
+
+            function _receiveItem(data) {
+                vm.notify(function () { //this receives the data and calls the special notify method that will trigger ng to refresh UI
+                    vm.item = data.item;
+                });
+            }
+            function _onInsertSuccess(result) {
+                console.log("executed function _onInsertSuccess(result)");
+                vm.notify(function () {
+                    console.log("executed function _onInsertSuccess(result)----- vm.notify(function ");
+                    vm.item.uid = result.item;
+                });
+            }
+
+            function _onInsertFailure() {
+                sabio.layout.showModal('alert-danger', 'Error', 'Please make sure All forms are filled out Correctly');
+                console.log("Uh Ohs, seems like you haven't created an event");
+            }
+
+            function _onUpdateSuccess() {
+                console.log("Woot woot, you have updated")
+            }
+
+            function _onUpdateFailure() {
+                sabio.layout.showModal('alert-danger', 'Error', 'Event not Updated! Please make sure all fields are filled out correctly.');
+                console.log("Oh Nos, update failed :/")
+            }
+            function _onSelectSuccess(result) { //this receives the data and calls the special notify method that will trigger ng to refresh UI
+                console.log("function _onSelectSuccess");
+                vm.notify(function () {
+                    vm.item = result.item;
+                    if (vm.item != null)
+                        sabio.page.loadGoogleMaps(vm.item.eventAddress.lat, vm.item.eventAddress.lng, 16, true);
+                    else
+                        sabio.page.loadGoogleMaps(39.5, -98.35, 4, false);
+                });
+            };
+            function _onSelectFailure() {
+                console.log("function _onSelectFailure");
+            };
+            //*******End AJAX success/error handlers/functions************
+
+        }
+        //*************End of Controller***********************************
+
+        sabio.ng.addService(sabio.ng.app.module, "$eventsService", ["$baseService"], sabio.services.events.factory);
+        sabio.ng.addService(sabio.ng.app.module, "$stateService", ["$baseService"], sabio.services.address.factory);
+        sabio.ng.addController(sabio.ng.app.module, "eventController", ['$scope', '$baseController', "$eventsService", "$stateService"], sabio.page.eventsControllerFactory);
+
+        sabio.page.loadGoogleMaps = function (lat, lng, zoom, exist) {
+            var myLatlng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+            var mapOptions = {
+                center: myLatlng,
+                zoom: parseInt(zoom)
+            };
+            sabio.page.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            if (exist == true) {
+                var marker = new google.maps.Marker({
+                    map: sabio.page.map,
+                    position: myLatlng
+                });
+            }
+        }
+        sabio.page.getCoor = function () {
+            console.log("sabio.page.getCoor = function () {");
+            var address = $('#addressLine1').val() + " " + $('#addressLine2').val() + ", " + $('#city').val() + ", " + $('#state').val() + " " + $('#zip').val();
+            var coor = new google.maps.Geocoder();
+            coor.geocode({ address: address }, function (results, status) {
+                console.log("coor.geocode should return and show the results below:");
+                console.log(results);
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var cntl = sabio.ng.getControllerInstance($("#eventControllerContainer"));
+                    cntl.notify(function () {
+                        cntl.item.eventAddress.lat = results[0].geometry.location.lat();
+                        cntl.item.eventAddress.lng = results[0].geometry.location.lng();
+                    });
+                    //sabio.page.map.setCenter(results[0].geometry.location);//center the map over the result
+                    //place a marker at the location
+                    //var marker = new google.maps.Marker(
+                    //{
+                    //    map: sabio.page.map,
+                    //    position: results[0].geometry.location
+                    //});
+                    cntl.processForm();
+                    //if (results[0].geometry.viewport)
+                    //    sabio.page.map.fitBounds(results[0].geometry.viewport);
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+    </script>
+};
+<!--==============================End of Scripts=================================-->

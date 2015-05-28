@@ -1,0 +1,17 @@
+﻿@model Sabio.Web.Models.ViewModels.BaseViewModel
+@if (@Model.IsLoggedIn)
+{
+    <ul class="nav navbar-nav navbar-left">
+        <li>
+            @Html.ActionLink("Hello, " + @Model.CurrentUser.UserName + "!", "Index", "Dashboard", routeValues: null, htmlAttributes: new { title = "Dashboard" })
+        </li>
+        <li><a href="/account/logoff">LOG OFF</a></li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-left">
+        <li>@Html.ActionLink("Register", "Index", "Registration", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Index", "Login", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

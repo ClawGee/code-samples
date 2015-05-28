@@ -1,0 +1,143 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+<title>Events Index page</title>
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Events I Created:</h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li class="active">Event Listings</li>
+            <li>
+                <!--need to change/fix link below-->
+                <a href="/jobs/details/560f5165-4e3f-4bfc-ac30-e1ec3b4482d8">Event Details</a>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="page-content" data-ng-controller="eventsController as events" id="eventsControllerContainer">
+
+
+    <div class="col-md-12" data-ng-repeat="event in events.items track by event.uid">
+        <div>
+            <div>
+                <h3>Title: {{event.title}}</h3>
+            </div>
+            <div>
+                <p>Description: {{event.description}}</p>
+            </div>
+            <div>
+                <p>Start Date: {{event.startDate}}</p>
+            </div>
+            <div>
+                <p>End Date: {{event.endDate}}</p>
+            </div>
+            <span><a class="btn btn-info btn-group bottom30 btn-group-xs btn-edit-job jobs-edit" ng-href="/events/edit/{{event.uid}}">Edit</a></span>
+
+        </div>
+    </div>
+    <pagination ng-model="events.currentPage"
+                total-items="events.totalCount"
+                items-per-page="events.pageSize"
+                max-size="events.maxSize"
+                ng-change="events.pageChanged()"
+                class="pagination-sm"
+                boundary-links="true"
+                rotate="false"
+                num-pages="numPages"></pagination>
+    <!-- ******** END EVENTS LISTINGS TEMPLATE******** -->
+</div>
+
+
+@section pageInitScripts{
+    <script type="text/javascript" src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+}
+
+
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/Services/services.events.js">
+    </script>
+    <!-- Scripts Start-->
+    <script type="text/javascript">
+        sabio.page.eventsController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.eventsController = sabio.ng.getControllerInstance($("#eventsControllerContainer"));
+        }
+
+        sabio.services.events.factory = function ($baseService) {
+            console.log("test 1");
+            var aSabioServiceObject = sabio.services.events
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        };
+
+        sabio.page.eventsControllerFactory = function ($scope, $baseController, $eventsService) {
+            var vm = this;
+            vm.items = null;
+            vm.$eventsService = $eventsService;
+            vm.receivedItemsSuccess = _receivedItemsSuccess;
+            vm.receivedItemsError = _receivedItemsError;
+            //Pagination defintions below
+            vm.currentPage = 1;
+            vm.pageSize = 8;
+            vm.pageChanged = _pageChanged;
+            vm.maxSize = 5;
+            vm.totalCount = null;
+
+            $.extend(vm, $baseController); //vm line to simulate inheritance
+
+            vm.notify = vm.$eventsService.getNotifier($scope);//vm is a wrapper for our small dependency on $scope
+
+            render();//as soon as page loads, fire render function below:
+
+            function render() {
+                console.log("executed function render");
+                vm.$eventsService.getEvents(vm.currentPage, vm.pageSize, vm.receivedItemsSuccess, vm.onReceivedItemsError);
+            };
+
+            function _receivedItemsSuccess(results) {
+                console.log("executed function _receivedItemsSuccess");
+                vm.notify(function () {
+                    console.log("vm.notify fired 1/2");
+                    //vm.items = results.items;
+                    vm.items = results.item.pagedItems;
+                    vm.currentPage = results.item.pageIndex;
+                    vm.totalCount = results.item.totalCount;
+                    vm.totalPages = results.item.totalPages;
+                    console.log("vm.notify fired 2/2");
+                });
+            }
+            function _receivedItemsError() {
+                console.log("executed function _receivedItemsError");
+            };
+
+            function _pageChanged() {
+                console.log("executed function _pageChanged()");
+                vm.$eventsService.getEvents(vm.currentPage, vm.pageSize, vm.receivedItemsSuccess, vm.onReceivedItemsError);
+            };
+
+        }
+        sabio.ng.addService(sabio.ng.app.module
+            , "$eventsService"
+            , ["$baseService"]
+            , sabio.services.events.factory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "eventsController"
+            , ["$scope", "$baseController", "$eventsService"]
+            , sabio.page.eventsControllerFactory);
+
+
+    </script>
+
+    <!-- Scripts End-->
+}
+

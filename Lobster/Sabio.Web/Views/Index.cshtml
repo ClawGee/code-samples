@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div class="hidden">testing</div>
+
+								<!-- LOGIN FORM -->
+<div class="col-md-6">
+    <h1 class="section-heading">Lobster Login</h1>
+    <form class="form-horizontal" id="login-form" role="form">
+        <div class="form-group">
+            <label for="email" class="control-label sr-only">Email</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email/Username">
+                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="control-label sr-only">Password</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <label class="fancy-checkbox">
+                    <input type="checkbox">
+                    <span>Don't You Forget about Me!</span>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <button type="button" id="btn-sign-in" class="btn btn-primary">Sign-In</button>
+            </div>
+        </div>
+    </form><br />
+    <p>
+        <div><em>Bro, You Don't Have an Account yet??!?</em> <a href="#register"><strong>Sign Yo'Self Up, BRO!</strong></a></div>
+        <div><em>Dude, Did You Forgot your password??</em> <a href="#recover">Recover My Password Dude!</a></div>
+        <div><em>Check this: Login With</em> <a href="http://plus.google.com">Google Plus</a>, <a href="https://www.facebook.com/login?_rdr">FaceBook</a>, or <a href="https://www.linkedin.com/uas/login">LinkedIn</a></div>
+    </p>
+    </div>
+    <!-- END LOGIN FORM -->
+    <!-- Scripts Start-->
+    @section Scripts {
+
+<script type="text/javascript">
+    // global var
+    //sabio.page.loginApiData = null;
+    //sabio.page.handlers.apiCall.done = null;
+    //sabio.page.handlers.apiCall.fail = null;
+    sabio.page.startUp = function () {
+    // clickevent handlers kept here
+    sabio.page.loginValidate();
+    $("#btn-sign-in").on("click", sabio.page.handlers.signIn);
+    };
+    sabio.page.handlers.signIn = function () {
+    emailValidate = $("#email").valid();
+    passwordValidate = $("#password").valid();
+    //console.log("Clientside " +emailValidate + " " + passwordValidate);
+
+    if (passwordValidate && emailValidate) {
+    //console.log("Output email and password to serializeArray AJAX");
+        var loginForm = $("#login-form");
+        var filledLoginForm = loginForm.serialize();
+        sabio.page.handlers.apiLoginCall(filledLoginForm);
+      
+    } else {
+        alert("Email or Password are Invalid");
+    };
+    };
+
+sabio.page.loginValidate = function () {
+        jQuery.validator.setDefaults({
+        debug: true,
+        success: "valid"
+        });
+    $('#login-form').validate({
+        rules: {
+            password: {
+            required: true,
+            rangelength: [5, 15]
+            },
+            email: {
+            required: true,
+            rangelength: [5, 25],
+            email: true,
+            }
+        },
+        messages: {
+            password: {
+                required: "Password is required to log in.",
+                rangelength: "Password must be between 5 and 15 letters long."
+            },
+            email: {
+                required: "Email is required to log in.",
+                rangelength: "Email must be between 5 and 25 letters long.",
+                email: "Your email address must be in the format of name@domain.com"
+            }
+         }
+        });
+    };
+
+sabio.page.handlers.apiLoginCall = function (inputData) {
+        //console.log(filledLoginForm);
+        $.ajax({
+            url: "/api/login/validate",
+            data: inputData,
+            type: "POST",
+            error: function (xhr, status, errorThrown) {
+                alert("Sorry, there was a problem!");
+                console.log("Error: " + errorThrown);
+                console.log("Status: " + status);
+                console.dir(xhr);
+            },
+            complete: function (xhr, status) {
+                alert("The request is complete!");
+            }
+        });
+    //$.done(function (data, textStatus, jqXHR) { alert("Success: " + response); });
+    //$.fail(function (jqXHR, textStatus, errorThrown) { alert("Error"); });
+    //console.log(sabio.page.loginApiData);
+    };
+
+</script>
+}
+    <!-- Scripts End-->
+    

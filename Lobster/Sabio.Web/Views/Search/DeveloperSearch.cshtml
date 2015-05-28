@@ -1,0 +1,376 @@
+﻿@{
+    ViewBag.Title = "DeveloperSearch";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+<script>
+    function initialize() {
+        var mapCanvas = document.getElementById('developer-map');
+        var mapOptions = {
+            center: new google.maps.LatLng(37.09024, -103.712891),
+            zoom: 3,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(mapCanvas, mapOptions);
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<div class="page-content" data-ng-controller="searchController as search">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Search</h2>
+                    </div>
+                    <!-- Search Form -->
+                    <div class="panel-body">
+                        <form class="form-horizontal searchForm">
+                            <div class="input-group input-group-sm">
+                                <input id="devKeyword"class="form-control input-group-sm searchContainer" ng-model="search.keyWord"
+                                       name="keyword" type="search" placeholder="enter a keyword ..." value="">
+                                <span class="input-froup-btn">
+
+                                    <button ng-click="search.searchKey()" type="submit" class="btn btn-primary btn-lg">
+                                        <i class="icon ion-android-search"></i>Search
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- End Search Form -->
+            </div>
+
+            <div class="col-md-9">
+                <!-- PAGE CONTENT -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Find Your Developer</h2>
+                    </div>
+                    <div class="panel-body" id="searchControllerContainer">
+                        <div class="page-content page-search-result">
+                            <div class="container">
+                                <h3 id="results" ng-show="search.keyWord.length"><span id="numbersFound">{{search.totalCount}}</span> Total Developers found for: <span><b>{{search.keyWord}}</b></span></h3>
+                                <!-- Search Results -->
+                                <!-- End Search Results -->
+                                <div id="developer-container" class="container-fluid">
+
+                                    <div class="row">
+                                        <!--Start of Hidden Developer Template-->
+                                        <div class="col-md-12">                                                      
+                                                                                             
+                                            <div id="developer-search-template" class="developerSearch col-xs-9" ng-repeat="developer in search.items track by developer.id">
+                                                <div>
+                                                    <ul class="list-unstyled list-results">
+                                                        <!--Template for Developer Search result-->
+                                                        <li class="type-portfolio">
+                                                            <a href="/profile/Developer/{{developer.developerPersonalInfo.id}}" class="profilePicture developerDetails">
+                                                                <img ng-src="{{search.getProfilePicture(developer.developerPhoto.fullUrl)}}" />
+                                                            </a>
+                                                            <h3 class="developer-name heading-left">
+                                                                <a href="/profile/Developer/{{developer.developerPersonalInfo.id}}">{{developer.developerPersonalInfo.firstName}} {{developer.developerPersonalInfo.lastName}}</a>
+                                                            </h3>
+                                                            <h5>
+                                                                <b>Current: </b>
+                                                                <span class="experience1">{{developer.experience1}}</span>
+                                                            </h5>
+                                                            <h6>
+                                                                <b>City/State: </b>
+                                                                <span class="city"> {{developer.developerAddresses.city}} {{developer.developerState.stateProvinceCode}}</span>
+                                                            </h6>
+                                                            <h6>
+                                                                <b>Programming Languages: </b>
+                                                                <span class="language1">{{developer.language1}}<span> </span></span>
+                                                                <span class="language2">{{developer.language2}}<span> </span></span>
+                                                                <span class="language3">{{developer.language3}}<span> </span></span>
+                                                                <span class="language4">{{developer.language4}}<span> </span></span>
+                                                                <span class="language5">{{developer.language5}}<span> </span></span>
+                                                            </h6>
+                                                            <h6>
+                                                                <b>Previous Experience: </b>
+                                                                <span class="experience2">{{developer.experience2}}</span>
+                                                            </h6>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!--Start of Angular Pagination-->
+                               
+                                <pagination ng-model="search.currentPage" 
+                                            total-items="search.totalCount"
+                                            items-per-page="search.pageSize" 
+                                            max-size="search.maxSize" 
+                                            ng-change="search.pageChanged()" 
+                                            class="pagination-sm" 
+                                            boundary-links="true" 
+                                            rotate="false" 
+                                            num-pages="numPages"></pagination>
+
+                                <!--End of Angular Pagination-->
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+
+
+
+
+@section pageInitScripts{
+    <script type="text/javascript" src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+}
+
+<!-- END PAGE CONTENT -->
+<!--Start Javascript-->
+@section Scripts {
+
+    <script type="text/javascript" , src="~/Scripts/Services/services.search.js"></script>
+    <script type="text/javascript">
+
+
+        //START OF ANGULAR JS CODE
+       
+
+        sabio.page.searchController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.searchController = sabio.ng.getControllerInstance($('#searchControllerContainer'));
+        }
+
+        sabio.services.search.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.search
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+
+        }
+
+       
+
+        sabio.page.searchControllerFactory = function ($scope, $baseController, $searchService) {
+            var vm = this;
+            vm.items = null;
+            vm.$searchService = $searchService;
+            vm.receiveItems = _receiveItems;
+            vm.onProfileError = _onProfileError;
+            vm.getProfilePicture = _getProfilePicture;
+            vm.searchKey = _searchKey;
+            vm.keyWord = null;
+
+            //Pagination defintions below
+            vm.currentPage = 1;
+            vm.pageSize = 5;
+            vm.pageChanged = _pageChanged;
+            vm.maxSize = 5;
+            vm.totalCount = null;
+            vm.getUrlValue = window.location.href;
+           
+
+            $.extend(vm, $baseController);
+
+            vm.notify = vm.$searchService.getNotifier($scope);
+
+            render();
+
+           
+            function render() { 
+                var uri_dec = decodeURIComponent(vm.getUrlValue);
+                var loadKeyword = uri_dec.split('=');
+                console.log(loadKeyword);
+                vm.keyWord = loadKeyword[1];
+                console.log(loadKeyword);
+                vm.$searchService.searchDevelopers(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onProfileError, vm.keyWord);
+                
+                }
+            
+
+            function _receiveItems(data) {
+                //this receives the data and calls the special
+                //notify method that will trigger ng to refresh UI
+                //var index = $scope.selected
+                vm.notify(function () {
+                    vm.items = data.item.pagedItems;
+                    //vm.currentPage = data.item.pageIndex;
+                    vm.totalCount = data.item.totalCount;
+                    vm.totalPages = data.item.totalPages;
+                   
+                });
+            }
+
+            function _onProfileError(jqXhr, error) {
+                console.error("developer profile failed to load");
+                console.error(error);
+            }
+
+            function _getProfilePicture(myPhoto) {
+                if (myPhoto) {
+                    return myPhoto;
+                } else {
+                    return 'http://mediad.publicbroadcasting.net/p/kpcw/files/201307/No_photo.jpg';
+                }
+            }
+
+            function _searchKey() {
+                vm.$searchService.searchDevelopers(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onProfileError, vm.keyWord);
+                console.log(vm.keyWord);
+            }
+
+
+            function _pageChanged() {
+                vm.$searchService.searchDevelopers(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onProfileError, vm.keyWord);
+                window.scrollTo(0, 0);
+            }
+            
+        }
+
+
+
+        sabio.ng.addService(sabio.ng.app.module, '$searchService', ['$baseService'], sabio.services.search.factory);
+        sabio.ng.addController(sabio.ng.app.module, 'searchController', ['$scope', '$baseController', '$searchService'], sabio.page.searchControllerFactory);
+       
+
+
+        //START OF JQUERY CODE
+
+        //sabio.page.startUp = function () {
+
+        //    sabio.services.search.developer(0, 10, sabio.page.handlers.ajaxSuccess, sabio.page.handlers.ajaxFail, null);
+        //    $('.btn').on('click', sabio.page.handlers.submit);
+
+        //}
+
+        //sabio.page.handlers.submit= function (evt, currentPage, pageSize) {
+        //    evt.preventDefault();
+        //    $("#developer-container").html("");
+        //    //var request = $(".searchForm").serialize();
+
+        //    //Showing Hidden search result banner
+        //    $('#searchResult').text($('.searchContainer').val());
+        //    $('h3.hidden').removeClass("hidden");
+
+        //    var keyWord = $(".searchForm").val();
+        //    sabio.services.search.developer(0, 10, sabio.page.handlers.ajaxSuccess, sabio.page.handlers.ajaxFail, keyWord);
+        //}
+
+        ////Ajax call to return Data on page load
+
+        //sabio.page.handlers.ajaxSuccess = function (data) {
+        //    data = data.item;
+        //    $("#developer-container").html("");
+        
+        //    var pageSize = data.pageSize;
+        //    var totalCount = data.totalCount;
+        //    var totalPages = data.totalPages;
+        //    var currentPage = data.pageIndex;
+        //    $('#numbersFound').text(totalCount);
+
+        //    $('#paging').pagination({
+        //        items: totalCount,
+        //        itemsOnPage: pageSize,
+        //        cssStyle: 'light-theme',
+        //        currentPage: currentPage + 1,
+        //        onPageClick: function (pageNumber) {
+        //            pageNumber = pageNumber - 1;
+        //            $('#paging').scrollTop();
+        //            sabio.services.search.developer(pageNumber, pageSize, sabio.page.handlers.ajaxSuccess, sabio.page.handlers.ajaxFail, null);
+        //        }
+        //    })
+
+        //    if (data.pagedItems) {
+        //        var developerTemplateContainer = $("#developer-container");
+        //        for (var i = 0; i < data.pagedItems.length; i++) {
+        //            sabio.page.handlers.fillDeveloperData(data.pagedItems[i], developerTemplateContainer);
+        //        }
+        //    } else {
+        //        alert("No matches found'");
+        //    }
+        //}
+
+        ////Creating Template clone
+        //sabio.page.handlers.getNewDeveloperClone = function (targetElement) {
+        //    return targetElement.clone().removeClass("hidden").removeAttr("id");
+        //};
+
+        ////DeveloperData packaged into template container
+        //sabio.page.handlers.fillDeveloperData = function (result, targetContainer) {
+        //    var developerTemplateClone = sabio.page.handlers.getNewDeveloperClone($("#developer-search-template"));
+        //    $(".address", developerTemplateClone).text(result.address);
+        //    $(".email", developerTemplateClone).text(result.email);
+        //    $(".language1", developerTemplateClone).text(result.language1);
+        //    $(".language2", developerTemplateClone).text(result.language2);
+        //    $(".language3", developerTemplateClone).text(result.language3);
+        //    $(".language4", developerTemplateClone).text(result.language4);
+        //    $(".language5", developerTemplateClone).text(result.language5);
+        //    $(".experience1", developerTemplateClone).text(result.experience1);
+        //    $(".experience2", developerTemplateClone).text(result.experience2);
+        //    $(".experience3", developerTemplateClone).text(result.experience3);
+        //    $(".experience4", developerTemplateClone).text(result.experience4);
+        //    $(".uid").val(result.uid);
+        //    $(".container").removeClass("hidden");
+        //    $(".dropzone").removeClass("hidden");
+        //    //Developer Name
+        //    $(".developer-name a", developerTemplateClone).text(result.developerPersonalInfo.firstName + " " + result.developerPersonalInfo.lastName);
+        //    //Developer Detail Profile link
+        //    $(".developerDetails", developerTemplateClone).attr("href", "/profile/Developer/" + result.developerPersonalInfo.id);
+
+        //    //Developer image pull
+        //    if (result.developerPhoto != null) {
+        //        $(".profilePicture img", developerTemplateClone).attr("src", result.developerPhoto.fullUrl);
+        //    } else {
+        //        $(".profilePicture img", developerTemplateClone).attr("src", "http://mediad.publicbroadcasting.net/p/kpcw/files/201307/No_photo.jpg");
+        //    }
+        //    targetContainer.prepend(developerTemplateClone);
+        //}
+
+        //sabio.page.handlers.ajaxFail = function (result) {
+        //    alert('Error');
+        //}
+
+
+
+
+
+
+
+
+            
+
+        ////On Search Success before pagination(No longer needed but keeping for reference)
+
+        //sabio.page.handlers.onSearchSuccess = function (result) {
+        //    $("#developer-container").html(""); //Clears profiles that were loaded on page start
+        //    if (result.items) {
+        //        for (var i = 0; i < result.items.length; i++) {
+        //            sabio.page.handlers.fillDeveloperData(result.items[i]);
+        //            $('#numbersFound').text(i);
+        //        }
+        //    } else {
+        //        alert("There were no results found");
+        //    }
+
+        //}
+     
+        //sabio.page.handlers.ajaxFail = function (result) {
+        //    sabio.layout.showModal('alert-danger', 'Error', 'Please contact your System Administrator!')
+        //}
+
+    </script>
+}
+
+<!--End Javascript-->

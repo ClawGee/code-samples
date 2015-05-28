@@ -1,0 +1,194 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid?>
+@{
+    ViewBag.Title = "ShareProfileIndex";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="panel-heading">
+        <h2 class="panel-title section-heading no-margin">Share a Profile</h2>
+
+        <div class="container">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li>
+                    <a href="#">Profile</a>
+                </li>
+                <li class="active">Share a Profile</li>
+            </ol>
+            <br />
+        </div>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- BEGIN SHARE PROFILE FORM -->
+<div class="page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="contact-form-wrapper">
+                    <p class="hidden" id="Uid"></p>
+                    <form id="shareProfileForm" class="form-horizontal margin-bottom-30px" role="form" method="post">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input id="senderNameInputField"  class="form-control" type="text" placeholder="Sender's Name*" name="senderName">
+                                    <span id="senderUserIcon" class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input id="senderEmailInputField" class="form-control" type="email" placeholder="Sender's Email*" name="senderEmail">
+                                    <span id="senderEmailIcon" class="input-group-addon">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input id="recipientNameInputField" class="form-control" type="text" placeholder="Recipient's Name*" name="recipientName">
+                                    <span id="recipientUserIcon" class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input id="recipientEmailInputField" class="form-control" type="email" placeholder="Recipient's Email*" name="recipientEmail">
+                                    <span id="recipientEmailIcon" class="input-group-addon">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <input id="shareProfileSubject" class="form-control" type="text" placeholder="Subject*" name="subject">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <textarea id="shareProfileMessage" class="form-control" placeholder="Message*" cols="30" rows="5" name="message"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <button id="submitButton" class="btn btn-success" type="submit">
+                                    <i class="fa fa-check-circle"></i>
+                                    <span>Share Profile!</span>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="profileGuid" id="profileGuid" value="@Model.Item" />
+                    </form>
+                    <a hidden id="profileLink" href="/profile/Developer/@Model.Item">
+                        <span><strong>Click here to return to the profile page of the developer whose profile you just shared.</strong></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END SHARE PROFILE FORM -->
+<!-- Custom Scripts -->
+@section Scripts{
+<script type="text/javascript">
+    sabio.page.startUp = function () {
+        sabio.page.rules(); //client side validation for form input.
+        sabio.page.checkForUid(); //checks to see if user is logged in.
+        $("#submitButton").on("click", sabio.page.handlers.sendShareProfile);
+    }
+
+    sabio.page.rules = function () { 
+        $("#shareProfileForm").validate(
+            {rules: {
+                senderName: "required",
+                senderEmail: {
+                    required: true,
+                    email: true
+                },
+                recipientName: "required",
+                recipientEmail: {
+                    required: true,
+                    email: true
+                },
+                subject: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 50
+                },
+                message: {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 500
+                }
+            },
+            messages: {
+                senderName: "Please enter your name.",
+                senderEmail: "Please enter your email address in the format of example@domain.com.",
+                recipientName: "Please enter the recipient's name.",
+                recipientEmail: "Please enter the recipient's email address in the format of email@example.com",
+                subject: "Please enter a Subject between 2 and 50 characters.",
+                message: "Please enter a Message between 10 and 500 characters."
+                }
+            });
+    }
+
+    sabio.page.checkForUid = function () { //sends ajax call to UsersApiController to request FullUser object
+        $.ajax({
+            url: "/api/user/",
+            data: null,
+            type: "GET"
+        }).done(sabio.page.handlers.foundUid).fail(sabio.page.handlers.didntFindUid)
+    }
+
+    sabio.page.handlers.foundUid = function (object) { //success handler that populates the sender's fields on the form.
+        if (object.item != null) {
+            $("#Uid").text(object.item.id); // puts the Uid on the page (hidden)
+            $("#senderNameInputField").val(object.item.firstName + " " + object.item.lastName);
+            $("#senderEmailInputField").val(object.item.email);
+        }
+    }
+
+    sabio.page.handlers.didntFindUid = function () { //error handler if user is not logged in.
+        console.log("User is not logged in.")
+    }
+
+    sabio.page.handlers.sendShareProfile = function (event) { //action handler used when submit button is clicked.
+        event.preventDefault();
+        var profileGuid = $("#profileGuid");
+        var isValid = $("#shareProfileForm").valid(); 
+        var dataSet = $("#shareProfileForm").serialize(); //serializes the form data for an ajax post.
+        if(isValid) { 
+            $.ajax({  //when the form is valid and the data serialized, the click will use an ajax post to the ShareProfileApiController 
+                url: "/api/shareprofile/" + profileGuid.val(), // and will direct the user to a share profile form
+                data: dataSet, //and package the data submitted in the form. The AppEmailService then takes over and shares the profile.
+                type: "POST"
+            }).done(sabio.page.handlers.ProfileShared).fail(sabio.page.handlers.ProfileNotShared) //upon completion, I call for a success or error handler.
+        }
+    }
+
+    sabio.page.handlers.ProfileShared = function () {
+        console.log("Profile was emailed successfully.");
+        sabio.layout.showModal("alert-success", "Success!", "The profile you selected was shared successfully.");
+        document.getElementById("shareProfileForm").reset();
+        $('#profileLink').removeAttr('hidden');
+
+    }
+
+    sabio.page.handlers.ProfileNotShared = function () {
+        console.log("Profile was NOT emailed successfully.");
+        sabio.layout.showModal("alert-danger", "Oops!", "The profile you selected was not shared successfully. Please try again.");
+
+    }
+</script>
+}

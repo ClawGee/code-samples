@@ -1,0 +1,971 @@
+﻿#mainBackgroundPhoto{
+    background: url(http://www.sotillocompany.com/sites/default/files/styles/node_hero/public/media/images/hero_node_people_networking.jpg?itok=eq12Tu8o);
+    background-repeat:no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+#mainBackgroundPhoto1 {
+    background: url(http://fc00.deviantart.net/fs71/i/2011/075/a/0/sky__s_the_limit_by_mjkam11-d3brf5r.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#mainBackgroundPhoto2 {
+    background: url(http://images.cxotoday.com/2012/09/tata_comm_KgO7F.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    padding-bottom: 30px;
+}
+
+#home2-image-1{
+  background: url("https://mazzonicenter.org/sites/default/files/typing%20hands%20for%20website.jpg") no-repeat center center;
+  background-size:cover;
+  height:100%;
+}
+
+#home2-image-2{
+  background: url("http://rack.2.mshcdn.com/media/ZgkyMDEyLzEyLzA0L2EzL2FwcHRlbGxzeW91LmJTcS5qcGcKcAl0aHVtYgk5NTB4NTM0IwplCWpwZw/f15d4f55/493/app-tells-you-which-linkedin-connections-are-in-the-room-f49725b1ba.jpg") no-repeat center center;
+  background-size:cover;
+  height:100%;
+}
+
+#home2-image-3{
+  background: url("http://static.guim.co.uk/sys-images/Money/Pix/pictures/2011/10/27/1319729224484/Two-people-shaking-hands-007.jpg") no-repeat center center;
+  background-size:cover;
+  height:100%;
+}
+
+.home2-media-thumbnail{   
+   height:200px;
+}
+
+.frontPageText{
+    color: white;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;  
+}
+
+.frontPageText1 {
+    font-family:Arial, Helvetica, sans-serif ;
+    color: #406da4;
+}
+
+.frontPageText2 {
+    font-family:Arial, Helvetica, sans-serif ;
+    color: #ef591f;
+}
+
+.frontPageText1a {
+    font-family:Arial, Helvetica, sans-serif ;
+    color: #406da4;
+    margin-top: 20px;
+}
+
+.logoBlock1 {
+    padding-left: 25px;
+    padding-top: 20px;
+}
+
+.logoBlock2 {
+    padding-left: 50px;
+    padding-top: 20px;
+    color: #ef591f;
+}
+
+.logoBlock2 .hero-heading {
+    color: #ef591f;
+    font-size: 50px;
+}
+
+.logoBlock2 .lead {
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    color: #ef591f;
+    font-weight: 400;
+}
+
+.logoBlock2 .btn {
+    background-color: transparent;
+        border: 3px solid #ef591f;
+}
+
+.logoBlock2 .btn-primary {
+    color:#ef591f; 
+}
+
+.carousel-inner {
+    background-color: rgba(192,192,192,0.8);
+    padding-bottom: 10px;
+    padding-left: 50px;
+    cursor: default;
+    min-height: 275px;
+}
+
+.full-width-section {
+    background-color: #ef591f;
+}
+
+.portfolio-item {
+    width:100%;
+    height:100%;
+}
+
+.portfolio-item .overlay {
+    background-color: #ef591f;
+}
+
+.portfolio-item .btn {
+    background-color: #e4dc4c;
+    border: 1px solid #f6eeee;
+}
+
+.portfolio-item .info {
+    margin-top: -79px;
+}
+
+.home2SearchBar {
+    padding-bottom: 20px
+}
+
+img.desaturate { 
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    padding-top: 7px;
+}
+
+img.home1Resize{
+    height: auto;
+    width: auto; 
+    max-width:250px; 
+    max-height:250px;
+}
+
+.recruiterTemplateSize{
+    height: 100%;
+    width: 180px;
+}
+
+.recruiterUserSize{
+    height: 180px;
+    width: 180px;
+}
+
+.recruiterCompanySize{
+    height: 75px;
+    width: 75px;
+}
+
+.smallRecruiterResize{
+    height: 100px;
+    width: 75px; 
+}
+
+.smallResize{
+    height: 75px;
+    width: 75px; 
+}
+
+#panelLocations{
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right:solid #ff920a 2px;
+}
+
+.margin-top-15px{
+    margin-top: 15px;
+}
+
+margin-bottom-15px{
+    margin-bottom: 15px;
+}
+
+label.error {
+    color: red;
+}
+
+.error {
+color: red;
+}
+
+.sabio-gif {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('http://i.stack.imgur.com/MnyxU.gif')
+                /*url('http://fla.fg-a.com/lobster/happy-lobster.gif')*/ 
+                50% 50% 
+                no-repeat;
+}
+
+body.loading {
+    overflow: hidden;   
+} 
+
+body.loading .sabio-gif {
+    display: block;
+}
+
+.centerWrapper {
+    text-align: center;
+}
+
+/*Background image for Registration page*/
+#registrationPhoto {
+    background:url('http://e.fastcompany.net/multisite_files/fastcompany/imagecache/1280/poster/2015/03/3043082-poster-1280-fogcreek-women-hire.jpg'); 
+    /*background-repeat:no-repeat
+    filter: alpha(opacity=40);*/
+    opacity: 0.4;
+    width: 1108px; 
+    height: 600px;
+    position: fixed;
+    padding-top:0;
+} 
+/*Input fields for registration page*/
+.inputField {
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: .6;
+    filter: alpha(opacity=90);
+    width: 500px;
+    color: black;
+    position: relative;
+}
+/*Title for registration page*/
+.title{
+    margin: 0 auto;
+    position: relative;
+    padding-top: 1cm;
+}
+
+/*Change color of button on hover.*/
+.buttonStyle:hover { 
+    background: #383; 
+
+}
+
+img.resize{
+    /* you can use % */
+    height: auto;
+    width: auto; 
+    max-width:300px; 
+    max-height:300px;
+}
+
+img.resizeRecruiter{
+    /* you can use % */
+    height: auto;
+    width: auto; 
+    max-width:200px; 
+    max-height:300px;
+}
+
+/*Size for img on Home Page*/
+
+.homePagePic{
+    height: auto;
+    width: auto;
+    max-width: 1025px;
+    max-height: 800px;
+}
+
+
+/*Size for Profile Pic*/
+.profilePic {
+    width:230px;
+    height:180px;
+    border:1px solid #021a40;
+}
+/*CSS for Developer search picture page*/
+.developerSearchPic {
+    float: left;
+    width: 200px;
+    height:160px;
+    margin: 10px;
+    padding:1px;
+    border:1px solid #021a40;
+}
+
+/*CSS for Recruiter search picture page*/
+.recruiterProfilePic {
+    float: left;
+    margin: 10px;
+    padding:1px;
+    border:1px solid #021a40;
+}
+
+.top5 { 
+    margin-top:5px; 
+}
+
+.top7 { 
+    margin-top:7px; 
+}
+
+.top10 {
+     margin-top:10px; 
+}
+
+.top15 {
+     margin-top:15px;
+}
+.top17 {
+     margin-top:17px; 
+}
+.top30 {
+     margin-top:30px; 
+}
+
+.bottom30 {
+     margin-bottom:30px; 
+}
+
+.jobs-body {
+color: #717171;
+font-size: 15px;
+font-weight: 300;
+}
+.jobs-header {
+color: black;
+font-weight: 500;
+}
+.jobs-title {
+color: black;
+font-weight: 500;
+}
+.header-ad {
+text-align: center;
+}
+.ad300x250 {
+width: 300px;
+height: 250px;
+overflow: hidden;
+margin: 0 auto;
+}
+.ad728x90 {
+width: 728px;
+min-height: 90px;
+overflow: hidden;
+}
+
+.jobs-header {
+text-align: left;
+padding-left: 2em;
+}
+
+.form-width {
+width: 1600px;
+}
+.jobs-input {
+    max-width: 900px;
+}
+.jobs-short-input {
+    max-width: 400px
+}
+
+#public-form {
+    margin-top: -20px;
+    margin-right: 30px;
+}
+
+/*styles for Update Address Page*/
+
+#addressLine1 {
+    max-width: 600px;
+    margin: 5px;
+}
+
+#addressLine2 {
+    max-width: 600px;
+    margin: 5px;
+}
+
+#city {
+    max-width: 400px;
+    margin: 5px;
+}
+
+#state {
+    margin:5px;
+}
+
+#zip {
+    max-width :200px; 
+    margin:5px;
+}
+
+#submitBtn {
+    margin:5px 805px 5px 195px;
+}
+
+
+/**
+* CSS themes for simplePagination.js
+* Author: Flavius Matis - http://flaviusmatis.github.com/
+* URL: https://github.com/flaviusmatis/simplePagination.js
+*/
+
+ul.simple-pagination {
+	list-style: none;
+}
+
+.simple-pagination {
+	display: block;
+	overflow: hidden;
+	padding: 0 5px 5px 0;
+	margin: 0;
+}
+
+.simple-pagination ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.simple-pagination li {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	float: left;
+}
+
+/*------------------------------------*\
+	Compact Theme Styles
+\*------------------------------------*/
+
+.compact-theme a, .compact-theme span {
+	float: left;
+	color: #333;
+	font-size:14px;
+	line-height:24px;
+	font-weight: normal;
+	text-align: center;
+	border: 1px solid #AAA;
+	border-left: none;
+	min-width: 14px;
+	padding: 0 7px;
+	box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+	background: #efefef; /* Old browsers */
+	background: -moz-linear-gradient(top, #ffffff 0%, #efefef 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#efefef)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffffff 0%,#efefef 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffffff 0%,#efefef 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #ffffff 0%,#efefef 100%); /* IE10+ */
+	background: linear-gradient(top, #ffffff 0%,#efefef 100%); /* W3C */
+}
+
+.compact-theme a:hover {
+	text-decoration: none;
+	background: #efefef; /* Old browsers */
+	background: -moz-linear-gradient(top, #efefef 0%, #bbbbbb 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#efefef), color-stop(100%,#bbbbbb)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #efefef 0%,#bbbbbb 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #efefef 0%,#bbbbbb 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #efefef 0%,#bbbbbb 100%); /* IE10+ */
+	background: linear-gradient(top, #efefef 0%,#bbbbbb 100%); /* W3C */
+}
+
+.compact-theme li:first-child a, .compact-theme li:first-child span {
+	border-left: 1px solid #AAA;
+	border-radius: 3px 0 0 3px;
+}
+
+.compact-theme li:last-child a, .compact-theme li:last-child span {
+	border-radius: 0 3px 3px 0;
+}
+
+.compact-theme .current {
+	background: #bbbbbb; /* Old browsers */
+	background: -moz-linear-gradient(top, #bbbbbb 0%, #efefef 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bbbbbb), color-stop(100%,#efefef)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #bbbbbb 0%,#efefef 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #bbbbbb 0%,#efefef 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #bbbbbb 0%,#efefef 100%); /* IE10+ */
+	background: linear-gradient(top, #bbbbbb 0%,#efefef 100%); /* W3C */
+	cursor: default;
+}
+
+.compact-theme .ellipse {
+	background: #EAEAEA;
+	padding: 0 10px;
+	cursor: default;
+}
+
+/*------------------------------------*\
+	Light Theme Styles
+\*------------------------------------*/
+
+.light-theme a, .light-theme span {
+	float: left;
+	color: #666;
+	font-size:14px;
+	line-height:24px;
+	font-weight: normal;
+	text-align: center;
+	border: 1px solid #BBB;
+	min-width: 14px;
+	padding: 0 7px;
+	margin: 0 5px 0 0;
+	border-radius: 3px;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+	background: #efefef; /* Old browsers */
+	background: -moz-linear-gradient(top, #ffffff 0%, #efefef 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#efefef)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffffff 0%,#efefef 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffffff 0%,#efefef 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #ffffff 0%,#efefef 100%); /* IE10+ */
+	background: linear-gradient(top, #ffffff 0%,#efefef 100%); /* W3C */
+}
+
+.light-theme a:hover {
+	text-decoration: none;
+	background: #FCFCFC;
+}
+
+.light-theme .current {
+	background: #666;
+	color: #FFF;
+	border-color: #444;
+	box-shadow: 0 1px 0 rgba(255,255,255,1), 0 0 2px rgba(0, 0, 0, 0.3) inset;
+	cursor: default;
+}
+
+.light-theme .ellipse {
+	background: none;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	font-weight: bold;
+	cursor: default;
+}
+
+/*------------------------------------*\
+	Dark Theme Styles
+\*------------------------------------*/
+
+.dark-theme a, .dark-theme span {
+	float: left;
+	color: #CCC;
+	font-size:14px;
+	line-height:24px;
+	font-weight: normal;
+	text-align: center;
+	border: 1px solid #222;
+	min-width: 14px;
+	padding: 0 7px;
+	margin: 0 5px 0 0;
+	border-radius: 3px;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+	background: #555; /* Old browsers */
+	background: -moz-linear-gradient(top, #555 0%, #333 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#555), color-stop(100%,#333)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #555 0%,#333 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #555 0%,#333 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #555 0%,#333 100%); /* IE10+ */
+	background: linear-gradient(top, #555 0%,#333 100%); /* W3C */
+}
+
+.dark-theme a:hover {
+	text-decoration: none;
+	background: #444;
+}
+
+.dark-theme .current {
+	background: #222;
+	color: #FFF;
+	border-color: #000;
+	box-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 0 1px 1px rgba(0, 0, 0, 0.1) inset;
+	cursor: default;
+}
+
+.dark-theme .ellipse {
+	background: none;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	font-weight: bold;
+	cursor: default;
+}
+
+/*CSS for angular input fields (Tested first with Developer profile)*/
+.ng-invalid.ng-dirty{
+    border-color: red;
+}
+
+.ng-valid.ng-dirty {
+    border-color: green;
+}
+
+/*styles for Message Center Page*/
+
+#cloneTemplate div:nth-child(even) {
+    background: #CCC;
+}
+
+#cloneTemplate div:nth-child(odd) {
+    background: #FFF;
+}
+
+#cloneTemplate {
+    border: solid 1px;
+    padding: 0px;
+    margin: 2px;
+}
+
+/*Styles for AdminUser Page */
+
+#rcorners1 {
+    border-radius: 25px;
+    background: #F5F5DC;
+    padding: 20px;
+    width: 1000px;
+    min-height:110px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.admin-type {
+    margin-top:20px;
+    margin-right:120px;
+}
+
+.admin-profile {
+    margin-top:20px;
+    margin-left:120px;
+}
+
+.admin-submit {
+    position:relative;
+    left: 40px;
+    top: 50px;
+}
+
+.admin-form input {
+    border: 1px solid #ccc;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    font-size: 15px;
+    padding: 4px 7px;
+    outline: 0;
+    -webkit-appearance: none;
+}
+
+
+
+
+/*Angular Pagination (For Developer Search Page)*/
+
+.paginate-controller{
+  border: 1px solid #ccf;
+  padding: 5px;
+  margin: 3px;
+}
+.paginate-controller small {
+  color: #99c;
+}
+
+
+/*Styles for Messaging Page */
+
+#tabs li {
+    float: left;
+    border: 1.5px solid gray;
+    border-bottom-width: 0;
+    margin: 3px 3px 0px 3px;
+    padding: 5px 5px 0px 5px;
+    background-color: #6699FF;
+    color: white;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    cursor:pointer;
+}
+
+#tabs ul {
+    list-style: none;
+}
+
+#mainView {
+    border: 1px solid gray;
+    clear: both;
+    padding: 0 1em;
+    border-radius: 5px;
+}
+
+#tabs li.active {
+    background-color: #FFF;
+    color: #000;
+}
+
+.myConversations-content {
+    padding: 5px 25px 5px 25px;
+}
+
+.message-avatar img {
+    border: 1px solid gray;
+    margin: 3px;
+    min-height:50px;
+    height:50px;
+}
+
+.message-meta {
+    display: inline;
+}
+#cloneTemplate {
+    border-radius: 5px;
+    border: 1px solid gray;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    padding: 1px;
+}
+
+#map { 
+    width:88%; 
+    height:500px; 
+}
+
+
+.latlong{
+    width:50%;
+}
+
+
+/*
+    UI Bootstrap entry
+*/
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+/* STYLES FOR RESUME FEATURE*/
+
+.resumeTextCenter {
+    text-align: center;
+}
+
+#resumeBorder {
+    border: 1px solid black;
+}
+
+.resumeTextRight {
+    text-align: right;
+}
+.resumeTextLeft {
+    text-align: left;
+}
+.inlineText {
+    display: inline;
+}
+
+.blueColor {
+    color: blue;
+}
+
+.twoElementsSameLine {
+    display: inline-block
+}
+
+.dateOnSameLine {
+    position: relative;left: 200px;
+}
+
+.closeLineHeight {
+    line-height: 1;
+}
+
+.textIndent {
+    padding-left: 25px;
+}
+
+.noTextIndent {
+    padding-left: 0px;
+}
+
+/*
+    Custom colors for stars
+*/
+
+.glyphicon-star {
+    color:yellow;
+    outline-color:black;
+    /*background-color: black*/
+}
+
+.glyphicon-empty-star {
+    outline-color: black;
+    color:yellow;
+}
+
+#developer-map {
+    width:100%; 
+    height:240px;
+}
+
+#profileType {
+    border: solid 1px black;
+}
+
+/* Gallery Buttons */
+.btn-gallery {
+    margin: 20px 0;
+}
+
+/* Styles for Entity View Pages */
+.btn-edit-entity {
+    margin: 20px;
+}
+
+.profile-well {
+background: rgba(242,246,248,1);
+background: -moz-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(242,246,248,1)), color-stop(50%, rgba(216,225,231,1)), color-stop(51%, rgba(181,198,208,1)), color-stop(100%, rgba(224,239,249,1)));
+background: -webkit-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+background: -o-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+background: -ms-linear-gradient(top, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+background: linear-gradient(to bottom, rgba(242,246,248,1) 0%, rgba(216,225,231,1) 50%, rgba(181,198,208,1) 51%, rgba(224,239,249,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#e0eff9', GradientType=0 );
+}
+
+.profile-well-lg {
+  height: 100%;
+  padding-top: 100px;
+  padding-bottom: 100px;
+  border-radius: 200px 200px 200px 200px;
+-moz-border-radius: 200px 200px 200px 200px;
+-webkit-border-radius: 200px 200px 200px 200px;
+border: 0px solid #000000;
+}
+
+.entity-info {
+    padding: 10px 10px 10px 30px;
+    color: antiquewhite;
+    font-size: 14px;
+}
+
+.lead-small {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.4;
+  color: antiquewhite;
+}
+
+.contact-section {
+    margin-top: 10px;
+}
+
+.vertical-line {
+    border-left: 1px solid #e7e7e7;
+}
+
+.profile-label {
+    font-size: 30px;
+}
+
+    .profile-label:after {
+        display: block;
+        content: '....................';
+        color: #406da4;
+        font-weight: 300;
+    }
+
+.profile-contacts {
+    font-size: 20px;
+}
+
+    .profile-contacts:after {
+        display: block;
+        content: '...................';
+        color: #406da4;
+        font-weight: 300;
+    }
+
+.smooth-pic {
+    border-radius: 25px;
+}
+
+div.entity-background { 
+  background: url(img/portfolio/single/blurred_lines.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+}
+
+div.entity-specialtylocation {
+  background: url(img/portfolio/single/hello_world.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+}
+
+/* Small Social Icons */
+.social-list-inline {
+  padding-left: 0;
+  margin-left: -5px;
+  list-style: none;
+}
+.social-list-inline > li {
+  display: inline-block;
+  padding-right: 3px;
+  padding-left: 3px;
+}
+
+ul.small-social-icons li a {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    display: block;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+}
+
+    ul.small-social-icons li a.facebook-bg:hover, ul.small-social-icons li a.facebook-bg:focus {
+        background-color: #344f98;
+    }
+
+    ul.small-social-icons li a.twitter-bg:hover, ul.small-social-icons li a.twitter-bg:focus {
+        background-color: #138bee;
+    }
+
+    ul.small-social-icons li a.googleplus-bg:hover, ul.small-social-icons li a.googleplus-bg:focus {
+        background-color: #d73925;
+    }
+
+    ul.small-social-icons li a.rss-bg:hover, ul.small-social-icons li a.rss-bg:focus {
+        background-color: #e65c00;
+    }
+
+    ul.small-social-icons li a i {
+        position: relative;
+        top: 5px;
+    }
+

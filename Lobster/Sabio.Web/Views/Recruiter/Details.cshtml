@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "RecruiterProfilesIndex";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- BREADCRUMBS -->
+<div data-ng-controller="recruiterDetailController as Recruit" id="recruiterViewController">
+    <div class="page-header">
+        <div class="container">
+            <h1 class="page-title pull-left text-info">Recruiter Profile</h1>
+            <!-- BEGIN SUBMIT CHANGE BUTTON-->
+
+            <button type="submit" data-ng-click="Recruit.edit()" id="recruitCancel" class="btn btn-warning btn-sm btn-edit-entity pull-left"><i class="fa fa-warning"></i> Edit</button>
+
+            <!-- END SUBMIT CHANGE BUTTON-->
+            <ol class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li class="active">Recruiter Profile</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- END BREADCRUMBS -->
+    <!-- PAGE CONTENT -->
+    <div class="page-content">
+        <div class="container">
+            <!-- BEGIN RECRUITER PHOTO CONTAINER -->
+            <div class="row portfolio-media entity-background">
+                <div class="col-md-4"></div>
+                <div class="col-md-4 profile-well profile-well-lg">
+                    <img id="imagePublic" class="resize center-block" ng-src="{{Recruit.item.recruiterPhoto.fullUrl}}" />
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <!-- END RECRUITER PHOTO CONTAINER -->
+            <!-- NAME & CONTACTS SECTION BEGIN -->
+            <div class="row">
+                <div class="col-md-8">
+                    <section>
+                        <h2 class="profile-label">{{Recruit.item.recruiterUser.firstName}} {{Recruit.item.recruiterUser.lastName}}</h2>
+                        <p ng-if="Recruit.item.summary" class="lead text-muted"><em>Let me take a moment to introduce myself...</em></p>
+                        <p ng-if="Recruit.item.summary">{{Recruit.item.summary}}</p>
+                    </section>
+                </div>
+                <div class="col-md-4 vertical-line">
+                    <div class="contact-section">
+                        <h2 class="section-heading profile-contacts">{ CONTACT DETAILS }</h2>
+                        <ul class="list-unstyled project-detail-list">
+                            <li ng-if="Recruit.item.phoneNumber1"><strong>Phone: </strong>{{Recruit.item.phoneNumber1}}</li>
+                            <li ng-if="Recruit.item.phoneNumber2"><strong>Phone (2): </strong>{{Recruit.item.phoneNumber2}}</li>
+                            <li ng-if="Recruit.item.recruiterUser.email"><strong>Email: </strong>{{Recruit.item.recruiterUser.email}}</li>
+                        </ul>
+                        <!-- BEGIN SOCIAL ICONS -->
+                        <div class="social-connect project-detail-list">
+                            <ul class="social-list-inline small-social-icons">
+                                <li>
+                                    <a ng-if="Recruit.item.facebookAccount" href={{Recruit.item.facebookAccount}} id="facebookPublic" class="facebook-bg"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li>
+                                    <a ng-if="Recruit.item.twitterAccount" href={{Recruit.item.twitterAccount}} id="twitterPublic" class="twitter-bg"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li>
+                                    <a ng-if="Recruit.item.googlePlusAccount" href={{Recruit.item.googlePlusAccount}} id="googlePublic" class="googleplus-bg"><i class="fa fa-google-plus"></i></a>
+                                </li>
+                                <li>
+                                    <a ng-if="Recruit.item.linkedInAccount" href={{Recruit.item.linkedInAccount}} id="linkedInPublic" class="linkedin-bg"><i class="fa fa-linkedin-square"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- END SOCIAL ICONS -->
+                        <a ng-if="Recruit.item.url" href="{{Recruit.item.url}}" class="btn btn-default"><i class="fa fa-external-link"></i> Visit Website</a>
+                    </div>
+                </div>
+            </div>
+            <!-- NAME & CONTACTS SECTION END -->
+            <hr>
+            <!-- BEGIN SPECIALTY & LOCATION SECTION -->
+            <div class="row">
+                <h2 class="section-heading profile-contacts">LOOKING FOR DEVELOPERS...</h2>
+            </div>
+            <div class="row entity-specialtylocation">
+                <div class="col-md-6">
+                    <section>
+                        <p ng-if="Recruit.item.specialty" class="lead-small"><em>*knowledgeable in one or more areas:</em></p>
+                        <p ng-if="Recruit.item.specialty" class="entity-info">{{Recruit.item.specialty}}</p>
+                    </section>
+                </div>
+                <div class="col-md-6 vertical-line">
+                    <section>
+                        <p ng-if="Recruit.item.specialty" class="lead-small"><em>*for positions located in:</em></p>
+                        <p ng-if="Recruit.item.specialty" class="entity-info">{{Recruit.item.location}}</p>
+                    </section>
+                </div>
+            </div>
+            <!-- SPECIALTY & LOCATION SECTION END -->
+            <!-- PHOTO CREDIT BEGIN -->
+            <div class="pull-right" about='https://farm5.static.flickr.com/4071/4306030258_be9960f0f9_s.jpg'>
+                <a href='https://www.flickr.com/photos/28208534@N07/4306030258/' target='_blank'></a>
+                <a rel='license' href='http://creativecommons.org/licenses/by-sa/2.0/' target='_blank'><img src='http://i.creativecommons.org/l/by-sa/2.0/80x15.png' alt='Creative Commons Creative Commons Attribution-Share Alike 2.0 Generic License' title='Creative Commons Creative Commons Attribution-Share Alike 2.0 Generic License' border='0' align='left'></a>&nbsp; &nbsp;by&nbsp;<a href='https://www.flickr.com/people/28208534@N07/' target='_blank'>&nbsp;</a><a xmlns:cc='http://creativecommons.org/ns#' rel='cc:attributionURL' property='cc:attributionName' href='https://www.flickr.com/people/28208534@N07/' target='_blank'>mikemol</a><a href='http://www.imagecodr.org/' target='_blank'>&nbsp;</a>
+            </div>
+            <!-- PHOTO CREDIT END -->
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+<!-- BEGIN CUSTOM SCRIPTS-->
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/Services/sabio.services.recruiters.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.recruiterDetailController = null;
+        sabio.page.recruitGuid = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.recruiterDetailController = sabio.ng.getControllerInstance($("#recruiterViewController"));
+            sabio.page.recruitGuid = $("#recruitGuid").text();
+
+        }
+
+        sabio.services.recruiters.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.recruiters;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.page.recruitersViewControllerFactory = function ($scope, $baseController, recruitersViewService) {
+            var viewModel = this;
+            viewModel.item = null;
+            viewModel.recruitersViewService = recruitersViewService;
+            viewModel.edit = _edit;
+            viewModel.receivedItems = _onSuccess;
+            viewModel.onResultError = _onResultError;
+
+            $.extend(viewModel, $baseController);
+
+            viewModel.notify = viewModel.recruitersViewService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                viewModel.recruitersViewService.get(viewModel.receivedItems, viewModel.onResultError);
+            }
+
+            function _edit() {
+                window.open('/recruiter/manage', '_self');
+            }
+
+            function _onSuccess(result) {
+
+                if (result.item != null) {
+                    viewModel.notify(function () {
+                        viewModel.item = result.item;
+                    });
+                } else {
+                    _onPopulateFailure();
+                }
+            }
+
+            function _onPopulateFailure() {
+                sabio.layout.showModal('alert-danger', 'Error', 'Please submit your Recruiter information first! Redirecting...');
+                setTimeout(function () {
+                    _edit();
+                }, 3000);
+            }
+
+            function _onResultError(jqXhr, error) {
+                console.log("Abort! Abort! Abort! Please contact your system administrator.");
+                console.log(error);
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module,
+            "recruitersViewService",
+            ["$baseService"],
+            sabio.services.recruiters.factory);
+
+        sabio.ng.addController(sabio.ng.app.module,
+            "recruiterDetailController",
+            ['$scope', '$baseController', 'recruitersViewService'],
+            sabio.page.recruitersViewControllerFactory);
+    </script>
+}

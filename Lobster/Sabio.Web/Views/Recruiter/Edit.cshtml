@@ -1,0 +1,566 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Recruiter Profile</h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li class="active">Recruiter Profile</li>
+        </ol>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- PAGE CONTENT -->
+<div class="page-content">
+    <div class="container">
+        <div class="row">
+            <div data-ng-controller="recruiterUserController as rec" id="recruiterFormControllerElement">
+                <div class="col-md-3">
+                    <!--Recruiter Photo Begin-->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title section-heading no-margin centerWrapper">Recruiter Photo</h2>
+                        </div>
+                        <div class="panel-body">
+                            <form novalidate>
+                                <img id="recImage" class="resizeRecruiter center-block" ng-if="rec.item.recruiterPhoto.fulUrl!=null" data-ng-model="rec.item.recruiterPhoto.fullUrl" ng-src="{{rec.item.recruiterPhoto.fullUrl}}" />
+                                <img id="recImage" class="resizeRecruiter center-block" ng-if="rec.item.recruiterPhoto.fulUrl==null" data-ng-model="rec.item.recruiterPhoto.fullUrl" ng-src="http://www.propelarizona.com/upload/thumb/no_img.jpg" />
+                            </form>
+                        </div>
+                        @*<div class="centerWrapper">
+                              <button type="button" data-ng-click="rec.open()" id="photoUpload">Change profile picture</button>
+                          </div>*@
+                    </div>
+                </div>
+
+
+                <!-- UPLOAD PHOTOS BEGIN  -->
+                <div class="col-md-9">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title section-heading no-margin centerWrapper">Upload New Photo</h2>
+                        </div>
+                        <div class="panel-body">
+                            <!--Begin Dropzone Photo Form-->
+                            <form novalidate>
+                                <div dropzone="rec.dropzoneConfig" id="myDropzone" class="fallback dropzone" style="height:180px"></div>
+                            </form>
+                            @*<div>
+                                    <button type="button" id="submit-all" data-ng-click="rec.submitPhotos()" class="btn btn-primary pull-right">Upload Photo</button>
+                                </div>*@
+                            <!--End Dropzone Photo Form-->
+                        </div>
+                    </div>
+                </div>
+                <!-- UPLOAD PHOTOS END  -->
+                <!--Recruiter Photo End-->
+                <!-- Button for Dropzone Modal -->
+                @*<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" id="fileUpload">
+                        Upload Files/Projects
+                    </button>
+
+                    <br />
+                    <br />*@
+
+                <!-- BASIC INPUT -->
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 class="panel-title section-heading no-margin">Recruiter Profile</h2>
+                        </div>
+                        <div class="panel-body">
+                            <form novalidate>
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <label for="specialty" class="col-md-3 control-label">Specialty Area(s)</label>
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.specialty" ng-minlength="2" class="form-control" id="specialty" name="specialty" placeholder="Specialty" required="">
+                                            <div data-ng-show="form.$submitted || form.specialty.$touched">
+                                                <div data-ng-show="form.specialty.$error.required">This field is required.</div>
+                                                <div data-ng-show="form.specialty.$error.minlength">Too short!</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="location" class="col-md-3 control-label">Location(s)</label>
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.location" ng-minlength="2" class="form-control" id="location" name="location" placeholder="Location(s)" required="">
+                                            <div data-ng-show="form.$submitted || form.location.$touched">
+                                                <div data-ng-show="form.location.$error.required">This field is required.</div>
+                                                <div data-ng-show="form.location.$error.minlength">Too short!</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="url" class="col-md-3 control-label">Website</label>
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.url" class="form-control" id="url" name="url" placeholder="http://">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="phoneNumber1" class="col-md-3 control-label">Phone Number 1</label>
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.phoneNumber1" data-ng-minlength="10" class="form-control" id="phoneNumber1" name="phoneNumber1" placeholder="Phone 1" required="">
+                                            <div data-ng-show="form.$submitted || form.phoneNumber1.$touched">
+                                                <div data-ng-show="form.phoneNumber1.$error.required">This field is required.</div>
+                                                <div data-ng-show="form.phoneNumber1.$error.minlength">(xxx)xxx-xxxx</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="phone2" class="col-md-3 control-label">Phone Number 2</label>
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.phoneNumber2" class="form-control" id="phone2" name="phone2" placeholder="Phone 2">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="summary" class="col-md-3 control-label">Summary</label>
+                                        <div class="col-md-9">
+                                            <textarea data-ng-model="rec.item.summary" class="form-control" id="summary" name="summary" placeholder="Tell us about yourself." rows="4"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="twitterAccount" class="col-md-3 control-label">Twitter Account</label>
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.twitterAccount" class="form-control" id="twitterAccount" name="twitterAccount" placeholder="http://">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="facebookAccount" class="col-md-3 control-label">Facebook Account</label>
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.facebookAccount" class="form-control" id="facebookAccount" name="facebookAccount" placeholder="http://">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="linkedInAccount" class="col-md-3 control-label">LinkedIn Account</label>
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.linkedInAccount" class="form-control" id="linkedInAccount" name="linkedInAccount" placeholder="http://">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="googlePlusAccount" class="col-md-3 control-label">Google+ Account</label>
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.googlePlusAccount" class="form-control" id="googlePlusAccount" name="googlePlusAccount" placeholder="http://"><br />
+                                        </div>
+                                    </div>
+
+                                    <div style="display:none" class="hidden form-group">
+                                        <div class="col-md-9">
+                                            <input type="text" data-ng-model="rec.item.uid" class="form-control" id="recUid" name="recUid"><br />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- BEGIN SUBMIT CHANGE BUTTON-->
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <button type="button" data-ng-click="rec.submit()" id="recruitUpdate" class="btn btn-success"><i class="fa fa-check-circle"></i> Submit</button>
+                                        <button type="button" data-ng-click="rec.cancel()" id="recruitCancel" class="btn btn-warning"><i class="fa fa-warning"></i> Cancel</button>
+                                    </div>
+                                </div>
+                                <!-- END SUBMIT CHANGE BUTTON-->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Start of Photo Upload Modal -->
+                @*<script type="text/ng-template" id="imagesModal.html">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel">Photos</h4>
+                            </div>
+                            <div class="modal-body">
+                                <h3>Upload Photos below</h3>
+                                <!--Begin Dropzone Photo Form-->
+                                <form novalidate>
+                                    <div id="myDropzone" class="dropzone-previews">
+                                        <div dropzone="rec.dropzoneConfig" class="fallback" style="width:230px;height:160px"></div>
+                                    </div>
+                                </form>
+                                <!--End Dropzone Photo Form-->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-ng-click="rec.close()" data-dismiss="modal">Close</button>
+                                <button type="button" id="submit-all" data-ng-click="rec.submitPhotos()" class="btn btn-primary">Upload Photos</button>
+                            </div>
+                        </div>
+                    </script>*@
+                <!-- End of Photo Upload Modal -->
+                <!-- Start of HIDDEN Dropzone File Upload Modal -->
+                @*<div class="modal fade" id="filesModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true" style="display:none">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">Files & Projects</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h3>Upload files below</h3>
+                                    <form id="myDropzone" name="uploadImage" method="post" action="/api/recruiter/files" class="dropzone dz-clickable" enctype="multipart/form-data" data-ng-model="rec.item.recruiterPhoto.fullUrl">
+                                        <div class="dropzone-previews"></div>
+                                        <div class="fallback" style="width:230px;height:160px">
+                                            <input name="file" type="file" multiple />
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="closeRecModal" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="Submit" id="submit-all" class="btn btn-primary">Upload Files</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                <!-- End of HIDDEN Dropzone File Upload Modal -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END BASIC INPUT -->
+<!-- END PAGE CONTENT -->
+@section pageInitScripts{
+    <script type="text/javascript" src="~/scripts/ng/sabio-angular-dropzone.js"></script>
+    <script type="text/javascript" src="~/scripts/ng/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['dropzone', 'ui.bootstrap'];
+    </script>
+}
+
+<!-- BEGIN CUSTOM SCRIPTS-->
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/Services/sabio.services.recruiters.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.recruiterUserController = null;
+        sabio.page.recGuid = null;
+        //sabio.page.createdProfile = false;
+
+        sabio.page.startUp = function () {
+            sabio.page.recruiterUserController = sabio.ng.getControllerInstance($('#recruiterFormControllerElement'));
+            sabio.page.recGuid = $('#recUid').val();
+        }
+
+        sabio.services.recruiters.factory = function ($baseService) {
+            var service = sabio.services.recruiters;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        sabio.page.recruiterUserControllerFactory = function ($scope, $baseController, recruitersService, $modal) {
+
+
+            var viewModel = this;
+            viewModel.item = null;
+            viewModel.recruitersService = recruitersService;
+            viewModel.returnHome = _return;
+            viewModel.submit = _submit;
+            //viewModel.submitPhotos = _submitPhotos;
+            viewModel.cancel = _cancel;
+            //viewModel.open = _open;
+            //viewModel.close = _close;
+            viewModel.receivedItems = _onSuccess;
+            viewModel.onResultError = _onResultError;
+            viewModel.initializeDropzone = $scope.initializeDropzone = _initializeDropzone;
+
+            //  we end up using $scope here after all so that we can communicate with the module
+            Dropzone.autoDiscover = false;
+
+            $scope.dropzoneConfig = {
+                'options': { // passed into the Dropzone constructor
+                    'url': '/api/recruiter/images',
+                    'autoProcessQueue': true,
+                    'uploadMultiple': false,
+                    'parallelUploads': 1,
+                    'maxFiles': 1,
+                    init: viewModel.initializeDropzone
+                    //function () {
+                    //            if (viewModel.receivedItems == null) {
+                    //                this.disable();
+                    //                sabio.layout.showModal('alert-info', 'One more step', 'Please submit your Recruiter information before uploading any files')
+                    //            } else {
+                    //                console.log("upload complete.")
+                    //                this.enable();
+                    //                this.processQueue();
+                    //                this.on('complete', function () {
+                    //                    if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    //                        location.reload();
+                    //                    }
+                    //                });
+                    //            }
+
+                //  the directive is now being run correctly but you need to hook up the rest of the code here to handle the events
+                //  i.e. add all init options, have success and error handler, etc
+                // $scope.submitPhotos
+            }
+            }
+
+            $.extend(viewModel, $baseController);
+
+            viewModel.notify = viewModel.recruitersService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                viewModel.recruitersService.get(viewModel.receivedItems, viewModel.onResultError);
+            }
+
+            function _submit() {
+                var data = viewModel.item;
+
+                if ($('#recUid').val() == 0 || $('#recUid').val() == "" || $('#recUid').val() == "00000000-0000-0000-0000-000000000000") {
+                    viewModel.recruitersService.post(data, viewModel.returnHome, viewModel.onResultError);
+                } else {
+                    viewModel.recruitersService.put(data, viewModel.returnHome, viewModel.onResultError);
+                }
+            }
+
+            function _initializeDropzone() {
+                console.log("HERE in init dropzone");
+                //this.on('complete', function () {
+                //    if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                //        location.reload();
+                //    }
+                //});
+            }
+
+            //function _submitPhotos() {
+            //    console.log("Reached submit-photos function.");
+            //    .getQueuedFiles()
+            //    .processQueue();
+            //}
+
+            //function _open(size) {
+
+            //    var modalInstance = $modal.open({
+            //        templateUrl: 'imagesModal.html',
+            //        controller: 'recruiterUserController as rec',
+            //        size: size
+            //    });
+            //}
+
+            //function _close() {
+            //    console.log("Reached modal-close function");
+            //    $modalInstance.dismiss('cancel');
+            //}
+
+
+            function _return() {
+                window.open('/recruiter/', '_self');
+            }
+
+            function _cancel() {
+                window.open('/recruiter/', '_self');
+            }
+
+            function _onSuccess(result) {
+                viewModel.notify(function () {
+                    viewModel.item = result.item;
+                });
+            }
+
+            function _onResultError(jqXhr, error) {
+                console.log("Abort! Abort! Abort! Please contact your system administrator.");
+                console.log(error);
+            }
+        };
+
+        sabio.ng.addService(sabio.ng.app.module,
+            "recruitersService",
+            ["$baseService"],
+            sabio.services.recruiters.factory);
+
+        sabio.ng.addController(sabio.ng.app.module,
+            "recruiterUserController",
+            ['$scope', '$baseController', 'recruitersService', '$modal'],
+            sabio.page.recruiterUserControllerFactory);
+
+    </script>
+}
+
+@*sabio.page.form = $("#form-recruitInfo");
+    sabio.page.createdProfile = false;
+
+    sabio.page.startUp = function () {
+        sabio.page.setUpValidation();
+        sabio.page.form.on("submit", sabio.page.handlers.manageRecruiter);
+        sabio.services.recruiters.get(sabio.page.handlers.onGetProfileSuccess, sabio.page.handlers.onPopulateFailure);
+        $("#fileUpload").on('click', sabio.page.handlers.filesUploadCheck);
+        $("#photoUpload").on('click',sabio.page.handlers.imagesUploadCheck);
+    }
+
+    //Form Validation
+    sabio.page.handlers.manageRecruiter = function (event) {
+
+        event.preventDefault();
+        console.log("click handler working");
+
+        //var isValid = $("#form-recruitInfo").valid();
+        //console.log("form updates valid = " + isValid);
+
+        if (sabio.page.form.valid()) {
+            if ($('#uid').val() == null || $('#uid').val() == 0 || $('#uid').val() == "" || $('#uid').val() == "00000000-0000-0000-0000-000000000000") {
+                sabio.services.recruiters.post(sabio.page.form.serialize(), sabio.page.handlers.onInsertSuccess, sabio.page.handlers.onInsertFailure);
+            }
+            else {
+                sabio.services.recruiters.put(sabio.page.form.serialize(), sabio.page.handlers.onUpdateSuccess, sabio.page.handlers.onUpdateFailure);
+            }
+        }
+
+
+    }
+
+    sabio.page.handlers.onGetProfileSuccess = function (result) {
+        var profile = result.item;
+        console.log(result);
+
+        if (profile == null) {
+            sabio.page.createdProfile = false;
+        } else {
+            sabio.page.createdProfile = true;
+        }
+
+        $("#specialty").val(profile.specialty);
+        $("#location").val(profile.location);
+        $("#url").val(profile.url);
+        $("#phone1").val(profile.phoneNumber1);
+        $("#phone2").val(profile.phoneNumber2);
+        $("#companyLogo").val(profile.companyLogo);
+        $("#summary").text(profile.summary);
+        $("#twitterAccount").val(profile.twitterAccount);
+        $("#facebookAccount").val(profile.facebookAccount);
+        $("#linkedInAccount").val(profile.linkedInAccount);
+        $("#googlePlusAccount").val(profile.googlePlusAccount);
+        $("#uid").val(profile.uid);
+
+    }
+
+    sabio.page.handlers.onInsertSuccess = function (result) {
+        sabio.page.createdProfile = true
+        console.log(result);
+        var success = result.item;
+        $("#uid").val(success);
+        console.log("Success! Woot! New Recruiter Profile Created");
+        sabio.layout.showModal('alert-success', 'Recruiter Profile Submitted', 'You have successfully created a Recruiter Profile!')
+    }
+
+    sabio.page.handlers.onInsertFailure = function (result) {
+        sabio.page.createdProfile == true;
+        console.log("New Recruiter Profile Creation Failed");
+        sabio.layout.showModal('alert-danger', 'Error', 'Recruiter Profile not submitted!')
+    }
+
+    sabio.page.handlers.onUpdateSuccess = function (result) {
+        sabio.layout.showModal('alert-success', 'Recruiter Profile Updated', 'You have successfully updated your Recruiter Profile!')
+    }
+
+    sabio.page.handlers.onUpdateFailure = function (result) {
+        sabio.layout.showModal('alert-danger', 'Error', 'Recruiter Profile not updated!')
+    }
+
+    sabio.page.handlers.onPopulateFailure = function (result) {
+        sabio.layout.showModal('alert-danger', 'Abort! Abort! Abort!', 'Please contact your System Administrator!')
+    }
+
+    sabio.page.setUpValidation = function () {
+        sabio.page.form.validate({
+            rules: {
+                specialty: {
+                    required: true,
+                    minlength: 2
+                },
+                location: {
+                    required: true,
+                    minlength: 2
+                },
+                url: {
+                    required: false
+                },
+                phone1: {
+                    required: true,
+                    minlength: 10
+                },
+                phone2: {
+                    required: false
+                },
+                companyLogo: {
+                    required: false
+                },
+                summary: {
+                    required: false
+                },
+                twitterAccount: {
+                    required: false
+                },
+                facebookAccount: {
+                    required: false
+                },
+                linkedInAccount: {
+                    required: false
+                },
+                googlePlusAccount: {
+                    required: false
+                },
+            },
+        });
+    }
+
+
+    //File Upload Modal
+    sabio.page.handlers.filesUploadCheck = function (e) {
+        e.preventDefault();
+        if (sabio.page.createdProfile == false) {
+            sabio.layout.showModal('alert-info', 'One more step', 'Please submit your Recruiter information before uploading any files')
+        } else {
+            $('#filesModal').modal('show');
+        }
+    }
+
+    //Photo Upload Modal
+    sabio.page.handlers.imagesUploadCheck = function (e) {
+        e.preventDefault();
+        if (sabio.page.createdProfile == false) {
+            sabio.layout.showModal('alert-info', 'One more step', 'Please submit your Recruiter information before uploading any pictures')
+        } else {
+            $('#imagesModal').modal('show');
+        }
+    }
+
+    //Dropzone function
+        Dropzone.options.myAwesomeDropzone = { // The camelized version of the ID of the form element
+
+            // The configuration of dropzone
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            parallelUploads: 25,
+            maxFiles: 25,
+
+            // Setting up of the dropzone
+            init: function () {
+                var myDropzone = this;
+                $("#submit-all").click(function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    myDropzone.processQueue();
+                }
+                );
+                this.on('complete', function () {
+                    if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+
+    }*@

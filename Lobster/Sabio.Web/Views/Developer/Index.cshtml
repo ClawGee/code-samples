@@ -1,0 +1,357 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+
+<!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Developer Profile</h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li class="active">Profile</li>
+        </ol>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- PAGE CONTENT -->
+<div data-ng-controller="developerController as dev">
+    <div class="profileSection" id="developerControllerContainer">
+        <!-- BEGIN PHOTO UPLOAD SECTON -->
+        <div ng-cloak class="col-md-4">
+            <h3 class="widget-title">PROFILE PICTURE</h3>
+            <img id="avatar" class="resize" data-ng-if="dev.developerPhotoUrl!=null" ng-src="{{dev.developerPhotoUrl}}" />
+            <img id="avatar" class="resize" data-ng-if="dev.developerPhotoUrl==null" ng-src="http://www.propelarizona.com/upload/thumb/no_img.jpg" />
+        </div>
+        <div class="col-md-6 row">
+            <h3 class="widget-title">EDIT YOUR PROFILE PHOTO</h3>
+            <p> (.jpg, .gif, or .png files only!)</p>
+            <form novalidate>
+                <div dropzone="dev.dropzoneConfig" id="myDropzone" class="fallback dropzone" style="height:180px"></div>
+            </form>
+        </div>
+        <!-- END PHOTO UPLOAD SECTON -->
+        <div class="page-content">
+            <div class="container">
+                <div class="row col-md-12">
+                    <form name="devForm" id="developerForm" class="form-horizontal margin-bottom-30px" novalidate="novalidate" role="form" method="get">
+                        <div class="col-md-3">
+                            <!-- Contact Info -->
+                            <div class="widget form-group" id="contact-info">  
+                                <h3 class="widget-title">CONTACT INFO</h3>
+                                <div class="contact-info fa-ul" >
+                                    <label class=" control-label" for="phone"> Phone</label>
+                                    <input class="form-control valid" type="text" placeholder="(555)555-5555*" name="phone" aria-invalid="false" ng-model="dev.item.phone" required>
+                                    <span class="help-inline" ng-show="devForm.phone.$error.required && devForm.phone.$dirty">Please enter a phone number</span>
+                                    <label class="control-label" for="email">Preferred Email Contact</label>
+                                    <input class="form-control valid" type="email" placeholder="email@example.com*" name="email" aria-invalid="false" ng-model="dev.item.email" required>
+                                    <span class="help-inline" ng-show="devForm.email.$error.email && devForm.email.$dirty">Invalid email</span>
+                                    <label class="control-label" for="address1">Address Line 1</label>
+                                    <input class="form-control valid" type="text" placeholder="1234 Pleasant St*" name="address1" aria-invalid="false" ng-model="dev.item.developerAddresses.addressLine1" required>
+                                    <span class="help-inline" ng-show="devForm.address.$error.required && devForm.address.$dirty">Please enter an address</span>
+                                    <label class="control-label" for="address2">Address Line 2</label>
+                                    <input class="form-control valid" type="text" name="address2" aria-invalid="false" ng-model="dev.item.developerAddresses.addressLine2">
+                                    <label class="control-label" for="city">City</label>
+                                    <input class="form-control valid" type="text" placeholder="Buford*" name="city" aria-invalid="false" ng-model="dev.item.developerAddresses.city" required>
+                                    <span class="help-inline" ng-show="devForm.city.$error.required && devForm.city.$dirty">Please enter your city</span>
+                                    <label class="control-label" for="state">State</label>
+                                    <select class="form-control" id="state" name="state" placeholder="State*" data-ng-options="state.stateProvinceId as state.name for state in dev.itemState" data-ng-model="dev.item.developerAddresses.state" required></select>      
+                                    <label class="control-label" for="zip">Zip</label>
+                                    <input class="form-control" type="text" name="zip" id="zip" placeholder="99577-0727" data-ng-model="dev.item.developerAddresses.zip" required="" data-ng-minlength="5" data-ng-maxlength="10">
+                                    <div data-ng-show="addressForm.$submitted || addressForm.zip.$touched">
+                                        <div data-ng-show="addressForm.zip.$error.required">This field is required.</div>
+                                        <div data-ng-show="form.description.$error.minlength">Description should be at least 5 characters.</div>
+                                        <div data-ng-show="form.description.$error.maxlength">Description should be no more than 10 characters.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Contact Info -->
+                            <!-- Languages Tags -->
+                            <div class="widget form-group">
+                                <h3 class="widget-title">PROGRAMMING LANGUAGES</h3>
+                                <div class="languages fa-ul">
+                                    <label class="control-label sr-only" for="language1"> Programming Language 1</label>
+                                    <input id="language1" class="form-control valid" type="text" placeholder="Language 1*" name="language1" aria-invalid="false" ng-model="dev.item.language1" required>
+                                    <span class="help-inline" ng-show="devForm.language1.$error.required && devForm.language1.$dirty">Please enter a known language</span>
+                                    <label class="control-label sr-only" for="language2"> Programming Language 2</label>
+                                    <input id="language2" class="form-control valid" type="text" placeholder="Language 2*" name="language2" aria-invalid="false" ng-model="dev.item.language2" required>
+                                    <span class="help-inline" ng-show="devForm.language2.$error.required && devForm.language2.$dirty">Please enter another known language</span>
+                                    <label class="control-label sr-only" for="language3"> Programming Language 3</label>
+                                    <input id="language3" class="form-control valid" type="text" placeholder="Language 3" name="language3" aria-invalid="false" ng-model="dev.item.language3">
+                                    <label class="control-label sr-only" for="language4"> Programming Language 4</label>
+                                    <input id="language4" class="form-control valid" type="text" placeholder="Language 4" name="language4" aria-invalid="false" ng-model="dev.item.language4">
+                                    <label class="control-label sr-only" for="language5"> Programming Language 5</label>
+                                    <input id="language5" class="form-control valid" type="text" placeholder="Language 5" name="language5" aria-invalid="false" ng-model="dev.item.language5">
+                                </div>
+                            </div>
+                            <!--End languages tag-->
+                            <!-- Text Widget -->
+                            <div class="widget form-group">
+                                <h3 class="widget-title">PROFESSIONAL EXPERIENCE</h3>
+                                <div class="Professional Experience fa-ul">
+                                    <label class="control-label sr-only" for="experience1">Experience1</label>
+                                    <input id="experience1" class="form-control valid" type="text" placeholder="Company/Project*" name="experience1" aria-invalid="false" ng-model="dev.item.experience1" required>
+                                    <span class="help-inline" ng-show="devForm.experience1.$error.required && devForm.experience1.$dirty">Required</span>
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <select id="yearsExperience1" class="valid" name="yearsexperience1" ng-model="dev.item.yearsExperience1">
+                                                <option value="9">Experience</option>
+                                                <option value="1">2-5 Years</option>
+                                                <option value="2">6-10 Years</option>
+                                                <option value="3">Freelance</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <label class="control-label sr-only" for="experience2">Experience2</label>
+                                    <input id="yearsExperience2" class="form-control valid" type="text" placeholder="Company/Project*" name="experience2" aria-invalid="false" ng-model="dev.item.experience2" required>
+                                    <span class="help-inline" ng-show="devForm.experience2.$error.required && devForm.experience2.$dirty">Required</span>
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <select id="yearsExperience2" class="valid" name="yearsexperience2" ng-model="dev.item.yearsExperience2">
+                                                <option value="9">Experience</option>
+                                                <option value="1">2-5 Years</option>
+                                                <option value="2">6-10 Years</option>
+                                                <option value="3">Freelance</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <label class="control-label sr-only" for="experience3">Experience3</label>
+                                    <input id="experience3" class="form-control valid" type="text" placeholder="Company/Project" name="experience3" aria-required="true" aria-invalid="false" ng-model="dev.item.experience3">
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <select id="yearsExperience3" class="valid" name="yearsexperience3" aria-required="false" ng-model="dev.item.yearsExperience3">
+                                                <option value="9">Experience</option>
+                                                <option value="1">2-5 Years</option>
+                                                <option value="2">6-10 Years</option>
+                                                <option value="3">Freelance</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <label class="control-label sr-only" for="experience4">Experience4</label>
+                                    <input id="experience4" class="form-control valid" type="text" placeholder="Company/Project" name="experience4" aria-required="true" aria-invalid="false" ng-model="dev.item.experience4">
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <select id="yearsExperience4" class="valid" name="yearsexperience4" aria-required="false" ng-model="dev.item.yearsExperience4">
+                                                <option value="9">Experience</option>
+                                                <option value="1">2-5 Years</option>
+                                                <option value="2">6-10 Years</option>
+                                                <option value="3">Freelance</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Text Widget -->
+                        </div>
+                        <div class="col-md-9">
+                            <section>
+                                <h3>Professional Summary</h3>
+                                <div class="form-group">
+                                    <label for="pro-summary" class="control-label sr-only">PROFESSIONAL SUMMARY</label>
+                                    <div class="col-sm-12">
+                                        <textarea class="form-control" id="summary" name="summary" rows="5" cols="30" placeholder="Brief Description" ng-model="dev.item.summary"></textarea>
+                                    </div>
+                                </div>
+                                <br>
+                                <h3>Professional Goals</h3>
+                                <div class="form-group">
+                                    <label for="pro-goals" class="control-label sr-only">PROFESSIONAL GOALS</label>
+                                    <div class="col-sm-12">
+                                        <textarea class="form-control" id="goals" name="goals" rows="5" cols="30" placeholder="Brief Description" ng-model="dev.item.goals"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-6">
+                                        <button id="submitForm" class="btn btn-primary" type="submit" ng-disabled="devForm.$invalid" data-ng-click="dev.processForm(dev.item)">
+                                            <i class="fa loading-icon"></i>
+                                            <span>Submit Profile</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                            </section>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END PAGE CONTENT -->
+<!--Start JavaScript-->
+@section pageInitScripts{
+    <script type="text/javascript" src="~/scripts/ng/sabio-angular-dropzone.js"></script>
+    <script type="text/javascript" src="~/scripts/ng/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['dropzone', 'ui.bootstrap'];
+    </script>
+}
+
+@section Scripts {
+
+    <script type="text/javascript" , src="~/Scripts/Services/services.developer.js"></script>
+    <script type="text/javascript">
+
+
+        // **ANGULAR CODE START OF ANGULAR**
+
+        sabio.page.developerController = null;
+        sabio.page.addressController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.developerController = sabio.ng.getControllerInstance($("#developerControllerContainer"));
+        }
+
+        sabio.services.developerFactory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.developer;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.services.addressFactory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.address;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.page.developerControllerFactory = function ($scope, $baseController, $developerService, $addressService) {
+            var vm = this;
+            vm.item = null;
+
+            vm.formFilled = false;
+            vm.selectedFormData = null;
+            vm.$developerService = $developerService;
+            vm.$addressService = $addressService;
+            vm.onProfileGetSuccess = _onProfileGetSuccess;
+            vm.onProfileGetError = _onProfileGetError;
+            vm.processForm = _processForm;
+            vm.onInsertSuccess = _onInsertSuccess;
+            vm.onInsertFailure = _onInsertFailure;
+            vm.onUpdateSuccess = _onUpdateSuccess;
+            vm.onUpdateFailure = _onUpdateFailure;
+            vm.initializeDropzone = $scope.initializeDropzone = _initializeDropzone;
+            vm.itemState = null;
+            vm.states = _stateSuccess;
+            vm.statesFail = _stateFail;
+
+            Dropzone.autoDiscover = false;
+            $scope.dropzoneConfig = {
+                'options': { // passed into the Dropzone constructor
+                    'url': '/api/developer/photoupload',
+                    'autoProcessQueue': true,
+                    'uploadMultiple': false,
+                    'parallelUploads': 1,
+                    'maxFiles': 1,
+                    init: vm.initializeDropzone
+                },
+            }
+
+            $.extend(vm, $baseController);
+
+
+            vm.notify = vm.$developerService.getNotifier($scope);
+            vm.notify = vm.$addressService.getNotifier($scope);
+
+            render();
+
+            function _initializeDropzone() {
+                console.log("HERE in init dropzone");
+                this.on('complete', function () {
+                    if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                        location.reload();
+                    }
+                });
+            }
+
+            function render() {
+                //this checks for an existing profile, receives the data if there is a profile, and calls the special
+                //notify method that will trigger ng to refresh the page.
+                vm.$developerService.get(vm.onProfileGetSuccess, vm.onProfileGetError);
+                vm.$addressService.getStates(vm.states, vm.statesFail);
+            }
+
+            function _stateSuccess(result) {
+                vm.notify(function () {
+                    vm.itemState = result.items;
+                });
+            }
+
+            function _stateFail() {
+                sabio.layout.showModal("alert-danger", "Error!", "The page did not load properly. Please check back later.");
+            }
+
+            function _onProfileGetSuccess(data) {
+                //var index = $scope.selected
+                console.log('onProfileGetSuccess called');
+                if (data.item != null) {
+                    console.log(data.item);
+                    vm.notify(function () {
+                        vm.item = data.item;
+                        vm.developerPhotoUrl = vm.item.developerPhoto.fullUrl;
+                    });
+                } else {
+                    console.log('A profile has not yet been created.');
+                }
+            }
+
+            function _onProfileGetError(jqXhr, error) {
+                console.error("Existing developer profile failed to load.");
+                sabio.layout.showModal("alert-danger", "Oops!", "Your previously saved profile info was not retrieved correctly. Please refresh the page to try again.");
+            }
+
+            function _processForm() {
+                console.log('processForm called');
+                data = vm.item;
+                data.AddressLine1 = data.developerAddresses.addressLine1;
+                data.AddressLine2 = data.developerAddresses.addressLine2;
+                data.City = data.developerAddresses.city;
+                data.State = data.developerAddresses.state;
+                data.Zip = data.developerAddresses.zip;
+                data.addressGuid = data.developerAddresses.uid;
+
+                if (vm.item.uid == null || vm.item.uid == "" || vm.item.uid == "00000000-0000-0000-0000-000000000000") {
+                    vm.$developerService.post(data, vm.onInsertSuccess, vm.onInsertFailure);
+                }
+                else {
+                    vm.$developerService.put(data, vm.onUpdateSuccess, vm.onUpdateFailure);
+                }
+            }
+
+            function _onInsertSuccess() {
+                console.log("You have created a profile");
+                sabio.layout.showModal("alert-success", "Success!", "Your profile has been created.");
+
+            }
+
+            function _onInsertFailure() {
+                sabio.layout.showModal('alert-danger', 'Oops!', 'There was a problem creating your profile. Please try again.');
+            }
+
+            function _onUpdateSuccess() {
+                sabio.layout.showModal("alert-success", "Success!", "Your profile has been updated.");
+                console.log("Woot woot, you have update");
+            }
+
+            function _onUpdateFailure() {
+                sabio.layout.showModal('alert-danger', 'Error', 'Profile not Updated! Please make sure all fields are filled out correctly.');
+                console.log("Oh Nos, update failed :/");
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module, "$developerService", ["$baseService"], sabio.services.developerFactory);
+        sabio.ng.addService(sabio.ng.app.module, "$addressService", ["$baseService"], sabio.services.addressFactory);
+        sabio.ng.addController(sabio.ng.app.module, "developerController", ['$scope', '$baseController', "$developerService", "$addressService"], sabio.page.developerControllerFactory);
+
+
+
+
+
+    </script>
+}

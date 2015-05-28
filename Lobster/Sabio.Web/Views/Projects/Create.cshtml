@@ -1,0 +1,329 @@
+﻿@model Sabio.Web.Models.ViewModels.ProjectsViewModel<Guid?>
+@{
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<br />
+<div data-ng-controller="createProjectsController as dashboard" id="createProjectsCtrler">
+    <div class="col-md-9">
+        <!-- BASIC INPUT -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title section-heading no-margin">My Projects</h2>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Project Name</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" placeholder="Enter a project name" ng-model="dashboard.item.name" ng-minlength=2
+                                   ng-maxlength=100 required>
+                            <span role="alert" class="help-inline error">
+                                <span ng-show="projectForm.dashboard.name.$error.maxlength">Project name is required</span>
+                                <span ng-show="projectForm.dashboard.name.$error.minlength">Too short! </span>
+                                <span ng-show="projectForm.dashboard.name.$error.maxlength">Too long! </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error' : projectForm.$invalid && !projectForm.$pristine }">
+                        <label class="col-md-2 control-label">Website</label>
+                        <div class="col-md-10">
+                            <input type="text" name="url" placeholder="Enter your website" class="form-control" ng-model="dashboard.item.url" required>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error' : projectForm.$invalid && !projectForm.$pristine }">
+                        <label class="col-md-2 control-label">Description</label>
+                        <div class="col-md-10">
+                            <textarea class="form-control" placeholder="Enter a description" rows="4" name="description" ng-model="dashboard.item.description" ng-minlength=20 ng-maxlength=400 required></textarea>
+                        </div>
+                        <span role="alert" class="help-inline error">
+                            <span ng-show="projectForm.description.$error.maxlength">Description is required</span>
+                            <span ng-show="projectForm.description.$error.minlength">Too short! </span>
+                            <span ng-show="projectForm.description.$error.maxlength">Too long! </span>
+                        </span>
+                    </div>
+                    <!--NEW DATE PICKER-->
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Date Launched</label>
+                        <div class="col-md-10">
+
+                            <div class="form-group">
+                                <p class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="dashboard.openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           datepicker-popup="MM/dd/yyyy"
+                                           ng-model="dashboard.item.launchdate"
+                                           is-open="dashboard.launchDateOpened"
+                                           ng-required="true"
+                                           close-text="Close"
+                                           placeholder="mm/dd/yyyy"
+                                           date-type="string" />
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- END NEW DATE PICKER-->
+                    <!-- START CHECK BOXES-->
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Technologies Used</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="fancy-checkbox" ng-repeat="(key, option) in dashboard.technologyOptions">
+                                    <input type="checkbox"
+                                           name="technologies[]"
+                                           value="{{key}}"
+                                           ng-checked="dashboard.isTechnologyChecked(key)"
+                                           ng-click="dashboard.toggleTechnology(key, option)">
+                                    <span>{{option}}</span>
+                                </label>
+
+                                <pre>{{dashboard.item.technologies|json}}</pre>
+                                <span class="col-sm-10">
+                                    <button class="btn btn-success" type="submit" ng-click="dashboard.submissionbutton()">
+                                        <i class=" fa fa-check-circle">
+                                        </i>
+                                        <span id="projBtn">
+                                            Save Project
+                                        </span>
+                                    </button>
+                                </span>
+                            </div>
+                            <input type="hidden" id="projectUid" name="projectUid" value="@Model.Item" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- END CHECK BOXES-->
+
+                <div class="form-group hidden">
+                    <label for="exampleInputFile" class="col-md-2 control-label">File input</label>
+                    <div class="col-md-10">
+                        <input type="file" id="exampleInputFile">
+                        <p class="help-block">
+                            <em>Example block-level help text here.</em>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END BASIC INPUT -->
+</div>
+<div>
+    <input type="hidden" id="projectUid" name="projectUid" value="@Model.Item" />
+</div>
+@section pageInitScripts{
+    <script type="text/javascript" src="~/scripts/ng/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+};
+
+@section scripts {
+
+    <script type="application/json" id="technologyOptions">
+        @Html.Raw(Json.Encode(Model.TechnologyOptions))
+    </script>
+    <script type="text/javascript" src="~/Scripts/Services/services.projects.js"></script>
+    <script type="text/javascript">
+
+
+        /*********************   ANGULAR   *********************/
+
+        sabio.page.startUp = function () {
+            sabio.page.createProjectsController = sabio.ng.getControllerInstance($("#createProjectsCtrler"));
+            var projectUid = $("#projectUid").val();
+            sabio.page.projectUid = projectUid;
+
+        }
+
+        sabio.services.projects.Factory = function ($baseService) {
+
+            var angularServiceObject = sabio.services.projects;
+
+            var newService = $.extend(true, {}, angularServiceObject, $baseService);
+
+            return newService;
+
+        }
+
+        sabio.page.createProjectsControllerFactory = function (
+           $scope,
+           $baseController,
+           $ProjectService) {
+
+            var vm = this;
+            vm.item = {};
+            vm.$ProjectService = $ProjectService;
+            vm.endPoint = "";
+            vm.projectUid = null
+
+            vm.receiveItem = _receiveItem;
+            vm.onUsersError = _onUsersError;
+            vm.toggleTechnology = _toggleTechnology;
+            vm.isTechnologyChecked = _isTechnologyChecked;
+            vm.submissionbutton = _submissionbutton;
+            vm.openDatePicker = _openDatePicker;
+            vm.today = _today;
+            vm.clear = _clear;
+            //vm.open = _open;
+            vm.dateOptions = {
+                formatYear: "yy",
+                startingDate: 1,
+            };
+
+            vm.launchDateOpened = false;
+            vm.formats = ['shortDate'];
+            vm.format = vm.formats[0];
+
+
+            vm.technologyOptions = JSON.parse($("#technologyOptions").html());
+            vm.technologySelected = [];
+
+            console.log("tech options", vm.technologyOptions);
+
+            $.extend(vm, $baseController);
+
+            vm.notify = vm.$ProjectService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$ProjectService.getByProjUid(sabio.page.projectUid, vm.receiveItem, vm.onUsersError);
+            }
+            /*
+                this function will be called for each of the checkeboxes whenever angular needs to know whether or not that box should be checked.
+                the argument coming in will be a number corresponding to a row in vm.technologyOptions, which is actually being passed from an enum on the server side.
+                we examine whether or not each technology index is included in our list of selected technologies to determine if each checkbox should be checked.
+            */
+            function _isTechnologyChecked(techIndex) {
+                if (typeof (vm.item.technologies) == 'undefined' || vm.item.technologies == null)
+                    return false;
+
+                techIndex = parseInt(techIndex);
+
+                var exists = vm.item.technologies.indexOf(techIndex);
+
+                return (exists > -1);
+            }
+            /*
+                this function is called whenever a technology checkbox is clicked. since we have written the directive as ng-click="dashboard.toggleTechnology(key)"
+                it will send the key from vm.technologyOptions into this function when a checkbox is clicked, since that key has been bound to each individual checkbox
+                during ng-repeat. in this function we need to see if they have already checked that box and if so, remove it from the list of selected techs.
+                if they have not yet selected this tech then we add it to the selected list. this same list vm.item.technologies is used in _isTechnologyChecked()
+                to see if each checkbox should be checked or not.
+            */
+            function _toggleTechnology(techIndex, option) {
+                if (typeof (vm.item.technologies) == 'undefined' || vm.item.technologies == null)
+                    vm.item.technologies = [];
+
+                techIndex = parseInt(techIndex);
+
+                var exists = vm.item.technologies.indexOf(techIndex);
+
+                if (exists < 0) {
+                    vm.item.technologies.push(techIndex);
+                }
+                else {
+                    vm.item.technologies.splice(exists, 1);
+                }
+
+                console.log("selected technologies from checkboxes: ", vm.item.technologies);
+                console.log(vm.item.technologies.indexOf);
+                console.log(techIndex);
+                console.log(option); 
+            }
+
+
+            function _getDayClass(date, mode) {
+                console.log("in getDayClass");
+                if (mode === 'day') {
+                    var dayToCheck = new Date(date).sethours(0, 0, 0, 0);
+
+                    for (var i = 0; i < $scope.events.length; i++) {
+                        var currentDay = new Date(vm.events[i].date).setHours(0, 0, 0, 0);
+
+                        if (dayToCheck === currentDay) {
+                            return vm.events[i].status;
+                        }
+                    }
+                }
+            }
+
+            function _openDatePicker($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                vm.launchDateOpened = true;
+            }
+
+            function _clear() {
+                console.log("in clear");
+                vm.dt = null;
+                console.log(vm.dt);
+            };
+
+            function _today() {
+                console.log("in today");
+                vm.dt = new Date();
+                console.log(vm.dt);
+            };
+
+
+            function _receiveItem(data) {
+                $(".projBtn").html("Save Edits"); 
+                if (data.item != null) {
+                    vm.notify(function () {
+                        vm.item = data.item;
+                    });
+                }
+            }
+
+
+            function _onUsersError(jqXhr, error) {
+
+                console.error(error);
+
+            }
+
+
+            function _submissionbutton() {
+
+                var data = vm.item;
+
+                data.launchdate = vm.formatDate(data.launchdate);
+
+                if ((sabio.page.projectUid).length > 0) {
+                    var projectUid = vm.projectUid;
+                    vm.$ProjectService.update(sabio.page.projectUid, data, vm.receiveItem, vm.onUsersError);
+                }
+                else {
+                    vm.$ProjectService.create(data, vm.receiveItem, vm.onUsersError);
+                }
+
+            }
+
+        }
+
+
+        sabio.ng.addService(
+            sabio.ng.app.module,
+            "$ProjectService",
+            ["$baseService"],
+            sabio.services.projects.Factory);
+
+
+        sabio.ng.addController(
+            sabio.ng.app.module,
+            "createProjectsController",
+            ['$scope', '$baseController', "$ProjectService"],
+            sabio.page.createProjectsControllerFactory);
+
+    </script>
+}
+

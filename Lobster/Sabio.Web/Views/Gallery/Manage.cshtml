@@ -1,0 +1,277 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<int>
+
+@{
+    ViewBag.Title = "Manage";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- BREADCRUMBS -->
+<div class="page-header" id="gallery-header">
+    <div class="container">
+        <h1 class="page-title pull-left galleryTitle"></h1>
+        <div class="col-md-3">
+            <button type="button" id="addPhotoBtn" class="btn btn-success btn-sm btn-gallery"><i class="fa fa-picture-o"></i>  Manage Photos</button>
+        </div>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+
+            <li class="active">Photo Galleries</li>
+        </ol>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!--BEGIN PAGE CONTENT-->
+<div id="photo-form" class="hidden page-content">
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title section-heading no-margin">Manage Photos</h2>
+            </div>
+            <div class="panel-body">
+                <form id="form-galleryInfo" role="form">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Title</label>
+                            <div class="col-sm-10">
+                                <p class="galleryTitle form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <p class="galleryDescription form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Date Created</label>
+                            <div class="col-sm-10">
+                                <p class="galleryDate form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group hidden" style="display:none">
+                            <div class="col-sm-10">
+                                <p id="galleryId" class="form-control-static" name="galleryId" value=galleryId></p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!--Begin Dropzone Photo Form-->
+                <form id="gallery-dropzone" action="/api/gallery/images/@Model.Item" class="dropzone">
+                    <div class="dropzone-previews"></div>
+                    <div class="fallback" style="width:230px;height:160px">
+                        <input name="file" type="file" multiple />
+                    </div>
+                </form>
+                <!--End Dropzone Photo Form-->
+                <div>
+                    <p class="pull-right">
+                        <button type="submit" id="submit-all" class="btn btn-primary">Upload Photos</button>
+                        <button id="cancelPhotoBtn" class="btn btn-warning"><i class="fa fa-close"></i> Cancel</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div id="photos"></div>*@
+
+<!-- END PORTFOLIO ITEM WRAPPER -->
+<div class="page-content">
+    <div class="container">
+        <div class="portfolio-item-wrapper">
+            <ul class="portfolio-item-list portfolio-isotope portfolio-nospace list-col-4">
+
+                <!-- PORTFOLIO ITEM TEMPLATE -->
+
+                <li id="portfolioTemplate" class="hidden portfolio-item design">
+                    @*<div class="overlay"></div>
+                        <div class="info">
+                            <h4 class="title">The Edge</h4>
+                            <p class="brief-description">UI &amp; UX Design</p>
+                            <a href="#" class="btn">read more</a>
+                        </div>*@
+                    <div class="media-wrapper">
+                        <img class="photoGallery resize" src="" alt="Photo Unavailable">
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- END PORTFOLIO ITEM TEMPLATE -->
+<!--END PAGE CONTENT-->
+@section Scripts{
+    <script type="text/javascript" src="~/Scripts/plugins/isotope/imagesloaded.pkgd.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/plugins/isotope/isotope.pkgd.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/Services/sabio.services.galleries.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.createdProfile = false;
+        sabio.page.galleryId = @Model.Item;
+
+
+        sabio.page.startUp = function () {
+
+            console.log("Gallery Id: " + sabio.page.galleryId);
+            sabio.services.galleries.getGalleryById(sabio.page.galleryId, sabio.page.handlers.onGetGallerySuccess, sabio.page.handlers.onPopulateFailure);
+            sabio.services.galleries.getGallery(sabio.page.galleryId, sabio.page.handlers.onGetMediasSuccess, sabio.page.handlers.onPopulateFailure);
+            
+            $("#editGalleryBtn").on("click", sabio.page.handlers.editGalleryInfo);
+            $("#addPhotoBtn").on("click", sabio.page.handlers.addPhotos);
+            $("#cancelPhotoBtn").on("click", sabio.page.handlers.cancelPhotos);
+
+        }
+
+        //sabio.page.handlers.checkForGalleryId = function () {
+        //    //handle "null" response that comes back from AJAX call
+        //    if ($('#galleryId').val()) {
+        //        sabio.page.handlers.galleryLoaded = true;
+        //        var galleryId = $("#galleryId").val();
+        //        sabio.services.galleries.getGallery(galleryId, sabio.page.handlers.onGetProfileSuccess, sabio.page.handlers.onPopulateFailure);
+        //    };
+        //};
+
+        sabio.page.handlers.editGalleryInfo = function () {
+            window.open('/gallery/', '_self')
+        }
+
+        sabio.page.handlers.onGetMediasSuccess = function (result) {
+
+            console.log(result);
+
+            if (result.items == null) {
+                sabio.page.handlers.uploadPhotos();
+            } else {
+                $.each(result.items, sabio.page.processMedias);
+            }
+        }
+
+        sabio.page.initializeIsotope = function () {
+
+
+            if($('.portfolio-isotope').length > 0) {
+                $container = $('.portfolio-isotope');
+
+                var $isoObj = $container.isotope({
+                    itemSelector: '.portfolio-item',
+                    layoutMode: 'masonry'
+                });
+
+                $container.parent().height($container.height());
+            }
+        }
+
+        //var $container = $('.portfolio-isotope');
+
+        //$container.imagesLoaded($container, function() {
+        //    if ($container.length > 0) {
+
+        //        var $isoObj = $container.isotope({
+        //            itemSelector: '.portfolio-item',
+        //            layoutMode: 'masonry'
+        //        });
+
+        //        $container.parent().height($container.height());
+        //    }
+        //});
+
+
+        sabio.page.cloneGallery = function () {
+
+            var clone = $("#portfolioTemplate").clone();
+            clone.appendTo(".portfolio-isotope");
+            return clone;
+        }
+
+        sabio.page.completedCloneGallery = function () {
+            var cGallery = sabio.page.cloneGallery();
+            cGallery.removeClass("hidden").removeAttr("id");
+            return cGallery;
+        }
+
+        sabio.page.processMedias = function (idx, singlePhoto) {
+
+            var newJqObj = sabio.page.completedCloneGallery();
+
+            $(".photoGallery", newJqObj).attr("src", singlePhoto.fullUrl);
+
+            //if (singleGallery.deleted) {
+            //    $(".addClass("hidden");
+            //}
+            //console.log(singleGallery.deleted);
+            //console.log(singleGallery);
+        }
+
+        //sabio.page.handlers.onGetProfileSuccess = function (result) {
+        //    var profile = result.item;
+        //    console.log(result);
+
+        //    if (profile == null) {
+        //        sabio.page.createdProfile = false;
+        //    } else {
+        //        sabio.page.createdProfile = true;
+        //    }
+        //}
+
+        sabio.page.handlers.onGetGallerySuccess = function (result) {
+            var galleryProfile = result.item;
+            console.log(result);
+
+            $(".galleryTitle").text(galleryProfile.title);
+            $(".galleryDescription").text(galleryProfile.description);
+            $(".galleryDate").text(galleryProfile.createdDate);
+
+        }
+
+        sabio.page.handlers.addPhotos = function () {
+            $("#photo-form").removeClass("hidden");
+            $('html, body').animate({
+                scrollTop: $("#photo-form").offset().top
+            }, 600);
+        }
+
+        sabio.page.handlers.cancelPhotos = function (e) {
+            e.preventDefault();
+            $("#photo-form").addClass("hidden");
+            $('html, body').animate({
+                scrollTop: $(".page-header").offset().top
+            }, 600);
+        }
+
+        sabio.page.handlers.uploadPhotos = function (result) {
+            sabio.layout.showModal('alert-danger', 'Time to upload photos!', 'Click in the Dropzone to add photos to your gallery.')
+        }
+        sabio.page.handlers.onPopulateFailure = function (result) {
+            sabio.layout.showModal('alert-danger', 'Abort! Abort! Abort!', 'Please contact your System Administrator!')
+        }
+
+        //Dropzone function
+        Dropzone.options.galleryDropzone = { // The camelized version of the ID of the form element
+
+            // The configuration of dropzone
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            parallelUploads: 25,
+            maxFiles: 25,
+
+            // Setting up of the dropzone
+            init: function () {
+                var myDropzone = this;
+                $("#submit-all").click(function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    myDropzone.processQueue();
+                    myDropzone.on('success', function () {
+                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                            location.reload();
+                        }
+                    });
+                });
+            }
+        }
+
+    </script>
+}

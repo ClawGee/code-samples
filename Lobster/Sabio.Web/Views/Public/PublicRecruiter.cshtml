@@ -1,0 +1,396 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid>
+@{
+    ViewBag.Title = "PublicRecruiter";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+
+
+<!-- BREADCRUMBS -->
+<div class="page-header" id="recruit-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Recruiter Profile</h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li class="active">Recruiter Profile</li>
+        </ol>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- PAGE CONTENT -->
+<div class="page-content">
+    <div class="container" data-ng-controller="recruiterController as Recruit" id="recruiterControllerElement">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="" ng-if="Recruit.item.recruiterPhoto.fullUrl!=null">
+                    @*removed "container" class*@
+                    <img id="imagePublic" class="profilePic" ng-src="{{Recruit.item.recruiterPhoto.fullUrl}}" />
+                </div>
+                <!-- Recruiter Contact Info -->
+                <div @*class="widget"*@>
+                    <div ng-if="Recruit.item.companyLogo!=null">
+                        <img id="companyLogoPublic" class="profilePic" ng-src="{{Recruit.item.companyLogo}}" />
+                    </div>
+                    <ul class="contact-info fa-ul">
+                        <li ng-show="Recruit.item.phoneNumber1"><i class="fa fa-li fa-phone"></i></li>
+                        <li ng-show="Recruit.item.phoneNumber1" id="phone1Public">{{Recruit.item.phoneNumber1}}</li>
+                        <li ng-show="Recruit.item.phoneNumber2"><i class="fa fa-li fa-phone"></i></li>
+                        <li ng-show="Recruit.item.phoneNumber2" id="phone2Public">{{Recruit.item.phoneNumber2}}</li>
+                        <li><i class="fa fa-li fa-envelope-o"></i></li>
+                        <li ng-show="Recruit.item.recruiterUser.email" id="emailPublic">{{Recruit.item.recruiterUser.email}}</li>
+                        <li ng-show="Recruit.item.recruiterUser.email"><i class="fa fa-li fa-external-link"></i><a href={{Recruit.item.url}} id="urlPublic">website</a></li>
+                    </ul>
+                </div>
+                <!-- End Contact Info -->
+                <!-- Text Widget -->
+                <div class="widget">
+                    <h3 class="widget-title">GET CONNECTED</h3>
+                    <div class="social-connect">
+                        <ul class="list-inline social-icons">
+                            <li>
+                                <a href={{Recruit.item.facebookAccount}} id="facebookPublic" class="facebook-bg"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href={{Recruit.item.twitterAccount}} id="twitterPublic" class="twitter-bg"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href={{Recruit.item.googlePlusAccount}} id="googlePublic" class="googleplus-bg"><i class="fa fa-google-plus"></i></a>
+                            </li>
+                            <li>
+                                <a href={{Recruit.item.linkedInAccount}} id="linkedInPublic" class="linkedin-bg"><i class="fa fa-linkedin-square"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- End Text Widget -->
+            </div>
+            <div id="public-form" class="well well-lg">
+                <div class="container page-content">
+                    <div class=" col-md-8">
+                        <ul class="list-inline text-left">
+                            <li><h1 id="firstNamePublic">{{Recruit.item.recruiterUser.firstName}}</h1></li>
+                            <li><h1 id="lastNamePublic">{{Recruit.item.recruiterUser.lastName}}</h1></li>
+                        </ul>
+                        <div class="row ">
+                            <label class="boxed-content-title text-primary" for="specialty">Looking for Developers knowledgeable in: </label>
+                            <h3 id="specialtyPublic">{{Recruit.item.specialty}}</h3>
+                        </div>
+                        <div class="row ">
+                            <label>Looking for Developers in: </label>
+                            <h3 id="locationPublic">{{Recruit.item.location}}</h3>
+                        </div>
+                        <div class="row ">
+                            <label>Summary: </label>
+                            <h3 id="summaryPublic">{{Recruit.item.summary}}</h3>
+                        </div>
+                        <div class="row hidden">
+                            <p id="guid">@Model.Item</p>
+                            <p id="ratingScore">{{Recruit.item.averageRating}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--rating widget starts here-->
+            <div class="container page-content well well-sm ">
+                <div class="panel-group">
+                    <div class="col-lg-3">
+                        <h3>Recruiter Rating</h3>
+                        <rating ng-model="Recruit.item.averageRating" max="Recruit.maxStars" readonly="Recruit.isReadOnly"></rating><label class="boxed-content-title text-primary" for="rating-count-display"></label><span><small>({{Recruit.item.ratingCount}} reviews)</small></span>
+                        <br />
+                        <label class="boxed-content-title text-primary" for="average-rating-display"></label><span class="avg-rating-display"><small>{{Recruit.item.averageRating| number: 2}} Stars out of 5</small></span>
+                    </div>
+                </div>
+                <div class="panel-group">
+                    <div class="col-lg-4">
+                        <div ng-include="'/Content/includes/RatingsPartial.html'"></div>
+                    </div>
+                </div>
+                <div class="panel-group">
+                    <div class="col-lg-4">
+                        <h4>Reviews</h4>
+                        <!--start sort button-->
+                        <div class="btn-group" dropdown is-open="Recruit.toggleStatus.isopen">
+                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                <small>Sort By</small><span class="caret"></span>
+                                @*<div class="btn btn-group pull-right col-lg-3" dropdown is-open="Recruit.toggleStatus.isopen">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                                    Sort By <span class="caret"></span>*@
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a ng-click="Recruit.getRatingsPage(Recruit.sortOrder ='old')" href=""><small>Oldest First</small></a></li>
+                                <li><a ng-click="Recruit.getRatingsPage(Recruit.sortOrder ='new')" href=""><small>Newest First</small></a></li>
+                                <li><a ng-click="Recruit.getRatingsPage(Recruit.sortOrder = 'hi')" href=""><small>High to Low</small></a></li>
+                                <li><a ng-click="Recruit.getRatingsPage(Recruit.sortOrder = 'low')" href=""><small>Low to High</small></a></li>
+                            </ul>
+                        </div>
+                        <!--end sort button-->
+                        <!-- rating display section-->
+                        <div class="rates" data-ng-repeat="rates in Recruit.existingRatingItems">
+                            <div class="testimonial testimonial-body">
+                                <rating ng-model="rates.ratingValue" max="Recruit.maxStars" readonly="Recruit.isReadOnly"></rating>
+                                <span>Rating: {{rates.ratingValue}}</span>
+                                <br />
+                                <span><small>Comments:</small> {{rates.comments}}</span>
+                                <br />
+                                <span><small class="pull-right"><i>Rated on:</i> {{rates.createDate| date}}</small></span>
+                                <span><small><i>Reviewed by: </i><a href="assignmeplease">{{rates.fullUser.firstName}}</a></small></span>
+                                <br />
+                                <span><small>Helpful?</small> </span><button ng-click="Recruit.disabledVote()" class="glyphicon glyphicon-thumbs-up"></button> <button ng-click="Recruit.disabledVote()" class=" glyphicon glyphicon-thumbs-down"></button>
+                                <hr />
+                            </div>
+                        </div>
+                        <pagination total-items="Recruit.totalCount" max-size="Recruit.maxPagesDisplayed" items-per-page="Recruit.pageSize" ng-model="Recruit.currentPage" ng-change="Recruit.getRatingsPage()"></pagination>
+                    </div>
+                </div>
+            </div>
+
+            <!--rating widget ends here-->
+        </div>
+    </div>
+</div>
+
+@section pageInitScripts{
+    <script src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+}
+@section Scripts{
+    <script type="text/javascript" , src="~/Scripts/Services/services.public.js"></script>
+    <script type="text/javascript" src="~/Scripts/Services/services.ratings.js"></script>
+    <script type="text/javascript" src="~/Scripts/sabio.rating.js"></script>
+
+    <script type="text/javascript">
+        sabio.page.recruiterController = null;
+        sabio.page.recruiterGuid = null;
+        sabio.page.ratingController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.recruiterController = sabio.ng.getControllerInstance($('#recruiterControllerElement'));
+            sabio.page.recruiterGuid = $('#guid').text();
+            sabio.page.ratingController = sabio.ng.getControllerInstance($("#ratingControllerContainer"));
+        }
+
+        sabio.services.public.factory = function ($baseService) {       //extending $baseService to include the new service, recruiterService (registers the service)
+            var service = sabio.services.public;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        sabio.services.ratings.factory = function ($baseService) {
+            var service = sabio.services.ratings;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        sabio.page.recruiterControllerFactory = function ($scope, $baseController, $recruiterService, $ratingService) {
+            var viewModel = this;
+            viewModel.item = null;
+            viewModel.$recruiterService = $recruiterService;
+            viewModel.receivedItems = _onSuccess;
+            viewModel.onResultError = _onResultError;
+
+            //section to enable Display Existing Ratings functionality
+            viewModel.$ratingService = $ratingService;
+            viewModel.existingRatingItems = null;
+            viewModel.onListSuccess = _onListSuccess;
+            viewModel.onListError = _onListError;
+            viewModel.maxStars = 5;
+            viewModel.isReadOnly = true;
+
+            //section to enable listener for ratingspartial submit
+            viewModel.$scope = $scope;
+            viewModel.$scope.error = _onListError;
+            viewModel.$scope.success = _onListSuccess;
+
+            //section to enable paginated listings functions and variables
+            viewModel.currentPage = 1;
+            viewModel.maxPagesDisplayed = 5
+            viewModel.getRatingsPage = _getRatingsPage;
+            viewModel.ratingListener = _ratingListener;
+            viewModel.disabledVote = _disabledVote;
+            //dropdown section
+            viewModel.toggleStatus = {
+                isopen: false
+            };
+            viewModel.toggled = _toggled;
+            viewModel.toggleDropdown = _toggleDropdown;
+
+            //-- this line to simulate inheritance
+            $.extend(viewModel, $baseController);
+
+            viewModel.notify = viewModel.$recruiterService.getNotifier($scope);
+
+            render();
+
+            function _disabledVote() {
+                sabio.layout.showModal('alert-info', 'Info', 'Sorry, this button is WIP');
+            };
+
+            viewModel.$scope.$on('submitRating', viewModel.ratingListener);
+
+            function _toggled(open) {
+                $log.log('Dropdown is now: ', open);
+            };
+
+            function _toggleDropdown($event) {
+                console.log("click");
+                viewModel.$event.preventDefault();
+                viewModel.$event.stopPropagation();
+                viewModel.toggleStatus.isopen = !viewModel.toggleStatus.isopen;
+            };
+
+            function render() {
+                viewModel.$recruiterService.getRecruiter(viewModel.$sabio.page.recruiterGuid, viewModel.receivedItems, viewModel.onResultError);
+            }
+
+            function _getRatingsPage(sortOrder) {
+
+                switch (sortOrder) {
+                    case 'hi':
+                        viewModel.sortOrder = 'HiToLow';
+                        break;
+                    case 'low':
+                        viewModel.sortOrder = 'LowToHi';
+                        break;
+                    case 'old':
+                        viewModel.sortOrder = 'OldToNew';
+                        break;
+                    case 'new':
+                        viewModel.sortOrder = 'NewToOld';
+                        break;
+                }
+                viewModel.$ratingService.listPagedRatingsByEntitySorted(
+                    viewModel.$sabio.entityId,
+                    viewModel.$sabio.entityType,
+                    viewModel.currentPage,
+                    viewModel.pageSize,
+                    viewModel.sortOrder,
+                    viewModel.$scope.success,
+                    viewModel.$scope.error);
+            };
+
+            //function _getHiRatingsPage() {
+            //    viewModel.$ratingService.listPagedRatingsByEntity_HiToLow(viewModel.$sabio.entityId, viewModel.$sabio.entityType, viewModel.currentPage, viewModel.pageSize, viewModel.$scope.success, viewModel.$scope.error);
+            //};
+
+            //function _getLowRatingsPage() {
+            //    viewModel.$ratingService.listPagedRatingsByEntity_LowToHi(viewModel.$sabio.entityId, viewModel.$sabio.entityType, viewModel.currentPage, viewModel.pageSize, viewModel.$scope.success, viewModel.$scope.error);
+            //};
+            //function _getOldRatingsPage() {
+            //    viewModel.$ratingService.listPagedRatingsByEntity_OldToNew(viewModel.$sabio.entityId, viewModel.$sabio.entityType, viewModel.currentPage, viewModel.pageSize, viewModel.$scope.success, viewModel.$scope.error);
+            //};
+
+            function _ratingListener(event, msg) {
+                viewModel.currentPage = 1;
+                viewModel.pageSize = 5;
+
+                viewModel.getRatingsPage();
+                //(viewModel.$sabio.entityId, viewModel.$sabio.entityType, viewModel.currentPage, viewModel.pageSize, viewModel.onListSuccess, viewModel.onListError);
+            };
+
+            //function _getRatingsPage() {
+            //    viewModel.$ratingService.listPagedRatingsByEntity(viewModel.$sabio.entityId, viewModel.$sabio.entityType, viewModel.currentPage, viewModel.pageSize, viewModel.$scope.success, viewModel.$scope.error);
+            //};
+
+            function _onListSuccess(result) {
+                viewModel.notify(function () {
+                    viewModel.existingRatingItems = result.item.pagedItems;
+                    viewModel.pageSize = result.item.pageSize;
+                    viewModel.totalCount = result.item.totalCount;
+
+                    ////evaluate and create a tag link by usertype
+                    //if (viewModel.item.entityType == 1) {
+                    //    viewModel.profilePath = '/profile/developer/'
+                    //} else if (viewModel.item.entityType == 2) {
+                    //    viewModel.profilePath = '/profile/recruiter/'
+                    //} else if (viewModel.item.entityType == 3) {
+                    //    viewModel.profilePath = '/profile/employer/'
+                    //};
+                });
+            }
+
+            function _onListError(jqXhr, error) {
+                sabio.layout.showModal('alert-danger', 'Error', 'Bummer, Ratings not coming through!')
+            };
+
+            function _onSuccess(result) {
+                viewModel.notify(function () {
+                    viewModel.item = result.item;
+                    viewModel.$sabio.entityId = viewModel.item.id;
+                    viewModel.$sabio.entityType = 2;
+                    viewModel.pageSize = 5;
+                    viewModel.sortOrder = 'NewToOld';
+                    viewModel.getRatingsPage();
+                    // changed from 'sabio.layout.entityId' and 'sabio.layout.entityType' (which is the same object), to 'viewModel.$sabio.entityId' and 'viewModel.$sabio.entityType' to respect the angular dependency injection;
+                });
+            }
+
+            function _onResultError(jqXhr, error) {
+                console.log("Abort! Abort! Abort! Please contact your system administrator.");
+                console.log(error);
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$recruiterService"
+            , ["$baseService"]
+            , sabio.services.public.factory);
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$ratingService"
+            , ["$baseService"]
+            , sabio.services.ratings.factory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "recruiterController",
+            ['$scope', '$baseController', '$recruiterService', '$ratingService']
+            , sabio.page.recruiterControllerFactory);
+
+    </script>
+}
+
+@*<script type="text/javascript" , src="~/Scripts/Services/services.public.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.createdProfile = false;
+
+        sabio.page.startUp = function () {
+            sabio.services.public.getRecruiter($('#guid').text(), sabio.page.handlers.onGetProfileSuccess, sabio.page.handlers.onPopulateFailure);
+        }
+
+        sabio.page.handlers.onGetProfileSuccess = function (result) {
+            var profile = result.item;
+            console.log(result);
+
+            if (profile == null) {
+                sabio.page.createdProfile = false;
+            } else {
+                sabio.page.createdProfile = true;
+            }
+
+            $("#firstNamePublic").text(profile.recruiterUser.firstName);
+            $("#lastNamePublic").text(profile.recruiterUser.lastName);
+            $("#specialtyPublic").text(profile.specialty);
+            $("#locationPublic").text(profile.location);
+            $("#urlPublic").attr('href', profile.url);
+            $("#emailPublic").text(profile.recruiterUser.email);
+            $("#phone1Public").text(profile.phoneNumber1);
+            $("#phone2Public").text(profile.phoneNumber2);
+            $("#companyLogoPublic").text(profile.companyLogo);
+            $("#summaryPublic").text(profile.summary);
+            $("#twitterPublic").attr('href', profile.twitterAccount);
+            $("#facebookPublic").attr('href', profile.facebookAccount);
+            $("#linkedInPublic").attr('href', profile.linkedInAccount);
+            $("#googlePublic").attr('href', profile.googlePlusAccount);
+            $("#imagePublic").attr('src', profile.recruiterPhoto.fullUrl);
+        }
+
+        sabio.page.handlers.onPopulateFailure = function (result) {
+            sabio.layout.showModal('alert-danger', 'Abort! Abort! Abort!', 'Please contact your System Administrator!')
+        }
+
+    </script>*@
+

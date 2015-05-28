@@ -1,0 +1,290 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Photo Galleries</h1>
+        <div class="col-md-3">
+            <button type="button" id="galleryCreateBtn" class="btn btn-success btn-sm btn-gallery"><i class="fa fa-file-image-o"></i> Create</button>
+        </div>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li>
+                <a href="#">Pages</a>
+            </li>
+            <li class="active">Photo Galleries</li>
+        </ol>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- BASIC INPUT -->
+<div id="gallery-form" class="hidden col-md-8">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title section-heading no-margin">Manage Photo Gallery</h2>
+        </div>
+        <form id="form-newGallery" role="form">
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Title</label>
+                        <div class="col-md-9">
+                            <input type="text" id="title" name="title" class="form-control" placeholder="Title">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Description</label>
+                        <div class="col-md-9">
+                            <input type="text" id="description" name="description" class="form-control" placeholder="Description">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Privacy Setting</label>
+                        <div class="col-md-9">
+                            <label class="radio radio-inline">
+                                <input type="radio" id="isPublic" name="isPublic" value="1">Public
+                            </label>
+                            <label class="radio radio-inline">
+                                <input type="radio" id="isPrivate" name="isPublic" value="0">Private
+                            </label>
+                        </div>
+                    </div>
+                    <div style="display:none" class="hidden form-group">
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="entityType" name="entityType" placeholder="Entity Type"><br />
+                        </div>
+                    </div>
+                    <div style="display:none" class="hidden form-group">
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="entityId" name="entityId" placeholder="Entity Id"><br />
+                        </div>
+                    </div>
+                    <div style="display:none" class="hidden form-group">
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="galleryId" name="galleryId" placeholder="Gallery Id"><br />
+                        </div>
+                    </div>
+                </div>
+                <p class="pull-right">
+                    <button type="submit" id="galleryUpdate" class="btn btn-success"><i class="fa fa-check-circle"></i> Submit</button>
+                    <button id="galleryCancelBtn" class="btn btn-warning"><i class="fa fa-close"></i> Cancel</button>
+                </p>
+            </div>
+        </form>
+    </div>
+    <!-- END BASIC INPUT -->
+</div>
+
+<!-- GALLERIES BEGIN -->
+<div class="page-content">
+    <div class="container">
+        <div class="galleries col-lg-12"></div>
+    </div>
+</div>
+<!-- GALLERIES END -->
+<!-- BEGIN GALLERY TEMPLATE -->
+<div id="galleryTemplate" class="col-lg-12 deletedGallery hidden">
+    <div class="panel panel-default">
+        <form>
+            <div class="panel-body">
+                <h2 class="section-heading galleryTitle text-primary"></h2>
+                <button id="galleryEditBtn" class="btn btn-warning btn-xs"><i class="fa fa-file-text"></i> Manage</button> 
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Description:</label>
+                        <div class="col-md-10">
+                            <p class="form-control-static galleryDescription"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Date Created:</label>
+                        <div class="col-md-10">
+                            <p class="form-control-static galleryCreated"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Privacy Setting:</label>
+                        <div class="col-md-10">
+                            <p class="form-control-static galleryPrivacy"></p>
+                        </div>
+                    </div>
+                    <div class="form-group hidden">
+                        <label class="col-md-2 control-label">Entity ID:</label>
+                        <div class="col-md-10">
+                            <p class="form-control-static entityIdNew"></p>
+                        </div>
+                    </div>
+                    <div class="form-group hidden">
+                        <label class="col-md-2 control-label">Entity Type:</label>
+                        <div class="col-md-10">
+                            <p class="form-control-static entityTypeNew"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="pull-right">
+                    <a href="" target="_self" class="galleryIdNew btn btn-success"><i class="fa fa-picture-o"></i> Manage Photos</a>
+                    <button type="button" class="galleryDeleteBtn btn btn-danger"><i class="fa fa-close"></i> Delete</button>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- END GALLERY TEMPLATE -->
+<!--END PAGE CONTENT-->
+<!-- BEGIN CUSTOM SCRIPTS-->
+@section Scripts{
+    <script type="text/javascript" , src="~/Scripts/Services/sabio.services.galleries.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.form = $("#form-newGallery");
+        sabio.page.createdProfile = false;
+
+
+        sabio.page.startUp = function () {
+            sabio.page.setUpValidation();
+
+            $("#galleryCancelBtn").on("click", sabio.page.handlers.cancelGallery);
+            $("#galleryCreateBtn").on("click", sabio.page.handlers.createGallery);
+            $("#galleryEditBtn").on("click", sabio.page.handlers.editGallery);
+            sabio.page.form.on("submit", sabio.page.handlers.manageGallery);
+            sabio.services.galleries.get(sabio.page.handlers.onGetGallerySuccess, sabio.page.handlers.onPopulateFailure);
+
+        }
+
+        sabio.page.handlers.manageGallery = function (event) {
+
+            event.preventDefault();
+            console.log("click handler working");
+
+            if (sabio.page.form.valid()) {
+                if ($('#galleryId').val() == null || $('#galleryId').val() == 0 || $('#galleryId').val() == "" || $('#galleryId').val() == "00000000-0000-0000-0000-000000000000") {
+                    sabio.services.galleries.post(sabio.page.form.serialize(), sabio.page.handlers.onInsertSuccess, sabio.page.handlers.onInsertFailure);
+                } else {
+                    console.log("Photo Gallery Form not valid.");
+                    sabio.services.galleries.put(sabio.page.form.serialize(), sabio.page.handlers.onUpdateSuccess, sabio.page.handlers.onUpdateFailure);
+                }
+            }
+        }
+
+        sabio.page.handlers.onGetGallerySuccess = function (result) {
+
+            console.log(result);
+            $.each(result.items, sabio.page.processSingleGallery);
+        }
+
+        sabio.page.cloneGallery = function () {
+
+            var clone = $("#galleryTemplate").clone();
+            clone.appendTo(".galleries");
+            return clone;
+        }
+
+        sabio.page.completedCloneGallery = function () {
+            var cGallery = sabio.page.cloneGallery();
+            cGallery.removeClass("hidden").removeAttr("id");
+            return cGallery;
+        }
+
+        sabio.page.processSingleGallery = function (idx, singleGallery) {
+
+            var newJqObj = sabio.page.completedCloneGallery();
+
+            $(".galleryTitle", newJqObj).text(singleGallery.title);
+            $(".galleryDescription", newJqObj).html(singleGallery.description);
+            $(".galleryCreated", newJqObj).html(singleGallery.createdDate);
+
+            if (singleGallery.isPublic) {
+                $(".galleryPrivacy", newJqObj).html("Public");
+            } else {
+                $(".galleryPrivacy", newJqObj).html("Private");
+            }
+
+            $(".galleryIdNew", newJqObj).attr("href", "/gallery/manage/" + singleGallery.id);
+            $(".entityIdNew", newJqObj).html(singleGallery.entityId);
+            $(".entityTypeNew", newJqObj).html(singleGallery.entityType);
+
+            //if (singleGallery.deleted) {
+            //    $(".addClass("hidden");
+            //}
+            console.log(singleGallery.deleted);
+            console.log(singleGallery);
+
+        }
+
+        sabio.page.handlers.onInsertSuccess = function (result) {
+            sabio.page.createdProfile = true;
+
+            var success = result.item;
+            console.log(success);
+            //$("#galleryId").val(success.id);
+            //$("#entityType").val(success.entityType);
+            //$("#entityId").val(success.entityId);
+            $("gallery-form").addClass("hidden");
+            console.log("Success! Woot! New Photo Gallery Created");
+            sabio.layout.showModal('alert-success', 'Photo Gallery Info Submitted', 'You have successfully created a photo gallery!');
+            window.open('/gallery/manage/' + success.id, '_self');
+        }
+
+        sabio.page.handlers.createGallery = function () {
+            $("#gallery-form").removeClass("hidden");
+            $('html, body').animate({
+                scrollTop: $("#gallery-form").offset().top
+            }, 600);
+        }
+
+        sabio.page.handlers.cancelGallery = function (e) {
+            e.preventDefault();
+            $("#gallery-form").addClass("hidden");
+            $('html, body').animate({
+                scrollTop: $(".page-header").offset().top
+            }, 600);
+        }
+
+        sabio.page.handlers.editGallery = function () {
+
+        }
+
+        sabio.page.handlers.onInsertFailure = function (result) {
+            sabio.page.createdProfile == true;
+            console.log("New Photo Gallery Creation Failed");
+            sabio.layout.showModal('alert-danger', 'Error', 'Photo Gallery info not submitted!')
+        }
+
+        sabio.page.handlers.onUpdateSuccess = function (result) {
+            sabio.layout.showModal('alert-success', 'Photo Gallery Updated', 'You have successfully updated your Photo Gallery!')
+        }
+
+        sabio.page.handlers.onUpdateFailure = function (result) {
+            sabio.layout.showModal('alert-danger', 'Error', 'Photo Gallery not updated!')
+        }
+
+        sabio.page.handlers.onPopulateFailure = function (result) {
+            sabio.layout.showModal('alert-danger', 'Abort! Abort! Abort!', 'Please contact your System Administrator!')
+        }
+
+        sabio.page.setUpValidation = function () {
+            sabio.page.form.validate({
+                rules: {
+                    title: {
+                        required: true,
+                        minlength: 2
+                    },
+                    description: {
+                        required: false
+                    },
+                    isPublic: {
+                        required: true
+                    }
+                },
+            });
+        }
+
+    </script>
+}
+<!-- END CUSTOM SCRIPTS-->

@@ -1,0 +1,74 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid?>
+@{
+    ViewBag.Title = "EmailConfirmed";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div class="page-content">
+    <div class="container">
+        <div id="registrationComplete" class="hidden">
+            <h3>Thanks for confirming your email address</h3>
+            <p>Please click the link to log in: <a href="/login"> Log In</a></p>
+        </div>
+        <div id="registrationFailed" class="hidden">
+            <h3>Oh Noes! Something went wrong</h3>
+            <p>Please contact us for assistance</p>
+        </div>
+    </div>
+</div>
+<div id="guid" class="hidden">@Model.Item</div>  <!--give id, hide, then jqeury/ajax to call that  id-->
+
+
+<!--==============================Start of Scripts=================================-->
+@section Scripts {
+
+    <script type="text/javascript">
+
+        sabio.page.startUp = function (){
+            var guid = $("#guid").text();
+            $.ajax({
+                url: "/api/register/confirmed/" + guid,//URL for the request.The data to send (will be converted to a query string)
+                data: null,
+                type: "GET",// Whether this is a POST, PUT, DElETE or GET request
+                dataType: "json",// The type of data we expect back
+                success: sabio.page.handlers.ajaxGetSuccess, // Code to run if the request succeeds, the response is passed to the function. it can also suceed by bringing back null.
+                error: sabio.page.handlers.ajaxError // only if internal catastrophic failure. Code to run if the request fails; the raw request and status codes are passed to the function
+            });
+        };
+
+        sabio.page.handlers.ajaxGetSuccess = function (json) {
+            console.log("ajax 'get' success");
+            if (json.item === null) {
+                alert("Sorry! Your registration email confirmation did not work");
+                $("#registrationFailed").removeClass("hidden");//show hidden div to show error message in view/html
+            } else {
+                $("#registrationComplete").removeClass("hidden");
+                console.log(json);
+                var guid = $("#guid").text();
+                $.ajax({
+                    url: "/api/register/emailconfirmed/" + guid,
+                    data: null,
+                    type: "PUT",
+                    dataType: "json",
+                    success: sabio.page.handlers.putAjaxSuccess, //change success handlers to select and put
+                    error: sabio.page.handlers.ajaxError 
+                });
+            };
+        };
+
+        sabio.page.handlers.putAjaxSuccess = function () {
+            console.log("ajax 'put' success");
+        };
+
+        sabio.page.handlers.ajaxError = function (xhr, status, errorThrown) {
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        };
+
+        
+       
+    </script>
+}
+
+<!--==============================End of Scripts=================================-->

@@ -1,0 +1,287 @@
+﻿@{
+    ViewBag.Title = "EmployerSearch";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+
+<div class="page-content" data-ng-controller="employerSearchController as dashboard" id="employerSearchCntrlr">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Search</h2>
+                    </div>
+                    <!-- Search Form -->
+                    <div class="panel-body">
+                        <form class="form form-horizontal">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control input-group-sm" id="input-search-keyword" type="search" placeholder="enter a keyword ..." value="keyword ..." ng-model="dashboard.keyWord">
+                                <span class="input-group-btn">
+                                    <!-- Angular click handler is not hooked up or functioning yet. -->
+                                    <button data-ng-click="dashboard.searchKey()" type="submit" class="btn btn-primary btn-sm" id="btn-search-keyword">
+                                        <i class="icon ion-android-search"></i>
+                                        Search
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                        <br />
+                        @*<h4>Location</h4>
+                            <form action="demo_form.asp" method="get">
+                                <input type="checkbox" name="vehicle" value="Los Angeles"> Los Angeles<br>
+                                <input type="checkbox" name="vehicle" value="Chicago"> Chicago<br>
+                                <input type="checkbox" name="vehicle" value="San Francisco"> San Francisco Bay Area<br>
+                                <input type="checkbox" name="vehicle" value="New York"> New York<br>
+                                <input type="checkbox" name="vehicle" value="Seattle"> Seattle<br>
+                                <input type="checkbox" name="vehicle" value="San Diego"> San Diego<br>
+                            </form>
+                            <br />*@
+                        @*<h4>Industry</h4>
+                            <form action="demo_form.asp" method="get">
+                                <input type="checkbox" name="vehicle" value="advertising"> Advertising<br>
+                                <input type="checkbox" name="vehicle" value="consulting"> Consulting<br>
+                                <input type="checkbox" name="vehicle" value="crm"> CRM<br>
+                                <input type="checkbox" name="vehicle" value="ecommerce"> Ecommerce<br>
+                                <input type="checkbox" name="vehicle" value="education"> Education<br>
+                                <input type="checkbox" name="vehicle" value="entertainment"> Entertainment<br>
+                                <input type="checkbox" name="vehicle" value="financial"> Financial<br>
+                                <input type="checkbox" name="vehicle" value="gaming"> Gaming<br>
+                                <input type="checkbox" name="vehicle" value="internet"> Internet<br>
+                                <input type="checkbox" name="vehicle" value="marketing"> Marketing<br>
+                                <input type="checkbox" name="vehicle" value="mobile"> Mobile<br>
+                                <input type="checkbox" name="vehicle" value="security"> Security<br>
+                                <input type="checkbox" name="vehicle" value="travel"> Travel<br>
+                            </form>
+                            <br />
+                            <h4>Employment Type</h4>
+                            <form action="demo_form.asp" method="get">
+                                <input type="checkbox" name="vehicle" value="terms1"> Full Time<br>
+                                <input type="checkbox" name="vehicle" value="terms2"> Part Time<br>
+                                <input type="checkbox" name="vehicle" value="terms3"> Contract<br>
+                                <input type="checkbox" name="vehicle" value="terms4"> Contract to Hire<br>
+                            </form>*@
+                    </div>
+                </div>
+                <!-- End Search Form -->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>View By Tags</h2>
+                    </div>
+                    <!-- Search Form -->
+                    <div class="panel-body">
+                        <form class="form form-horizontal">
+                            <div class="input-group input-group-sm">
+
+                                <!--employerTag-->
+
+
+                                <span class="tags employer-tag-industry-template" style="padding:5px; display:inline-block"
+                                     data-ng-repeat="tag in dashboard.tags">
+                                        <a class="btn btn-primary btn-sm" href="/employer/tag/{{tag.name}}">{{tag.name}}</a>
+                                </span>
+                               </div>
+                        </form>
+                        <br />
+                    </div>
+                </div>
+                <!-- End Search Form -->
+
+
+            </div>
+
+            <div class="col-md-9">
+                <!-- PAGE CONTENT -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Find Your Future Employer</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="page-content page-search-result">
+                            <div class="container">
+                                <h3 class=""><span id="numbersFound">{{dashboard.totalCount}}</span> results found</h3> <!--for keyword: <b>"{{dashboard.keyWord}}"</b></h3>-->
+                                <!-- Search Results -->
+                                <!-- START INSERT EMPLOYERS SEARCH POINT-->
+                                <div id="employer-search-container" class="container-fluid">
+                                    <div class="row animate-repeat" data-ng-repeat="pagedItem in dashboard.items track by pagedItem.employerId">
+                                        <!--Template for Employer Search result-->
+                                        <ul class="list-unstyled list-results" id="employer-search-template">
+                                            <li class="type-portfolio">
+                                                <a href="/profile/employer/{{pagedItem.uid}}" target="_blank" class="pull-left"><img data-ng-if="pagedItem.employerMedia != null" alt="Search Result" class="media-object employer-search-img-template resize" data-ng-src="{{pagedItem.employerMedia.fullUrl}}" /></a>
+                                                <a href="/profile/employer/{{pagedItem.uid}}" target="_blank" class="pull-left"><img data-ng-if="pagedItem.employerMedia == null" alt="Search Result" class="media-object employer-search-img-template resize" data-ng-src='http://patterson-solutions.com/wp-content/uploads/2014/08/Organizational-structure-icon.png' /></a>
+                                                <div class="media-body">
+                                                    <h4 style="margin-left:20px"><a href="/profile/employer/{{pagedItem.uid}}" class="employer-search-name-template">{{pagedItem.employerName}}</a></h4>
+                                                    <h4 style="margin-left:20px">Visit Us: <a href="{{pagedItem.employerURL}}" class="url employer-search-url-template">{{pagedItem.employerURL}}</a></h4>
+                                                    <p style="margin-left:20px"><b>Location: </b><span class="location employer-search-location-template">{{pagedItem.employerOtherLocation}}</span></p>
+                                                    <p style="margin-left:20px"><b>Industry: </b><span class="industry employer-search-industry-template">{{pagedItem.employerIndustry}}</span> </p>
+                                                    <rating ng-model="pagedItem.averageRating" style="margin-left:20px" max="dashboard.maxStars" readonly="dashboard.isReadOnly"></rating><span>({{pagedItem.ratingCount}})</span>
+                                                    <p style="margin-left:20px" ng-if="pagedItem.averageRating"><b>Rating: </b><span class="industry employer-search-industry-template">{{pagedItem.averageRating|number:2}} out of 5</span> </p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!--END INSERT EMPLOYERS SEARCH POINT-->
+                                <ul class="list-unstyled list-results hidden">
+                                    <!--Fake Result for Employer Search result-->
+                                    <li class="type-portfolio">
+                                        <div class="media clearfix">
+                                            <a href="#" class="pull-left"><img data-ng-src="http://www.bumperstickerz.com/images/10000242-00-00-00-00_lg.png" alt="Search Result" class="media-object"></a>
+                                            <div class="media-body">
+                                                <h3><a href="#">Initech Studios</a></h3>
+                                                <h4>Visit Us: <span class="url">http://www.google.com</span></h4>
+                                                <p><b>Location: </b><span class="location">Los Angeles</span></p>
+                                                <p><b>Industry: </b><span class="industry">Web Software, Design</span> </p>
+                                            </div>
+
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- End Search Results -->
+
+                            <pagination ng-model="dashboard.currentPage"
+                                        total-items="dashboard.totalCount"
+                                        items-per-page="dashboard.pageSize"
+                                        max-size="dashboard.maxSize"
+                                        ng-change="dashboard.pageChanged()"
+                                        class="pagination-sm"
+                                        @*boundary-links="true"*@
+                                        rotate="false"
+                                        num-pages="numPages">
+                            </pagination>
+                            <!-- END Pagination -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section pageInitScripts{
+    <script type="text/javascript" src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+}
+
+<!-- END PAGE CONTENT -->
+@section Scripts {
+
+    @*<script type="text/javascript" src="~/Scripts/bootstrap-paginator.min.js"></script>*@
+    <script type="text/javascript" src="~/Scripts/Services/services.search.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.employerSearchController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.employerSearchController = sabio.ng.getControllerInstance($("#employerSearchCntrlr"));
+        }
+
+        sabio.services.employerSearchFactory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.search;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.services.ratings.factory = function ($baseService) {
+            var service = sabio.services.ratings;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        sabio.page.employerSearchControllerFactory = function ($scope, $baseController, $employerSearchService, $ratingService) {
+            var vm = this;
+            vm.items = null;
+            vm.selectedEmployerSearch = null;
+            vm.$employerSearchService = $employerSearchService;
+            vm.receiveItems = _receiveItems;
+            vm.onEmpSrchError = _onEmpSrchError;
+
+            vm.receiveTagItems = _receiveTagItems;
+            vm.onTagSrchError = _onTagSrchError;
+
+            vm.currentPage = 1;
+            vm.pageSize = 10;
+            vm.pageChanged = _pageChanged;
+
+            vm.keyWord = null;
+            vm.searchKey = _searchKey;
+            vm.getUrlValue = window.location.href;
+
+            //section to enable Display Existing Ratings functionality
+            vm.$ratingService = $ratingService;
+            vm.maxStars = 5;
+            vm.isReadOnly = true;
+
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$employerSearchService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                var loadKeyword = vm.getUrlValue.split('=');
+                vm.keyWord = loadKeyword[1];
+                console.log(loadKeyword);
+                vm.$employerSearchService.employers(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onEmpSrchError, vm.keyWord);
+
+            }
+
+            function _receiveItems(data) {
+                vm.notify(function () {
+                    vm.items = data.item.pagedItems;
+                    vm.totalCount = data.item.totalCount;
+                    vm.totalPages = data.item.totalPages;
+                });
+                vm.$employerSearchService.getAllTags(vm.receiveTagItems, vm.onTagSrchError);
+
+            }
+
+            function _receiveTagItems(data) {
+                vm.notify(function () {
+                    vm.tags = data.items;
+                });
+
+            }
+
+            function _onEmpSrchError(jqXhr, error) {
+            }
+
+            function _onTagSrchError(jqXhr, error) {
+            }
+
+            function _searchKey() {
+                vm.$employerSearchService.employers(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onEmpSrchError, vm.keyWord);
+            }
+
+            function _pageChanged() {
+                vm.$employerSearchService.employers(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onEmpSrchError, vm.keyWord);
+                window.scrollTo(0, 0);
+            }
+
+        }
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$employerSearchService"
+            , ["$baseService"]
+            , sabio.services.employerSearchFactory);
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$ratingService"
+            , ["$baseService"]
+            , sabio.services.employerSearchFactory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "employerSearchController"
+            , ['$scope', '$baseController', "$employerSearchService", "$ratingService"]
+            , sabio.page.employerSearchControllerFactory);
+
+    </script>
+}

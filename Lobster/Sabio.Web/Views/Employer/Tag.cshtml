@@ -1,0 +1,210 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<string>
+
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div data-ng-controller="employerTagController as manager" id="employerTagCntrlr" class="page-content">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+
+
+                <!-- ^^^^^BEGIN*** PAGE CONTENT^^^^^^^ -->
+                <div class="col-md-12">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2 id="tagsPage">
+                                Employers by Tag: <b>
+                                    <span id="tagCalled" style="text-transform: capitalize">{{manager.tagName}}</span>
+                                </b>
+                            </h2>
+                        </div>
+                        <div class="panel-body">
+                            <div class="page-content page-search-result">
+                                <div class="container">
+                                    <h3 id="">
+                                        <span id="numbersFound">{{manager.totalCount}}</span> Total Results Found
+
+                                    </h3>
+                                     <!-- START INSERT EMPLOYERS SEARCH POINT-->
+                                    <div id="employer-search-container" class="container-fluid">
+                                                <!--***TEMPLATE***FOR EMPLOYER TAG SEARCH RESULTS**-->
+                                        <div id="tagTemplate" class="row animate-repeat" data-ng-repeat="pagedItem in manager.items track by pagedItem.employerId">
+                                            <ul class="list-unstyled list-results" id="employer-tag-template">
+                                                <li class="type-portfolio">
+                                                    <a href="/profile/employer/{{pagedItem.uid}}" target="_blank" class="pull-left"><img data-ng-if="pagedItem.employerMedia != null" alt="Search Result" class="media-object employer-search-img-template resize ng-scope" ng-src="{{pagedItem.employerMedia.fullUrl}}" /></a>
+                                                    <a href="/profile/employer/{{pagedItem.uid}}" target="_blank" class="pull-left">
+                                                        <img data-ng-if="pagedItem.employerMedia == null" alt="Search Result" class="media-object employer-search-img-template resize" src='http://patterson-solutions.com/wp-content/uploads/2014/08/Organizational-structure-icon.png' />
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <!--employerName-->
+                                                        <h4 style="margin-left:20px">
+                                                            <a href="/profile/employer/{{pagedItem.uid}}" class="employer-tag-name-template">{{pagedItem.employerName}}</a>
+                                                        </h4>
+
+                                                        <!--employerURL-->
+                                                        <h5 style="margin-left:20px">
+                                                            Visit Us: <a href="{{pagedItem.employerURL}}" class="url employer-tag-url-template">{{pagedItem.employerURL}}</a>
+                                                        </h5>
+
+                                                        <!--employerOtherLocaion-->
+                                                        <p style="margin-left:20px"><b>Location: </b><span class="location employer-tag-location-template">{{pagedItem.employerOtherLocation}}</span></p>
+
+                                                        <!--employerIndustry-->
+                                                        <p style="margin-left:20px"><b>Industry: </b><span class="industry employer-tag-industry-template">{{pagedItem.employerIndustry}}</span> </p>
+
+                                                        <!--employerTag-->
+                                                        <p style="margin-left:20px"><b>Tags: </b><span class="tags employer-tag-industry-template" style="text-transform: capitalize" data-ng-repeat="tag in pagedItem.employerTags">{{tag.name}}, </span> </p>
+
+
+                                                        <!--ratings-->
+                                                        <rating ng-model="pagedItem.averageRating" style="margin-left:20px" max="manager.maxStars" readonly="manager.isReadOnly"></rating><span>({{pagedItem.ratingCount}})</span>
+
+                                                        <p style="margin-left:20px" ng-if="pagedItem.averageRating"><b>Rating: </b><span class="industry employer-search-industry-template">{{pagedItem.averageRating|number:2}} out of 5</span> </p>
+
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                            </div>
+                                            <!--***End **TEMPLATE***FOR EMPLOYER TAG SEARCH RESULTS**-->
+                                        </div>
+                                        <!--END INSERT EMPLOYERS SEARCH POINT-->
+                                        <!--***hidden input for item-->
+                                        <input type="hidden" id="tagName" name="tagName" value="@Model.Item">
+
+                                    </div>
+                                </div><!-- End Search Results -->
+                            </div>
+                    <pagination ng-model="manager.currentPage"
+                                total-items="manager.totalCount"
+                                items-per-page="manager.pageSize"
+                                max-size="manager.maxSize"
+                                ng-change="manager.pageChanged()"
+                                class="pagination-sm"
+                                @*boundary-links="true"*@
+                                rotate="false"
+                                num-pages="numPages">
+                    </pagination>
+                    <!-- END Pagination -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section pageInitScripts{
+    <script type="text/javascript" src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript"> sabio.extraNgDependencies = ['ui.bootstrap']; </script>
+}
+
+<!-- ^^^^^END*** PAGE CONTENT^^^^^^^ -->
+@section Scripts {
+
+    <script type="text/javascript" src="~/Scripts/Services/services.employers.js"></script>
+    <script type="text/javascript">
+
+
+        sabio.page.employerTagController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.employerTagController = sabio.ng.getControllerInstance($("#employerTagCntrlr"));
+
+        }
+
+        sabio.services.employers.employerTagFactory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.employers;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.services.ratings.factory = function ($baseService) {
+            var service = sabio.services.ratings;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+
+        sabio.page.employerTagControllerFactory = function ($scope, $baseController, $employerTagService, $ratingService) {
+
+            console.log($employerTagService);
+            var vm = this;
+            vm.items = null;
+            vm.tagName = $("#tagName").val();
+
+            vm.$employerTagService = $employerTagService;
+
+            vm.receiveItems = _receiveItems;
+            vm.onEmpTagError = _onEmpTagError;
+
+            vm.currentPage = 1;
+            vm.pageSize = 10;
+            vm.pageChanged = _pageChanged;
+
+            //section to enable Display Existing Ratings functionality
+            vm.$ratingService = $ratingService;
+            vm.maxStars = 5;
+            vm.isReadOnly = true;
+
+
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$employerTagService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.pageChanged();
+            }
+
+
+            function _receiveItems(data) {
+                console.log(data);
+                vm.notify(function () {
+                    vm.items = data.item.pagedItems;
+                    vm.totalCount = data.item.totalCount;
+                    vm.totalPages = data.item.totalPages;
+                });
+            }
+
+            function _onEmpTagError(jqXhr, error) {
+                console.error(error);
+            }
+
+            function _pageChanged() {
+                vm.$employerTagService.getTag(vm.currentPage - 1, vm.pageSize, vm.tagName, vm.receiveItems, vm.onEmpTagError);
+                window.scrollTo(0, 0);
+            }
+
+        }
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$employerTagService"
+            , ["$baseService"]
+            , sabio.services.employers.employerTagFactory);
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$ratingService"
+            , ["$baseService"]
+            , sabio.services.employers.employerTagFactory);
+
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "employerTagController"
+            , ['$scope', '$baseController', "$employerTagService", "$ratingService"]
+            , sabio.page.employerTagControllerFactory);
+
+    </script>
+}
+
+

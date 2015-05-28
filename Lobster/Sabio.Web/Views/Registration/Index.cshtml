@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+
+<div id="registration-content" class="container">  
+    <div>
+        <div id="registrationPhoto"></div>
+        <div @*class="panel panel-default"*@>
+            <div class="inputCenter title">
+                <h2 class="panel-title section-heading no-margin">Register Today!!!</h2>
+            </div>
+            <br />
+            <div @*class="panel-body"*@>
+                <div class="form-horizontal background">
+                    <form id="signupForm" class="form-horizontal margin-bottom-30px" role="form" method="get">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label class="control-label" for="firstName">First Name</label>
+                                <input id="firstName" class="form-control valid inputField" type="text" placeholder="First Name*" name="firstName" aria-required="true" aria-invalid="false">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="lastName">Last Name</label>
+                                <input id="lastName" class="form-control valid inputField" type="text" placeholder="Last Name*" name="lastName" aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="email">Email</label>
+                                <input id="email" class="form-control valid inputField" type="text" placeholder="Email*" name="email" aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="password">Password</label>
+                                <input id="password" class="form-control error inputField" type="password" placeholder="Password*" name="password" aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="confirmPassword">Confirm Password</label>
+                                <input id="confirmPassword" class="form-control error inputField" type="password" placeholder="Confirm Password*" name="confirmPassword" aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="profiletype">Define a Profile Type</label>
+                                <select id="profileType" class="valid" name="profiletype" aria-required="true">
+                                    <option value="">Select One*</option>
+                                    <option value="1">Developer</option>
+                                    <option value="2">Recruiter</option>
+                                    <option value="3">Employer</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button id="submitRegistration" class="btn btn-primary buttonStyle" type="submit">
+                                    <i class="fa loading-icon"></i>
+                                    <span>Submit!</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+        //Registration ClickHandlers
+        sabio.page.startUp = function () {
+            $("#submitRegistration").on("click", sabio.page.handlers.register);
+
+            $.validator.addMethod("pwcheck",
+                function (value, element) {
+                    return this.optional(element) || /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[\W_])(?=.{8,20}).*$/.test(value);
+                }
+                , 'Passwords must have at least 8 characters, including one non-letter/non-digit special character, one lowercase letter, one uppercase letter, and one number.');
+
+            $("#signupForm").validate({
+                rules: {
+                    firstName: "required",
+                    lastName: "required",
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        pwcheck: true,
+                    },
+                    confirmPassword: {
+                        required: true,
+                        equalTo: "#password"
+                    },
+                    profiletype: "required"
+                },
+                messages: {
+                    firstName: "Please enter your first name.",
+                    lastName: "Please enter your last name.",
+                    email: "Your email must be in the format of example@domain.com.",
+                    password: "Please enter a password with a minimum of 8 characters, including one special character, one number, one lowercase letter, and one uppercase letter.",
+                    confirmPassword: "Please enter the same password as above.",
+                    profiletype: "Please select a profile type."
+                }
+            });
+        }
+
+
+        //clickHandler leading to profile page
+        sabio.page.handlers.register = function (e) {
+            e.preventDefault();
+            var form = $("#signupForm");
+
+            //Validating the Form
+            if (form.valid()) {
+                var filledForm = form.serialize();
+                $.ajax({
+                    url: "/api/register/",
+                    data: filledForm,
+                    type:"POST",
+                })
+                .done(sabio.page.handlers.onAjaxSuccess)
+                .fail(sabio.page.handlers.onAjaxFail)
+                ;;
+            }
+            else {
+                sabio.layout.showModal('alert-danger', 'Oops!', "Please make sure all fields are filled out correctly.")
+            }
+        }
+
+        sabio.page.handlers.onAjaxSuccess = function (data, textStatus, jqXHR)
+        {
+            sabio.layout.showModal('alert-success', 'Welcome!', 'Thanks for registering with Recruit.Us.');
+            window.location.href = "/login/";
+        }
+
+        sabio.page.handlers.onAjaxFail = function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            var httpStatus = jqXHR.status;
+
+            if (httpStatus == 400) {
+                sabio.layout.showModal('alert-warning', 'Oops!', 'That email address is already being used. Please use another email address or reset your password by clicking on the "Change Password" link below.');
+            }
+            else {
+                sabio.layout.showModal('alert-danger', 'Sorry.', 'Please excuse our current technical difficulties and try again later.');
+            }
+
+        }
+    </script>
+}        

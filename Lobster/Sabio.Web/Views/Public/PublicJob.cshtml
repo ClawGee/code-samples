@@ -1,0 +1,174 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid>
+@{
+    ViewBag.Title = "Public";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- END TOPBAR -->
+<input type="hidden" value="@Model.Item" name="uid" id="uid" />
+<!-- MAIN NAVIGATION -->
+<!-- END MAIN NAVIGATION -->
+<!-- END NAVBAR -->
+<!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Job Profile</h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/search/jobs">Jobs Search</a>
+            </li>
+            <li class="active">Job Details</li>
+        </ol>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- PAGE CONTENT -->
+<div class="page-content">
+    <div class="container">
+        <!-- PORTFOLIO ITEM -->
+        <div class="portfolio-media media-carousel">
+            <div><img height="150" width="240" src="~/Content/img/sliders/slider1-h500.png" class="img" alt="City Img"></div>
+        </div>
+        <div class="row" data-ng-controller="jobController as job" id="jobControllerContainer">
+            <div class="col-md-8">
+                <section>
+                    <h1 class="heading-center" id="job-title-template">{{job.item.title}}</h1>
+                    <h4 class="sub-category-list" id="job-description">Job Description</h4>
+                    <p id="job-description-template">{{job.item.description}}</p>
+                    <h4 class="sub-category-list">Qualifications</h4>
+                    <p id="job-qualifications-template">{{job.item.qualifications}}</p>
+                    <ul class="list-unstyled project-detail-list">
+                        <li><strong>Rate:</strong>{{job.item.rate}}</li>
+                        <li><strong>Terms:</strong>{{job.item.terms}}</li>
+                        <li><strong>Skills:</strong>C#, MVC, Javascript, HTML/CSS</li>
+                    </ul>
+                </section>
+            </div>
+            <div class="col-md-4">
+                <section>
+                    <h2 class="section-heading">Company Details</h2>
+                    <ul class="list-unstyled project-detail-list">
+                        <li id="company-name-template"><strong>Company:</strong>{{job.item.companyName}}</li>
+                        <li id="contacts-template"><strong>Recruiter:</strong>{{job.item.contacts}}  <a id="email" class="btn btn-info btn-sm" href="mailto:{{job.item.primaryEmail}}">Email Now</a></li>
+                        <li id="industry-template"><strong>Industry:</strong>Virtual Reality, Wearables, Mobile</li>
+                                                <li>
+                            <strong>Categories:</strong>
+                            <a href="https://www.google.com/#q=development">Development</a>,
+                            <a href="https://www.google.com/#q=cutting+edge">Cutting Edge</a>
+                        </li>
+                        <li><strong>Job Location:</strong><span id="address"> Culver City, CA</span></li>
+                        <li id="geoLat" class="hidden">33.9884882</li>
+                        <li id="geoLng" class="hidden">-118.3845679</li>
+                    </ul>
+                    <div id="map-canvas"></div>
+                </section>
+                <section>
+                    <div class="top30">
+                        <a href="mailto:{{job.item.primaryEmail}}/{{job.item.uid}}" class="btn btn-danger"><i class="fa fa-external-link"></i>Apply Now</a>
+                        <a href="{{job.item.url}}" class="btn btn-default btn-info"><i class="fa fa-external-link"></i>Visit Our Website</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- END JOB ITEM -->
+        <!-- END RELATED PORTFOLIO -->
+    </div>
+</div>
+<!-- END PAGE CONTENT -->
+<!-- START JOB TEMPLATE-->
+
+<!-- Manage Get Jobs Start-->
+<!-- Scripts Start-->
+<style type="text/css">
+    #map-canvas {
+        width: 350px;
+        height: 250px;
+        background-color: #CCC;
+    }
+</style>
+
+<!-- Manage Get Jobs Start-->
+<!-- Scripts Start-->
+@section Scripts {
+    <script type="text/javascript" src="~/Scripts/Services/services.jobs.js"></script>
+<script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD-7HL0_pepuPOc4nUVX1vF10DWphG-UF8"></script>
+@*<script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/geocode/json?address=400+Corporate+Pointe,+Culver+City,+CA&key=AIzaSyD-7HL0_pepuPOc4nUVX1vF10DWphG-UF8"></script>*@
+    <script type="text/javascript">
+
+        sabio.page.startUp = function () {
+            // clickevent handlers kept here
+            //sabio.services.jobs.getByJobId($("#uid").val(), sabio.page.handlers.fillJobData, sabio.page.handlers.onPopulateFailure);
+            sabio.page.handlers.displayGoogleMap($("#map-canvas"));
+        };
+
+
+        sabio.page.handlers.displayGoogleMap = function (mapcanvas) {
+            var mapCanvas = mapcanvas;
+            var mapOptions = {
+                center: new google.maps.LatLng(33.9884882, -118.3845679),
+                zoom: 10,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(mapCanvas[0], mapOptions);
+        };
+
+
+        sabio.services.jobs.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.jobs
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+        }
+
+        sabio.page.jobControllerFactory = function ($scope, $baseController, $jobService) {
+            var vm = this;
+            vm.item = null;
+            //vm.selectedEmployee = null;
+            vm.$jobService = $jobService;
+            vm.receiveItem = _receiveItem;
+            vm.onJobError = _onJobError;
+
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$jobService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$jobService.getByJobId($("#uid").val(), vm.receiveItem, vm.onJobError);
+            }
+
+            function _receiveItem(data) {
+                //this receives the data and calls the special
+                //notify method that will trigger ng to refresh UI
+                vm.notify(function () {
+                    vm.item = data.item;
+                });
+            }
+
+            function _onJobError(jqXhr, error) {
+                console.error(error);
+
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module
+           , "$jobService"
+           , ["$baseService"]
+           , sabio.services.jobs.factory);
+
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "jobController"
+            , ['$scope', '$baseController', "$jobService"]
+            , sabio.page.jobControllerFactory);
+    </script>
+}

@@ -1,0 +1,24 @@
+﻿@{
+
+}
+
+
+<div class="container page-content">
+    <div>
+        <form class="col-md-6" id="rating-form">
+            <div class="row">
+                <h3>Rating Form</h3>
+                <input type="hidden" class="rating bottom30" id="rating-star" />
+                <label class="boxed-content-title text-primary" for="rating-star"> Rate 1-5</label>
+                <div class="row bottom30">
+                    @*<input type="text" class="col-md-6" name="rating-comment" id="rating-comment"/>*@
+                    <textarea class="col-md-6" name="rating-comment" id="rating-comment">Rating Comments Here...</textarea>
+                    <label class="boxed-content-title text-primary" for="rating-comment"> Share Comments</label>
+                </div>
+                <div class="row">
+                    <input class="col-lg-push-6 btn-success" id="btn-rating-submit" type="submit" value="Submit Rating and Comments"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

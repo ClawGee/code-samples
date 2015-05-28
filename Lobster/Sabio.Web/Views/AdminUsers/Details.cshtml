@@ -1,0 +1,210 @@
+﻿@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div style=margin-top:50px class="page-content" data-ng-controller="adminController as dashboard">
+    <div id="adminControlContainer">
+        <h1> Active Users </h1>
+        <table class="centerWrapper" border="1" style="width:90%">
+            <tr>
+                <td height="25" width="20%"><b>Name</b></td>
+                <td height="25" width="20%"><b>Profile Type</b></td>
+                <td height="25" width="30%"><b>Email</b></td>
+                <td height="25" width="15%"><b>Edit Column</b></td>
+            </tr>
+        </table>
+        <div ng-repeat="user in dashboard.items track by user.id">
+            <table class="centerWrapper" border="1" style="width:90%">
+                <tr>
+                    <td height="30" width="20%">{{user.firstName}} {{user.lastName}}</td>
+                    <td height="30" width="20%">{{dashboard.profile(user.userType)}}</td>
+                    <td height="30" width="30%">{{user.email}}</td>
+                    <td height="30" width="15%">
+                        <a data-ng-click="isCollapsed = !isCollapsed" href="#">
+                            <i class="fa fa-user"></i>Edit
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <div ng-show="isCollapsed" id="rcorners1">
+                <form class=" admin-form" ng-submit="">
+                    <input type="text" placeholder="First Name" name="firstName" data-ng-model="user.firstName" required>
+                    <input class='pull-right control-group' type="text" placeholder="Password" name="password">
+                    <input type="text" placeholder="Last Name" name="lastName" data-ng-model="user.lastName" required>
+                    <input class='pull-right control-group' type="text" placeholder="Email" name="email" data-ng-model="user.email" required>
+
+                    <input class="admin-submit" type="button" value="Submit" data-ng-click="dashboard.processForm(user)">
+
+                    @*<input type="text" id="id" name="id" class="form-control hidden" data-ng-model="user.id" />*@
+                    <div class="form-group pull-left control-group admin-profile">
+                        <div class="col-md-10">
+                            <select id="profile-type" class="valid" name="profiletype" aria-required="true">
+                                <option value="">Select Profile Type</option>
+                                <option value="1">Developer</option>
+                                <option value="2">Recruiter</option>
+                                <option value="3">Employer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group pull-right control-group admin-type">
+                        <div class="col-md-10">
+                            <select id="admin-rights" class="valid" name="adminrights" aria-required="true">
+                                <option value="">Admin Type</option>
+                                <option value="1">No Admin Rights</option>
+                                <option value="2">Admin Rights</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <pagination ng-model="dashboard.currentPage"
+                    total-items="dashboard.totalCount"
+                    items-per-page="dashboard.pageSize"
+                    max-size="dashboard.maxSize"
+                    ng-change="dashboard.pageChanged()"
+                    class="pagination-sm"
+                    boundary-links="true"
+                    rotate="false"
+                    num-pages="numPages">
+        </pagination>
+    </div>
+</div>
+
+@* Start of Template for Admin Edit form *@
+@*<script type="text/ng-template" id="/scripts/app/admin/selectedEmployee.html">
+    <div id="rcorners1" class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-3">
+                <input type="text" data-ng-model="dashboard.items.firstName" /><input class='pull-right control-group' type="text" data-ng-model="dashboard.items.password" />
+                <input type="text" data-ng-model="dashboard.items.lastName" /><input class='pull-right control-group' type="text" data-ng-model="dashboard.items.email" />
+            </div>
+        </div>
+        <button type="button" data-ng-click="dashboard.saveStatus(dashboard.item)"
+                class="btn-outlined btn-sm btn-success">
+            Save
+        </button>
+    </div>
+</script>*@
+@* Start of Template for Admin Edit form  *@
+
+
+
+
+@* PAGINATION  *@
+
+@section pageInitScripts{
+    <script type="text/javascript" src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+}
+
+@* END OF PAGINATION  *@
+
+
+
+<!--Start JavaScript-->
+@section Scripts {
+
+    <script type="text/javascript" , src="~/Scripts/Services/sabio.services.accounts.js"></script>
+    <script type="text/javascript">
+
+        sabio.page.adminController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.adminController = sabio.ng.getControllerInstance($("#adminControlContainer"));
+        }
+
+  
+        sabio.services.adminFactory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.accounts
+
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+
+            return newService;
+        }
+
+        sabio.page.adminControllerFactory = function ($scope, $baseController, $adminService) {
+            var vm = this;
+            vm.items = null;
+            vm.$adminService = $adminService;
+            vm.receiveItems = _receiveItems;
+            vm.onProfileError = _onProfileError;
+            //vm.editCollapse = _editCollapse;
+            vm.profile = _profile;
+            vm.onUpdateSuccess = _onUpdateSuccess;
+            vm.onUpdateFailure = _onUpdateFailure;
+            vm.processForm = _processForm;
+            vm.currentPage = 1;
+            vm.pageSize = 20;
+            vm.totalCount = null;
+            vm.maxSize = 5;
+            vm.pageChanged = _pageChanged;
+
+
+            $.extend(vm, $baseController);
+
+            vm.notify = vm.$adminService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$adminService.getAll(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onProfileError); 
+            }
+
+            function _receiveItems(data) {
+                vm.notify(function () {
+                    vm.items = data.item.pagedItems;
+                    vm.totalCount = data.item.totalCount;
+                    vm.totalPages = data.item.totalPages;
+                });
+            }
+
+            function _onProfileError(jqXhr, error) {
+                console.error("Profiles failed to load");
+                console.error(error);
+            }
+
+
+            function _profile(num) {
+                if (num == 1) {
+                    return "Developer";
+                } else if (num == 2) {
+                    return "Recruiter";
+                } else if (num == 3) {
+                    return "Employer";
+                } else {
+                    return "No Profile Selected";
+                }
+            }
+
+
+            function _processForm(user) {
+                console.log(user);
+                vm.item = user;
+                userId = user.id;
+                vm.$adminService.update(userId, vm.item, vm.onUpdateSuccess, vm.onUpdateFailure); 
+            }
+
+            function _onUpdateSuccess() {
+                console.log("Profile has been updated")
+            }
+
+            function _onUpdateFailure() {
+                console.log("!!!!ERROR: PROFILE HAS NOT BEEN UPDATED!!!!!")
+            }
+
+            function _pageChanged() {
+                vm.$adminService.getAll(vm.currentPage, vm.pageSize, vm.receiveItems, vm.onProfileError);
+                console.log('Page Changed to: ' + vm.currentPage);
+            }
+
+        }
+
+        sabio.ng.addService(sabio.ng.app.module, "$adminService", ["$baseService"], sabio.services.adminFactory);
+        sabio.ng.addController(sabio.ng.app.module, "adminController", ['$scope', '$baseController', "$adminService"], sabio.page.adminControllerFactory);
+
+    </script>
+}

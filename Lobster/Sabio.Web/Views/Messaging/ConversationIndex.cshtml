@@ -1,0 +1,327 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<int>
+@{
+    ViewBag.Title = "ConversationIndex";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<!-- BREADCRUMBS -->
+<div class="page-header">
+    <div class="panel-heading">
+        <h1 class="panel-title section-heading no-margin">MY MESSAGE CENTER</h1>
+
+        <div class="container">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/messaging#/">Message Center</a>
+                </li>
+                <li class="active">Conversation Thread</li>
+            </ol>
+            <br />
+        </div>
+    </div>
+</div>
+<!-- END BREADCRUMBS -->
+<!-- BEGIN PAGE CONTENT SECTION -->
+<div class="container" data-ng-controller="messagingController as dashboard">
+
+    <!-- BEGIN CONVERSATION SECTION -->
+    <div class="conversationSection" id="messagingCntrlr">
+        <h3>A CONVERSATION THREAD BETWEEN</h3>
+        <div ng-cloak class="message-meta">
+            <p><strong>{{dashboard.metaData.recipient.firstName}} {{dashboard.metaData.recipient.lastName}}</strong></p>
+        </div>
+        <div ng-cloak class="message-avatar" ng-if="dashboard.metaData.recipient.avatar != null">
+            <img ng-src="{{dashboard.metaData.recipient.avatar.fullUrl}}" alt="avatar" />
+        </div>
+        <div class="message-avatar" ng-if="dashboard.metaData.recipient.avatar == null">
+            <img ng-src="https://citizenmed.files.wordpress.com/2011/08/user-icon1.jpg" alt="avatar" />
+        </div>
+        <p><strong>and</strong></p>
+        <div ng-cloak class="message-avatar" ng-if="dashboard.metaData.sender.avatar != null">
+            <img ng-src="{{dashboard.metaData.sender.avatar.fullUrl}}" alt="avatar" />
+        </div>
+        <div class="message-avatar" ng-if="dashboard.metaData.sender.avatar == null">
+            <img ng-src="https://citizenmed.files.wordpress.com/2011/08/user-icon1.jpg" alt="avatar" />
+        </div>
+        <div ng-cloak class="message-meta">
+            <p><strong>{{dashboard.metaData.sender.firstName}} {{dashboard.metaData.sender.lastName}}</strong></p>
+            <p><strong>INITIATED: </strong>{{dashboard.metaData.createDate | date : 'medium'}}</p>
+        </div>
+
+        <!-- comment template start -->
+        <div class="row animate-repeat" data-ng-repeat="message in dashboard.items track by message.messageId">
+            <div class="col-md-6" id="cloneTemplate">
+                <div ng-cloak class="message-content clearfix" style="margin-left: 10px">
+                    <p>
+                        <strong>Sender Id: </strong>{{message.appUserId}} |
+                        <strong>Subject: </strong>{{message.subject}}<br />
+                        <strong>Message: </strong>{{message.body}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- comment template end -->
+
+    </div>
+
+    <!-- END CONVERSATION SECTION -->
+    <!-- START REPLY FORM -->
+    <div class="page-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="contact-form-wrapper">
+                        <h4>ADD TO THIS THREAD</h4>
+                        <form novalidate id="replyingForm" role="form" method="post">
+                            <div class="form-group">
+                                <label for="body">Message</label>
+                                <textarea ng-model="dashboard.newMessage.body" id="replyingMessage"
+                                          class="form-control" placeholder="Enter Your Message" cols="30" rows="5" name="body"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <button data-ng-click="dashboard.selectFormData(dashboard.newMessage)" id="replyButton"
+                                        class="btn btn-success" type="submit">
+                                    <i class="fa fa-check-circle"></i>
+                                    <span>Send!</span>
+                                </button>
+                            </div>
+                            <input name="conversationId" id="conversationId" value="@Model.Item" type="hidden" /> @*CONVERSATIONID INPUT*@
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END REPLY FORM -->
+</div>
+
+<!-- Custom Scripts -->
+@section Scripts{
+    <script type="text/javascript">
+
+        sabio.page.messagingController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.messagingController = sabio.ng.getControllerInstance($("#messagingCntrlr"));
+        }
+
+        sabio.services.messagingFactory = function ($baseService) {
+
+            var aSabioServiceObject = sabio.services.messaging;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.page.messagingControllerFactory = function ($scope, $baseController, $messagingService) {
+            console.log($messagingService);
+            var vm = this;
+            vm.items = null;
+            vm.metaData = null;
+            vm.selectedFormData = null;
+            vm.$messagingService = $messagingService;
+            vm.conversationRetrieved = _conversationRetrieved;
+            vm.conversationNotRetrieved = _conversationNotRetrieved;
+            vm.selectFormData = _selectFormData;
+            vm.onPostReplySuccess = _onPostReplySuccess;
+            vm.onPostReplyError = _onPostReplyError;
+            vm.onMetaDataRetrieved = _onMetaDataRetrieved;
+            vm.onMetaDataError = _onMetaDataError;
+
+            //-- this line to simulate inheritance
+            $.extend(vm, $baseController);
+
+            //this is a wrapper for our small dependency on $scope
+            vm.notify = vm.$messagingService.getNotifier($scope);
+
+            render();
+
+            function render() {
+                vm.$messagingService.getMessagesByConversationId($("#conversationId").val(), vm.conversationRetrieved, vm.conversationNotRetrieved);
+                vm.$messagingService.getConvoMetaData($("#conversationId").val(), vm.onMetaDataRetrieved, vm.onMetaDataError);
+            }
+
+            function _selectFormData(formData) {
+                console.log(formData);
+                vm.selectedFormData = formData;
+                vm.selectedFormData.conversationId = $("#conversationId").val();
+                vm.$messagingService.postReply(vm.selectedFormData, vm.onPostReplySuccess, vm.onPostReplyError);
+            }
+
+            function _conversationRetrieved(data) {
+                console.log(data);
+                vm.notify(function () {
+                    vm.items = data.items;
+                });
+            }
+
+            function _conversationNotRetrieved(error) {
+                console.error(error);
+                sabio.layout.showModal("alert-danger", "Oops!", "Your conversation was not retrieved from the database. Please reload the page to try again.");
+            }
+
+            function _onMetaDataRetrieved(metaData) {
+                vm.notify(function () {
+                    vm.metaData = metaData.item;
+                });
+                console.log(metaData);
+            }
+
+            function _onMetaDataError() {
+                console.log("Meta data not retrieved.");
+            }
+
+            function _onPostReplySuccess() {
+                vm.newMessage = {};
+                vm.item = null;
+                render();
+                console.log("Message sent successfully.");
+                sabio.layout.showModal("alert-success", "Success!", "Your message was sent.");
+            }
+
+            function _onPostReplyError() {
+                console.log("Message NOT sent successfully.");
+                sabio.layout.showModal("alert-danger", "Oops!", "Your message was not sent. Please try again.");
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$messagingService"
+            , ["$baseService"]
+            , sabio.services.messagingFactory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "messagingController"
+            , ['$scope', '$baseController', "$messagingService"]
+            , sabio.page.messagingControllerFactory);
+
+        //    sabio.page.startUp = function () {
+        //        sabio.services.messaging.getConversation(sabio.page.handlers.conversationRetrieved, sabio.page.handlers.conversationNotRetrieved);
+        //        sabio.page.rules();
+        //        $("#composeButton").on("click", sabio.page.handlers.initializeConversation);
+        //        $("#replyButton").on("click", sabio.page.handlers.initializeReply);
+        //    }
+
+        //    sabio.page.showConversation = function (data) {
+        //        $.each(data.items, function (index, item) {
+        //        var newClone = sabio.page.getNewMessageClone();
+        //        sabio.page.addMessageContent(item, newClone);
+        //    });
+        //        $("#composeSection").addClass("hidden");
+        //        $('html, body').animate({
+        //            scrollTop: $("#cloneTemplate").offset().top
+        //        }, 1000);
+        //    }
+
+        //    sabio.page.getNewMessageClone = function () {
+        //        console.log("new clone function called");
+        //        return $("#cloneTemplate").clone().removeClass("hidden").removeAttr("id");
+        //    }
+
+        //    sabio.page.addMessageContent = function (item, newClone) {
+        //        console.log("AddMessageContent function called");
+        //        console.log(item);
+        //        var targetElement = $(".conversationSection");
+        //        targetElement.append(newClone);
+        //        $(".message-meta a", newClone).text(item.appUserId);
+        //        $(".message-meta p", newClone).html("Sent: " + item.createDate);
+        //        $("h4", newClone).html("Subject: " + item.subject);
+        //        $(".message-body p", newClone).html("Message: " + item.body);
+        //        //$(".comment-avatar img", newClone).attr('src', 'https://cdn2.iconfinder.com/data/icons/crystalproject/crystal_project_256x256/apps/personal.png');
+        //        return newClone;
+        //    }
+
+        //sabio.page.rules = function () {
+        //    $("#messagingForm").validate({
+        //        rules: {
+        //            senderNameInputField: "required",
+        //            recipientNameInputField: "required",
+        //            messagingSubject: {
+        //                maxlength: 128
+        //            },
+        //            messagingMessage: {
+        //                maxlength: 1000
+        //            }
+        //        },
+        //        messages: {
+        //            senderNameInputField: "Please enter your name",
+        //            recipientNameInputField: "Please enter the recipient's name.",
+        //            messagingSubject: {
+        //                maxlength: jQuery.validator.format("Please enter no more than {0} characters.")
+        //            },
+        //            messagingMessage: {
+        //                maxlength: jQuery.validator.format("Please enter no more than {0} characters.")
+        //            }
+        //        }
+        //    })
+
+        //    $("#replyingForm").validate({
+        //        rules: {
+        //            senderNameInputField: "required",
+        //            recipientNameInputField: "required",
+        //            replyingSubject: {
+        //                maxlength: 128
+        //            },
+        //            replyingMessage: {
+        //                maxlength: 1000
+        //            },
+        //            conversationId: "required"
+        //        },
+        //        messages: {
+        //            senderNameInputField: "Please enter your name",
+        //            recipientNameInputField: "Please enter the recipient's name.",
+        //            messagingSubject: {
+        //                maxlength: jQuery.validator.format("Please enter no more than {0} characters.")
+        //            },
+        //            messagingMessage: {
+        //                maxlength: jQuery.validator.format("Please enter no more than {0} characters.")
+        //            },
+        //            conversationId: "Conversation association error. Please reload the page."
+        //        }
+        //    })
+        //}
+
+        //sabio.page.initializeConversation = function (event) {
+        //    event.preventDefault();
+        //    var isValid = $("#messagingForm").valid();
+        //    var dataSet = $("#messagingForm").serialize();
+        //    if (isValid) {
+        //        sabio.services.messaging.postMessage(dataSet, sabio.page.handlers.messageSent, sabio.page.handlers.messageNotSent);
+        //    }
+        //}
+
+        //sabio.page.initializeReply = function (event) {
+        //    event.preventDefault();
+        //    var isValid = $("#replyingForm").valid();
+        //    var dataSet = $("#replyingForm").serialize();
+        //    if (isValid) {
+        //        sabio.services.messaging.postReply(dataSet, sabio.page.handlers.messageSent, sabio.page.handlers.messageNotSent);
+        //    }
+        //}
+
+        //sabio.page.handlers.messageSent = function () {
+        //    console.log("Message sent successfully.");
+        //    sabio.layout.showModal("alert-success", "Success!", "Your message was sent.");
+        //}
+
+        //sabio.page.handlers.messageNotSent = function () {
+        //    console.log("Message NOT sent successfully.");
+        //    sabio.layout.showModal("alert-danger", "Oops!", "Your message was not sent. Please try again.");
+
+        //}
+
+        //sabio.page.handlers.conversationRetrieved = function (data) {
+        //    console.log("Conversation received successfully.");
+        //    sabio.page.showConversation(data);
+        //}
+
+        //sabio.page.handlers.conversationNotRetrieved = function () {
+        //    console.log("Conversation NOT received.");
+        //    sabio.layout.showModal("alert-danger", "Oops!", "Your conversation was not retrieved from the database. Please reload the page to try again.");
+
+        //}
+    </script>
+}
+

@@ -1,0 +1,416 @@
+﻿@model Sabio.Web.Models.ViewModels.ItemViewModel<Guid>
+@{
+    ViewBag.Title = "Public";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title pull-left">Employer Profile</h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">Home</a>
+            </li>
+            <li>
+                <a href="/search/employer">Employer Search</a>
+            </li>
+            <li class="active">Employer Details</li>
+        </ol>
+    </div>
+</div>
+<div id="public-form">
+    <div class="container page-content" data-ng-controller="employerController as Emp" id="employerControllerElement">
+        <div class="col-md-6">
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="name">Company Name</label>
+                @*<h6 id="name" class=""></h6>*@
+                <h6>{{Emp.item.name}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="contactName">Contact Name</label>
+                @*<h6 id="contactName" class=""></h6>*@
+                <h6>{{Emp.item.contactName}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="size">Company Size</label>
+                @*<h6 class="" id="size"></h6>*@
+                <h6>{{Emp.item.size}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="industry">Industry</label>
+                @*<h6 class="" id="industry"></h6>*@
+                <h6>{{Emp.item.industry}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="contactEmail">Contact Email</label>
+                @*<h6 id="contactEmail" class=""></h6>*@
+                <h6>{{Emp.item.contactEmail}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="url">Company Website</label>
+                @*<h6 id="url" class=""></h6>*@
+                <h6>{{Emp.item.url}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="country">Country</label>
+                @*<h6 class="" id="country"></h6>*@
+                <h6>{{Emp.item.country}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="stateOptions">State</label>
+                @*<h6 class="" id=" stateOptions"></h6>*@
+                <h6>{{Emp.item.city}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="otherLocation">Providence/Region</label>
+                @*<h6 id="otherLocation" class=""></h6>*@
+                <h6>{{Emp.item.otherLocation}}</h6>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="tech">Technologies</label>
+                @*<h6 id="tech" class=""></h6>*@
+                <h6>{{Emp.item.tech}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="description">Company Description</label>
+                @*<h6 id="description" class=""></h6>*@
+                <h6>{{Emp.item.description}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="facebook">Facebook Address</label>
+                @*<h6 id="facebook" class=""></h6>*@
+                <h6>{{Emp.item.facebook}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="twitter">Twitter Address</label>
+                @*<h6 id="twitter" class=""></h6>*@
+                <h6>{{Emp.item.twitter}}</h6>
+            </div>
+
+            <div class="row ">
+                <label class="boxed-content-title text-primary" for="linkedIn">LinkedIn Address</label>
+                @*<h6 id="linkedIn" class=""></h6>*@
+                <h6>{{Emp.item.linkedIn}}</h6>
+            </div>
+
+            <div class="row hidden">
+                <p id="guid">@Model.Item</p>
+            </div>
+        </div>
+        <div class="container" ng-if="Emp.item.media.fullUrl==null">
+            @*<img class="resize" src="" id="image" />*@
+            <img id="image" src="http://www.lunametrics.com/wp-content/uploads/2011/12/Question-mark-face1.jpg" alt="Search Result" class="resize" />
+        </div>
+        <div ng-if="Emp.item.media.fullUrl!=null">
+            <img id="image" src="{{Emp.item.media.fullUrl}}" alt="Search Result" class="resize" />
+        </div>
+        <!--rating widget starts here-->
+        <br />
+        <div class="container page-content well well-sm ">
+            <div class="panel-group">
+                <div class="col-lg-2">
+                    <h3>Employer Rating</h3>
+                    <rating ng-model="Emp.item.averageRating" max="Emp.maxStars" readonly="Emp.isReadOnly"></rating><label class="boxed-content-title text-primary" for="rating-count-display"></label><span><small>({{Emp.item.ratingCount}} reviews)</small></span>
+                    <br />
+                    <label class="boxed-content-title text-primary" for="average-rating-display"></label><span class="avg-rating-display"><small>{{Emp.item.averageRating| number: 2}} Stars out of 5</small></span>
+                </div>
+            </div>
+            <div class="panel-group">
+                <div class="col-lg-4">
+                    <div ng-include="'/Content/includes/RatingsPartial.html'"></div>
+                </div>
+            </div>
+            <div class="panel-group">
+                <div class="col-lg-6">
+                    <h4>Reviews</h4>
+                    <!--start sort button-->
+                    <div class="btn-group" dropdown is-open="Emp.toggleStatus.isopen">
+                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                            <small>Sort By</small><span class="caret"></span>
+                            @*<div class="btn btn-group pull-right col-lg-3" dropdown is-open="Recruit.toggleStatus.isopen">
+                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                                Sort By <span class="caret"></span>*@
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a ng-click="Emp.getRatingsPage(Emp.sortOrder ='old')" href=""><small>Oldest First</small></a></li>
+                            <li><a ng-click="Emp.getRatingsPage(Emp.sortOrder ='new')" href=""><small>Newest First</small></a></li>
+                            <li><a ng-click="Emp.getRatingsPage(Emp.sortOrder = 'hi')" href=""><small>High to Low</small></a></li>
+                            <li><a ng-click="Emp.getRatingsPage(Emp.sortOrder = 'low')" href=""><small>Low to High</small></a></li>
+
+                        </ul>
+                    </div>
+                    <!--end sort button-->
+                    <div class="rates" data-ng-repeat="rates in Emp.existingRatingItems">
+                        <div class="testimonial testimonial-body">
+                            <rating ng-model="rates.ratingValue" max="Emp.maxStars" readonly="Emp.isReadOnly"></rating>
+                            <span>Rating: {{rates.ratingValue}}</span>
+                            <br />
+                            <span><i><small>Comments:</small></i> {{rates.comments}}</span>
+                            <br />
+                            <span><small><i>Rated on:</i> {{rates.createDate| date}}</small></span>
+                            <span><small><i>Reviewed by: </i><a href="assignmeplease">{{rates.fullUser.firstName}}</a></small></span>
+                            <br />
+                            <span><small>Helpful?</small> </span><button ng-click="Emp.disabledVote()" class="glyphicon glyphicon-thumbs-up"></button> <button ng-click="Emp.disabledVote()" class=" glyphicon glyphicon-thumbs-down"></button>
+                            <hr />
+                        </div>
+                    </div>
+                    <pagination total-items="Emp.totalCount" max-size="Emp.maxPagesDisplayed" items-per-page="Emp.pageSize" ng-model="Emp.currentPage" ng-change="Emp.getRatingsPage()"></pagination>
+                </div>
+            </div>
+        </div>
+        <!--rating widget ends here-->
+    </div>
+</div>
+<!-- Custom Ng Scripts -->
+@section pageInitScripts{
+    <script src="~/Scripts/ng/ui-bootstrap-tpls-0.12.1.js"></script>
+    <script type="text/javascript">
+        sabio.extraNgDependencies = ['ui.bootstrap'];
+    </script>
+}
+
+@section Scripts{
+    <script type="text/javascript" , src="~/Scripts/Services/services.public.js"></script>
+    <script type="text/javascript" src="~/Scripts/Services/services.ratings.js"></script>
+    <script type="text/javascript" src="~/Scripts/sabio.rating.js"></script>
+    <script type="text/javascript">
+        sabio.page.employerController = null;
+        sabio.page.employerGuid = null;
+        sabio.page.ratingController = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.employerController = sabio.ng.getControllerInstance($('#employerControllerElement'));
+            sabio.page.employerGuid = $('#guid').text();
+            sabio.page.ratingController = sabio.ng.getControllerInstance($("#ratingControllerContainer"));
+        }
+
+        sabio.services.public.factory = function ($baseService) {
+            var service = sabio.services.public;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        sabio.services.ratings.factory = function ($baseService) {
+            var service = sabio.services.ratings;
+            var newService = $.extend(true, {}, service, $baseService);
+            return newService;
+        }
+
+        sabio.page.employerControllerFactory = function ($scope, $baseController, $employerService, $ratingService) {
+            // --ng controller factory service variables
+            var viewModel = this;
+            viewModel.item = null;
+            viewModel.$employerService = $employerService;
+            viewModel.receivedItems = _onSuccess;
+            viewModel.onResultError = _onResultError;
+
+            //section to enable Display Existing Ratings functionality
+            viewModel.$ratingService = $ratingService;
+            viewModel.existingRatingItems = null;
+            viewModel.onListSuccess = _onListSuccess;
+            viewModel.onListError = _onListError;
+            viewModel.maxStars = 5;
+            viewModel.isReadOnly = true;
+
+            //section to enable listener for ratingspartial submit
+            viewModel.$scope = $scope;
+            viewModel.$scope.error = _onListError;
+            viewModel.$scope.success = _onListSuccess;
+
+            //section to enable paginated listings functions and variables
+            viewModel.currentPage = 1;
+            viewModel.maxPagesDisplayed = 5;
+            viewModel.getRatingsPage = _getRatingsPage;
+            viewModel.ratingListener = _ratingListener;
+            viewModel.disabledVote = _disabledVote;
+            //dropdown section
+            viewModel.toggleStatus = {
+                isopen: false
+            };
+            viewModel.toggled = _toggled;
+            viewModel.toggleDropdown = _toggleDropdown;
+
+            $.extend(viewModel, $baseController);
+
+            viewModel.notify = viewModel.$employerService.getNotifier($scope);
+            viewModel.$scope.$on('submitRating', viewModel.ratingListener);
+
+            render();
+
+            function _disabledVote() {
+                sabio.layout.showModal('alert-info', 'Info', 'Sorry, this button is WIP');
+            };
+
+            function _toggled(open) {
+                $log.log('Dropdown is now: ', open);
+            };
+
+            function _toggleDropdown($event) {
+                //console.log("click");
+                viewModel.$event.preventDefault();
+                viewModel.$event.stopPropagation();
+                viewModel.toggleStatus.isopen = !viewModel.toggleStatus.isopen;
+            };
+
+            function render() {
+                viewModel.$employerService.getEmployer(sabio.page.employerGuid, viewModel.receivedItems, viewModel.onResultError);
+            }
+
+            function _ratingListener(event, msg) {
+                viewModel.currentPage = 1;
+                viewModel.pageSize = 5;
+
+                viewModel.getRatingsPage();
+            };
+
+            function _getRatingsPage(sortOrder) {
+
+                switch (sortOrder) {
+                    case 'hi':
+                        viewModel.sortOrder = 'HiToLow';
+                        break;
+                    case 'low':
+                        viewModel.sortOrder = 'LowToHi';
+                        break;
+                    case 'old':
+                        viewModel.sortOrder = 'OldToNew';
+                        break;
+                    case 'new':
+                        viewModel.sortOrder = 'NewToOld';
+                        break;
+                }
+                viewModel.$ratingService.listPagedRatingsByEntitySorted(
+                    viewModel.$sabio.entityId,
+                    viewModel.$sabio.entityType,
+                    viewModel.currentPage,
+                    viewModel.pageSize,
+                    viewModel.sortOrder,
+                    viewModel.$scope.success,
+                    viewModel.$scope.error);
+            };
+
+            function _onListSuccess(result) {
+                viewModel.notify(function () {
+                    //function _receiveItems(data) {
+                    //    //this receives the data and calls the special
+                    //    //notify method that will trigger ng to refresh UI
+                    //    //var index = $scope.selected
+                    //    viewModel.notify(function () {
+                    // from Andy/ Gregorio session
+                    //var index = $scope.selected
+                    //viewModel.notify(function () {
+                    //    viewModel.items = data.item.pagedItems;
+                    //    viewModel.currentPage = data.item.pageIndex;
+                    //    viewModel.totalCount = data.item.totalCount;
+                    //    viewModel.totalPages = data.item.totalPages;
+
+                    viewModel.existingRatingItems = result.item.pagedItems;
+                    viewModel.profilePath = null;
+                    viewModel.pageSize = result.item.pageSize;
+                    viewModel.totalCount = result.item.totalCount;
+                });
+            }
+
+            function _onListError(jqXhr, error) {
+                sabio.layout.showModal('alert-danger', 'Error', 'Bummer, Ratings not coming through!')
+            };
+
+            function _onSuccess(result) {
+                viewModel.notify(function () {
+                    viewModel.item = result.item;
+                    viewModel.$sabio.entityId = viewModel.item.employerId;
+                    viewModel.$sabio.entityType = 3;
+                    viewModel.pageSize = 5;
+                    viewModel.sortOrder = 'NewToOld';
+                    viewModel.getRatingsPage();
+                });
+            }
+
+            function _onResultError(jqXhr, error) {
+                console.log("Danger Will Robinson, Danger!!!");
+                console.log(error);
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$employerService"
+            , ["$baseService"]
+            , sabio.services.public.factory);
+
+        sabio.ng.addService(sabio.ng.app.module
+            , "$ratingService"
+            , ["$baseService"]
+            , sabio.services.ratings.factory);
+
+        sabio.ng.addController(sabio.ng.app.module
+            , "employerController",
+            ['$scope', '$baseController', '$employerService', '$ratingService']
+            , sabio.page.employerControllerFactory);
+
+    </script>
+
+    @*<script type="text/javascript">
+            sabio.page.startUp = function(){
+                sabio.services.public.getEmployer($('#guid').text(), sabio.page.handlers.fillEmployerData, sabio.page.handlers.onPopulateFailure);
+            }
+
+            sabio.page.handlers.fillEmployerData = function (result) {
+                results = result.item;
+                var data = [];
+                for (var i in results) {
+                    data.push([i, results[i]]);
+                }
+                for (j = 0; j < data.length; j++) {
+                    var info = "#" + data[j][0];
+                    $(info).append(data[j][1]);
+                }
+                $('#image').attr('src', results.media.fullUrl);
+            }
+
+            sabio.page.handlers.onPopulateFailure = function (result) {
+            }
+        <script type="text/javascript">
+            sabio.page.startUp = function(){
+                sabio.services.public.getEmployer($('#guid').text(), sabio.page.handlers.fillEmployerData, sabio.page.handlers.onPopulateFailure);
+            }
+
+            sabio.page.handlers.fillEmployerData = function (result) {
+                results = result.item;
+                var data = [];
+                for (var i in results) {
+                    data.push([i, results[i]]);
+                }
+                for (j = 0; j < data.length; j++) {
+                    var info = "#" + data[j][0];
+                    $(info).append(data[j][1]);
+                }
+                $('#image').attr('src', results.media.fullUrl);
+            }
+
+            sabio.page.handlers.onPopulateFailure = function (result) {
+            }
+            </script>*@
+}
+
+
+
+
+
+
+
+
+

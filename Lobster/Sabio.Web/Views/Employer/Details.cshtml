@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutLobster.cshtml";
+}
+
+<h2>Employer Profile</h2>
+<div id="employerControllerContainer" data-ng-controller="employerController as emp">
+    <div class="container page-content">
+        <div class="col-lg-12">
+            <div class="col-lg-4">
+                <ul class="list-unstyled project-detail-list">
+                    <li class="text-primary">
+                        <strong>Name:</strong>{{emp.item.name}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>Contact:</strong>{{emp.item.contactName}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>Email:</strong>{{emp.item.contactEmail}}
+                    </li>
+
+                    <li class="text-primary">
+                        <strong>Country:</strong>{{emp.item.country}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>City:</strong>{{emp.item.city}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>State:</strong>{{emp.item.stateOptions}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>Other Loc:</strong>{{emp.item.otherLocation}}
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <ul class="list-unstyled project-detail-list">
+                    <li class="text-primary">
+                        <strong>Size:</strong>{{emp.item.size}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>Industry:</strong>{{emp.item.idustry}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>Technology:</strong>{{emp.item.tech}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>Website:</strong>{{emp.item.url}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>Facebook</strong>{{emp.item.facebook}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>Twitter:</strong>{{emp.item.twitter}}
+                    </li>
+                    <li class="text-primary">
+                        <strong>LinkedIn:</strong>{{emp.item.linkedIn}}
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <img class="resize" id="image" data-ng-if="emp.item.media.fullUrl!=null" data-ng-src="{{emp.item.media.fullUrl}}" />
+                <img class="resize" id="image" data-ng-if="emp.item.media.fullUrl==null" data-ng-src="http://www.propelarizona.com/upload/thumb/no_img.jpg" />
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="col-lg-8 table-bordered">
+                <ul class="list-unstyled project-detail-list">
+                    <li class="text-primary">
+                        <strong>Description:</strong>{{emp.item.description}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="row  hidden">
+                <h6 id="uid">{{emp.item.uid}}</h6>
+            </div>
+            <div class="col-lg-4">
+                <strong class="text-primary">Tags:</strong>
+                <ul id="tags" class="list-inline">
+                    <li class="animate-repeat" data-ng-repeat="tag in emp.item.tags"><a href="">{{tag.name}}</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+                <input type="submit" class="btn btn-success" name="edit" value="Edit" data-ng-click="emp.edit()" />
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+        //          *START OF ANGULAR CODE*
+
+        sabio.page.employerController = null;
+        sabio.page.employerUid = null;
+
+        sabio.page.startUp = function () {
+            sabio.page.employerController = sabio.ng.getControllerInstance($("#employerControllerContainer"));
+            sabio.page.employerUid = $("#guid").text();
+        }
+
+        sabio.services.employers.factory = function ($baseService) {
+            var aSabioServiceObject = sabio.services.employers;
+            var newService = $.extend(true, {}, aSabioServiceObject, $baseService);
+            return newService;
+        }
+
+        sabio.page.employersControllerFactory = function ($scope, $baseController, employersService) {
+            var viewModel = this;
+            viewModel.item = null;
+            viewModel.employersService = employersService;
+            viewModel.edit = _edit;
+            viewModel.receivedItems = _onSuccess;
+            viewModel.onResultError = _onResultError;
+
+            $.extend(viewModel, $baseController);
+
+            viewModel.notify = viewModel.employersService.getNotifier($scope);
+
+            render();
+
+
+            function render() {
+                viewModel.employersService.get(viewModel.receivedItems, viewModel.onResultError);
+            }
+
+            function _edit() {
+                window.open('/Employer/manage', '_self');
+            }
+
+            function _onSuccess(result) {
+                viewModel.notify(function () {
+                    viewModel.item = result.item;
+                });
+            }
+
+            function _onResultError(jqXhr, error) {
+                console.log("Danger Will Robinson, Danger!!!");
+                console.log(error);
+            }
+        }
+
+        sabio.ng.addService(sabio.ng.app.module,
+            "employersService",
+            ["$baseService"],
+            sabio.services.employers.factory);
+
+        sabio.ng.addController(sabio.ng.app.module,
+            "employerController",
+            ['$scope', '$baseController', 'employersService'],
+            sabio.page.employersControllerFactory);
+
+    </script>
+}
+
