@@ -1,4 +1,5 @@
-﻿using Sabio.Web.Models.Requests;
+//Public view of Developer projects for those that are not registered for the website
+using Sabio.Web.Models.Requests;
 using Sabio.Web.Domain;
 using Sabio.Web.Services;
 using System;
