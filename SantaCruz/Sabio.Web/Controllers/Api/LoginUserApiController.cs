@@ -16,11 +16,11 @@ namespace Sabio.Web.Controllers.Api
         [Route("validate"), HttpPost]
         public HttpResponseMessage EchoAccountValidation(LoginUserRequestModel model)
         {
-            // if the Model does not pass validation, there will be an Error response returned with errors
+            
             if (!ModelState.IsValid)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-                // call UserService.createUser w/ email & password
+                
 
             }
 
