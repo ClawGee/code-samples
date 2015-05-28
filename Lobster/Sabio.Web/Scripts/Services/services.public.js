@@ -1,4 +1,6 @@
-﻿sabio.services.public = {};
+//Public AJAX calls for the public pages tht do not require users to be logged in to view data
+
+sabio.services.public = {};
 sabio.services.public.getEmployer = function(guid, onSuccess, onError){
 	var url = '/api/Public/employer/'+guid;
 	var settings = {
