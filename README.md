@@ -59,7 +59,7 @@ https://github.com/ClawGee/code-samples/blob/master/Lobster/Sabio.Web/Services/P
 https://github.com/ClawGee/code-samples/blob/master/Lobster/Sabio.Web/Views/Projects/Create.cshtml<br>
 https://github.com/ClawGee/code-samples/blob/master/Lobster/Sabio.Web/Views/Projects/Details.cshtml<br>
 https://github.com/ClawGee/code-samples/blob/master/Lobster/Sabio.Web/Views/Projects/Index.cshtml<br>
-https://github.com/ClawGee/code-samples/blob/master/Lobster/Sabio.Web/Views/Public/PublicProjects.cshtml
+https://github.com/ClawGee/code-samples/blob/master/Lobster/Sabio.Web/Views/Public/PublicProjects.cshtml<br>
 
 
 
