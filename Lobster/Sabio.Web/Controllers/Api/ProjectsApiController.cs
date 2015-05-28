@@ -71,48 +71,6 @@ namespace Sabio.Web.Controllers.Api
             return Request.CreateResponse(response);
         }
 
-        //[Route("upload/{projectUid:guid}"), HttpPost]
-        //public HttpResponseMessage Post(Guid projectUid)
-        //{
-        //    HttpResponseMessage result = null;
-        //    var httpRequest = HttpContext.Current.Request;
-        //    if (httpRequest.Files.Count > 0)
-        //    {
-        //        ItemResponse<int> response = new ItemResponse<int>();
-
-        //        UserProjectDomainModel entity = ProjectService.Get(projectUid);
-
-        //        foreach (string file in httpRequest.Files)
-        //        {
-        //            var postedFile = httpRequest.Files[file];
-        //            string uniqueName = Guid.NewGuid().ToString() + postedFile.FileName;//uniqueName is the remoteName.  Guid makes it so that names do not repeat.
-        //            string localPath = HttpContext.Current.Server.MapPath("~/FileTemp/" + uniqueName);
-
-        //            postedFile.SaveAs(localPath);
-
-        //            FileService.uploadFile(localPath, uniqueName, postedFile.ContentType);
-
-
-        //            UploadInsertRequestModel model = new UploadInsertRequestModel();
-        //            model.Filename = uniqueName;
-        //            model.ContentType = postedFile.ContentType;
-        //            model.EntityType = 1;
-        //            model.EntityId = entity.Id;
-        //            model.MediaType = 4;
-
-        //            string currentUserId = UserService.GetCurrentUserId();
-
-        //            response.Item = MediaService.UploadInsert(model, currentUserId);
-        //        }
-        //        return Request.CreateResponse(response);
-        //    }
-        //    else
-        //    {
-        //        result = Request.CreateResponse(HttpStatusCode.BadRequest);
-        //    }
-        //    return result;
-        //}
-
     }
 
 
