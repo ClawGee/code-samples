@@ -41,7 +41,7 @@ https://github.com/ClawGee/code-samples/blob/master/SantaCruz/Sabio.Web/Controll
 
 
 
-DEVELOPER PROJECTS (these were completed between May 2015) <br>
+DEVELOPER PROJECTS (these were completed in May 2015) <br>
 https://github.com/ClawGee/code-samples/blob/master/Lobster/Sabio.Web/Controllers/Api/ProjectsApiController.cs<br>
 https://github.com/ClawGee/code-samples/blob/master/Lobster/Sabio.Web/Controllers/Api/PublicApiController.cs<br>
 https://github.com/ClawGee/code-samples/blob/master/Lobster/Sabio.Web/Enums/Technologies.cs<br>
